@@ -13,6 +13,8 @@ License: What license it uses
 Depends: 
     dplyr,
     sonify,
+    signal,
+    tuneR,
     tidyverse
 Encoding: UTF-8
 LazyData: true
