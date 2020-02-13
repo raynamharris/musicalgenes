@@ -1,5 +1,4 @@
 library(tidyverse)
-library(cowplot)
 library(sonify)
 
 ### setup themes

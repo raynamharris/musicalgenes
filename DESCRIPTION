@@ -11,7 +11,6 @@ Authors@R:
 Description: From gene expression counts to sounds in R
 License: What license it uses
 Depends: 
-    cowplot,
     dplyr,
     sonify,
     tidyverse
