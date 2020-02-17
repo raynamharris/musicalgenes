@@ -1,0 +1,7 @@
+install.packages('sonify')
+install.packages('signal')
+install.packages('tuneR')
+install.packages('tidyverse')
+install.packages('dplyr')
+install.packages('sonify')
+install.packages('tidyverse')
