@@ -8,12 +8,15 @@
 #
 
 library(shiny)
+library(tidyverse)
 
-gene_names <- df %>% dplyr::distinct(gene) %>% pull()
+gene_names <- read_csv("./data/candidatecounts.csv") %>% 
+  dplyr::distinct(gene) %>% pull()
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
-  
+   
+
   # Application title
   titlePanel("Gene expression in parental pigeons"),
  

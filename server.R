@@ -60,7 +60,7 @@ shinyServer(function(input, output) {
     p <- df %>% dplyr::filter(gene %in% input$variable ) %>%
       dplyr::filter(treatment %in% charlevels,
                     tissue %in% tissuelevels,
-                    sex %in% sexlevels) %>%
+                    sex %in% "female") %>%
       ggplot(aes(x = treatment, y = counts, color = sex)) +
       geom_boxplot(aes(fill = treatment)) + 
       facet_grid(tissue~gene, scales = "free_y") + 
@@ -74,10 +74,13 @@ shinyServer(function(input, output) {
     plot_grid(expdesign, p, nrow = 2,  rel_heights = c(0.25,1))
   })
   
+  
+
   observeEvent(input$play, {
     insertUI(selector = "#play",
              where = "afterEnd",
-             ui = tags$audio(src = "PRLfemalepituitary.mp3", type = "audio/mp3", autoplay = NA, controls = NA, style="display:none;")  
+             ui = tags$audio(src = "PRLfemalepituitary.mp3", type = "audio/mp3", 
+                             autoplay = NA, controls = NA, style="display:none;")  
     )
   })
   
