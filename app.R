@@ -32,9 +32,22 @@ allcolors <- c(colorschar, colorssex, colorstissue)
 
 ### get data
 
-df <- read_csv("./data/candidatecounts.csv")
-df$treatment <- factor(df$treatment, levels = charlevels)
-df$tissue <- factor(df$tissue, levels = tissuelevels)
+#df <- read_csv("./data/candidatecounts.csv")
+
+
+geneids <- read_csv("./data/00_geneinfo.csv")
+
+vsd_path <- "./data/"   # path to the data
+vsd_files <- dir(vsd_path, pattern = "*vsd.csv") # get file names
+vsd_pathfiles <- paste0(vsd_path, vsd_files)
+vsd_files
+
+allvsd <- vsd_pathfiles %>%
+  setNames(nm = .) %>% 
+  map_df(~read_csv(.x), .id = "file_name")  %>% 
+  dplyr::rename("gene" = "X1") %>% 
+  pivot_longer(cols = L.G118_female_gonad_control:y98.o50.x_male_pituitary_inc.d3, 
+               names_to = "samples", values_to = "counts") 
 
 ## plot data
 
@@ -47,7 +60,8 @@ expdesign <- ggdraw() +  draw_image(expdesign, scale = 1)
 
 
 ### get gene names
-gene_names <- df %>% dplyr::distinct(gene) %>% pull()
+gene_names <- geneids %>% dplyr::distinct(Name) %>% 
+  dplyr::arrange(Name) %>% pull()
 
 ## ui
 ui <- fluidPage(
@@ -61,6 +75,9 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       wellPanel( 
+        HTML(paste(h4("Plot gene expression"))),
+        HTML(paste("Select a gene from the pull down menu. 
+                   View its expression in one or more tissues or sexes.")),
         selectInput(inputId = "gene",
                     label = "Which gene",
                     choices = c(gene_names),
@@ -70,19 +87,19 @@ ui <- fluidPage(
                     label = "Which tissue(s)?",
                     choices = tissuelevels,
                     selected = "pituitary",
-                    multiple = FALSE),
+                    multiple = TRUE),
         selectInput(inputId = "sex",
                     label = "Which sex(es)?",
                     choices = sexlevels,
                     selected = "female",
-                    multiple = FALSE)
+                    multiple = TRUE)
       ),
       wellPanel( 
         HTML(
-          paste(h4("Musical genes"), 
+          paste(h4("Play gene expression"), 
           "Listen to mean value of gene expression over time. 
-                Each note is the mean value of expression for the 
-          gene in each tissue and sex. <i>Note: limited to PRL in female pituitary.</i> "
+                Each sound represents the mean value of expression for the 
+          gene in each tissue and sex, following the plot from left to right. <i>Note: Prototype limited to PRL in female pituitary.</i> "
           )
         ),
         actionButton("play", "Listen")
@@ -90,8 +107,10 @@ ui <- fluidPage(
     
     # boxplot
     mainPanel(
+      
       tags$img(src = "expdesign.png", width = "500px"),
       plotOutput("boxPlot", width = "500px"),
+      p("Note: Plots may take a few seconds to load. Thanks for your patience."),
       tags$a(href="https://github.com/raynamharris/musicalgenes", "Source code available at GitHub @raynamharris/musicalgenes")
     )
   )
@@ -102,6 +121,21 @@ ui <- fluidPage(
 server <- function(input, output){
   
   output$boxPlot <- renderPlot({
+    
+    df  <- allvsd %>%
+      filter(gene %in% input$gene) %>%
+      dplyr::mutate(sextissue = sapply(strsplit(file_name, '_vsd.csv'), "[", 1)) %>%
+      dplyr::mutate(sextissue = sapply(strsplit(sextissue, './data/'), "[", 2)) %>%
+      dplyr::mutate(sex = sapply(strsplit(sextissue, '\\_'), "[", 1),
+                    tissue = sapply(strsplit(sextissue, '\\_'), "[", 2),
+                    treatment = sapply(strsplit(samples, '\\_'), "[", 4)) %>%
+      dplyr::mutate(treatment = sapply(strsplit(treatment, '.NYNO'), "[", 1)) %>%
+      dplyr::select(sex, tissue, treatment, gene, samples, counts) %>%
+      filter(tissue %in% input$tissue, sex %in% input$sex) 
+    
+    df$treatment <- factor(df$treatment, levels = charlevels)
+    df$tissue <- factor(df$tissue, levels = tissuelevels)
+    
     
     p <- df %>% dplyr::filter(gene %in% input$gene ) %>%
       dplyr::filter(treatment %in% charlevels,
