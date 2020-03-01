@@ -9,7 +9,7 @@
 
 library(shiny)
 
-gene_names <- df %>% distinct(gene) %>% pull()
+gene_names <- df %>% dplyr::distinct(gene) %>% pull()
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
@@ -20,12 +20,14 @@ shinyUI(fluidPage(
   # Sidebar with a slider input for boxplot
   sidebarLayout(
     sidebarPanel(
-      selectInput(inputId = "variable",
-                  label = "candidate gene",
+      wellPanel( 
+        selectInput(inputId = "variable",
+                  label = "Gene of interest",
                   choices = c(gene_names),
                   selected = "PRL",
-                  multiple = FALSE)
-    ),
+                  multiple = FALSE),
+        actionButton("play", "Play PRL expression in female pituitaries")
+      )),
     
     # boxplot
     mainPanel(
