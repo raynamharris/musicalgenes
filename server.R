@@ -52,7 +52,7 @@ expdesign <- png::readPNG("./data/expdesign.png")
 expdesign <- ggdraw() +  draw_image(expdesign, scale = 1)
 
 
-# Define server logic required to draw a histogram
+# Define server logic required to draw a first box plot
 shinyServer(function(input, output) {
    
   output$boxPlot <- renderPlot({
@@ -73,6 +73,7 @@ shinyServer(function(input, output) {
       labs(y = "variance stabilized expression")
     plot_grid(expdesign, p, nrow = 2,  rel_heights = c(0.25,1))
   })
+  
   
   
 
