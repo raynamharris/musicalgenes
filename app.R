@@ -1,17 +1,9 @@
-#
-# This is the server logic of a Shiny web application. You can run the 
-# application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-# 
-#    http://shiny.rstudio.com/
-#
-
 library(shiny)
 library(tidyverse)
 library(cowplot)
 library(sonify)
 
+## setup before
 
 ### setup themes
 # experimental levels
@@ -51,10 +43,38 @@ candidategenes <- c("PRL", "PRLR", "AVPR1B", "MYC",
 expdesign <- png::readPNG("./data/expdesign.png")
 expdesign <- ggdraw() +  draw_image(expdesign, scale = 1)
 
+### get gene names
+gene_names <- df %>% dplyr::distinct(gene) %>% pull()
 
-# Define server logic required to draw a first box plot
-shinyServer(function(input, output) {
-   
+## ui
+ui <- fluidPage(
+  
+  # Application title
+  titlePanel("Gene expression in parental pigeons"),
+  
+  # Sidebar with a slider input for boxplot
+  sidebarLayout(
+    sidebarPanel(
+      wellPanel( 
+        selectInput(inputId = "variable",
+                    label = "Gene of interest",
+                    choices = c(gene_names),
+                    selected = "PRL",
+                    multiple = FALSE),
+        actionButton("play", "Play PRL expression in female pituitaries")
+      )),
+    
+    # boxplot
+    mainPanel(
+      plotOutput("boxPlot", height = "750px")
+    )
+  )
+  
+)
+
+## server
+server <- function(input, output){
+  
   output$boxPlot <- renderPlot({
     
     p <- df %>% dplyr::filter(gene %in% input$variable ) %>%
@@ -74,9 +94,8 @@ shinyServer(function(input, output) {
     plot_grid(expdesign, p, nrow = 2,  rel_heights = c(0.25,1))
   })
   
-  
-  
 
+  
   observeEvent(input$play, {
     insertUI(selector = "#play",
              where = "afterEnd",
@@ -84,8 +103,9 @@ shinyServer(function(input, output) {
                              autoplay = NA, controls = NA, style="display:none;")  
     )
   })
-  
-  
-})
+
+}
 
 
+## shiny
+shinyApp(ui = ui, server = server)
