@@ -11,6 +11,7 @@ charlevels <- c("control", "bldg",
                 "lay", "inc.d3", "inc.d9", "inc.d17", 
                 "hatch", "n5", "n9")
 sexlevels <- c("female", "male")
+
 tissuelevels <- c("hypothalamus", "pituitary", "gonad")
 
 # experimental colors
@@ -56,17 +57,37 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       wellPanel( 
-        selectInput(inputId = "variable",
-                    label = "Gene of interest",
+        selectInput(inputId = "gene",
+                    label = "Which gene",
                     choices = c(gene_names),
                     selected = "PRL",
                     multiple = FALSE),
-        actionButton("play", "Play PRL expression in female pituitaries")
+        selectInput(inputId = "tissue",
+                    label = "Which tissue(s)?",
+                    choices = tissuelevels,
+                    selected = "pituitary",
+                    multiple = FALSE),
+        selectInput(inputId = "sex",
+                    label = "Which sex(es)?",
+                    choices = sexlevels,
+                    selected = "female",
+                    multiple = FALSE)
+      ),
+      wellPanel( 
+        HTML(
+          paste(h4("Musical genes"), 
+          "Listen to mean value of gene expression over time. 
+                Each note is the mean value of expression for the 
+          gene in each tissue and sex. <i>Note: limited to PRL in female pituitary.</i> "
+          )
+        ),
+        actionButton("play", "Listen")
       )),
     
     # boxplot
     mainPanel(
-      plotOutput("boxPlot", height = "750px")
+      img(src='data/expdesign.png', align = "right"),
+      plotOutput("boxPlot", height = "500px")
     )
   )
   
@@ -77,10 +98,10 @@ server <- function(input, output){
   
   output$boxPlot <- renderPlot({
     
-    p <- df %>% dplyr::filter(gene %in% input$variable ) %>%
+    p <- df %>% dplyr::filter(gene %in% input$gene ) %>%
       dplyr::filter(treatment %in% charlevels,
-                    tissue %in% tissuelevels,
-                    sex %in% "female") %>%
+                    tissue %in% input$tissue,
+                    sex %in% input$sex) %>%
       ggplot(aes(x = treatment, y = counts, color = sex)) +
       geom_boxplot(aes(fill = treatment)) + 
       facet_grid(tissue~gene, scales = "free_y") + 
@@ -90,7 +111,7 @@ server <- function(input, output){
       theme(axis.text.x = element_text(angle = 45, hjust = 1),
             legend.position = "bottom",
             strip.text.x = element_text(face = "italic")) +
-      labs(y = "variance stabilized expression")
+      labs(y = "gene expression", caption = "Source available on GitHub at @raynamharris/musicalgenes")
     plot_grid(expdesign, p, nrow = 2,  rel_heights = c(0.25,1))
   })
   
