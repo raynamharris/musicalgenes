@@ -3,32 +3,11 @@ library(tidyverse)
 library(cowplot)
 library(sonify)
 
-## setup before
+options(shiny.maxRequestSize=30*1024^2)
 
-### setup themes
-# experimental levels
-charlevels <- c("control", "bldg", 
-                "lay", "inc.d3", "inc.d9", "inc.d17", 
-                "hatch", "n5", "n9")
-sexlevels <- c("female", "male")
+source("./global.R")
 
-tissuelevels <- c("hypothalamus", "pituitary", "gonad")
 
-# experimental colors
-colorschar <-  c("control" = "#cc4c02", 
-                 "bldg"= "#fe9929", 
-                 "lay"= "#fed98e", 
-                 "inc.d3"= "#78c679", 
-                 "inc.d9"= "#31a354", 
-                 "inc.d17"= "#006837", 
-                 "hatch"= "#08519c",
-                 "n5"= "#3182bd", 
-                 "n9"= "#6baed6")
-colorssex <- c("female" = "#969696", "male" = "#525252")
-colorstissue <- c("hypothalamus" = "#d95f02",
-                  "pituitary" = "#1b9e77",
-                  "gonads" =  "#7570b3")
-allcolors <- c(colorschar, colorssex, colorstissue)
 
 ### get data
 
@@ -48,16 +27,6 @@ allvsd <- vsd_pathfiles %>%
   dplyr::rename("gene" = "X1") %>% 
   pivot_longer(cols = L.G118_female_gonad_control:y98.o50.x_male_pituitary_inc.d3, 
                names_to = "samples", values_to = "counts") 
-
-## plot data
-
-candidategenes <- c("PRL", "PRLR", "AVPR1B", "MYC",
-                    "MAP2KA",   "MSH", "PALB2", "BRCA1")
-
-expdesign <- png::readPNG("www/expdesign.png")
-expdesign <- ggdraw() +  draw_image(expdesign, scale = 1)
-
-
 
 ### get gene names
 gene_names <- geneids %>% dplyr::distinct(Name) %>% 
@@ -137,10 +106,7 @@ server <- function(input, output){
     df$tissue <- factor(df$tissue, levels = tissuelevels)
     
     
-    p <- df %>% dplyr::filter(gene %in% input$gene ) %>%
-      dplyr::filter(treatment %in% charlevels,
-                    tissue %in% input$tissue,
-                    sex %in% input$sex) %>%
+    p <- df  %>%
       ggplot(aes(x = treatment, y = counts, color = sex)) +
       geom_boxplot(aes(fill = treatment)) + 
       facet_grid(tissue~gene, scales = "free_y") + 
