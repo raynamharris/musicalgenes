@@ -44,6 +44,8 @@ candidategenes <- c("PRL", "PRLR", "AVPR1B", "MYC",
 expdesign <- png::readPNG("./data/expdesign.png")
 expdesign <- ggdraw() +  draw_image(expdesign, scale = 1)
 
+
+
 ### get gene names
 gene_names <- df %>% dplyr::distinct(gene) %>% pull()
 
@@ -86,7 +88,6 @@ ui <- fluidPage(
     
     # boxplot
     mainPanel(
-      img(src='data/expdesign.png', align = "right"),
       plotOutput("boxPlot", height = "500px")
     )
   )
@@ -112,7 +113,8 @@ server <- function(input, output){
             legend.position = "bottom",
             strip.text.x = element_text(face = "italic")) +
       labs(y = "gene expression", caption = "Source available on GitHub at @raynamharris/musicalgenes")
-    plot_grid(expdesign, p, nrow = 2,  rel_heights = c(0.25,1))
+  
+   plot_grid(expdesign, p, nrow = 2,  rel_heights = c(0.25,1))
   })
   
 
@@ -120,8 +122,10 @@ server <- function(input, output){
   observeEvent(input$play, {
     insertUI(selector = "#play",
              where = "afterEnd",
-             ui = tags$audio(src = "PRLfemalepituitary.mp3", type = "audio/mp3", 
-                             autoplay = NA, controls = NA, style="display:none;")  
+             ui = tags$audio(src = "PRLfemalepituitary.mp3", 
+                             type = "audio/mp3", 
+                             autoplay = NA, controls = NA,
+                             style="display:none;")  
     )
   })
 
