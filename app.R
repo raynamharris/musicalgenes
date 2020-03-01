@@ -41,7 +41,7 @@ df$tissue <- factor(df$tissue, levels = tissuelevels)
 candidategenes <- c("PRL", "PRLR", "AVPR1B", "MYC",
                     "MAP2KA",   "MSH", "PALB2", "BRCA1")
 
-expdesign <- png::readPNG("./data/expdesign.png")
+expdesign <- png::readPNG("www/expdesign.png")
 expdesign <- ggdraw() +  draw_image(expdesign, scale = 1)
 
 
@@ -54,6 +54,8 @@ ui <- fluidPage(
   
   # Application title
   titlePanel("Gene expression in parental pigeons"),
+  
+ # titlePanel(title=div(img(src="expdesign.png"))),
   
   # Sidebar with a slider input for boxplot
   sidebarLayout(
@@ -88,7 +90,9 @@ ui <- fluidPage(
     
     # boxplot
     mainPanel(
-      plotOutput("boxPlot", height = "500px")
+      tags$img(src = "expdesign.png", width = "500px"),
+      plotOutput("boxPlot", width = "500px"),
+      tags$a(href="https://github.com/raynamharris/musicalgenes", "Source code available at GitHub @raynamharris/musicalgenes")
     )
   )
   
@@ -112,12 +116,9 @@ server <- function(input, output){
       theme(axis.text.x = element_text(angle = 45, hjust = 1),
             legend.position = "bottom",
             strip.text.x = element_text(face = "italic")) +
-      labs(y = "gene expression", caption = "Source available on GitHub at @raynamharris/musicalgenes")
-  
-   plot_grid(expdesign, p, nrow = 2,  rel_heights = c(0.25,1))
+      labs(y = "gene expression")
+    p
   })
-  
-
   
   observeEvent(input$play, {
     insertUI(selector = "#play",
@@ -128,9 +129,8 @@ server <- function(input, output){
                              style="display:none;")  
     )
   })
-
+  
 }
-
 
 ## shiny
 shinyApp(ui = ui, server = server)
