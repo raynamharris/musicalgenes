@@ -35,8 +35,8 @@ ui <- fluidPage(
         selectInput(inputId = "gene",
                     label = "Which gene",
                     choices = c(gene_names),
-                    selected = c("PRL", "PRLR", "BRCA1"),
-                    multiple = FALSE),
+                    selected = c("BRCA1", "MYC"),
+                    multiple = TRUE),
         selectInput(inputId = "tissue",
                     label = "Which tissue(s)?",
                     choices = tissuelevels,
@@ -85,8 +85,9 @@ server <- function(input, output){
                     tissue %in%  input$tissue,
                     sex %in% input$sex) %>%
       drop_na() %>%
-      ggplot(aes(x = treatment, y = counts, color = sex)) +
+      ggplot( aes(x = treatment, y = counts, color = sex)) +
       geom_boxplot(aes(fill = treatment)) + 
+      geom_smooth(aes(x = as.numeric(treatment))) +
       facet_grid(tissue~gene, scales = "free_y") + 
       theme_classic(base_size = 16) +
       scale_fill_manual(values = allcolors, guide=FALSE) +
