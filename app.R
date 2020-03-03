@@ -2,6 +2,8 @@ library(shiny)
 library(tidyverse)
 library(cowplot)
 library(sonify)
+library(stringr)
+library(scales)
 
 options(shiny.maxRequestSize=30*1024^2)
 
@@ -9,64 +11,30 @@ source("./global.R")
 
 ### get data
 
+## candidate counts
 df <- read_csv("./data/candidatecounts.csv")
+df$treatment <- factor(df$treatment, levels = charlevels)
+df$tissue <- factor(df$tissue, levels = tissuelevels)
 
-df2 <- read_csv("./data/allDEG.csv")
-df3 <- read_csv("./data/allDEG2.csv")
 
-df2 %>% filter(gene %in% c("PRL")) %>%
-  ggplot(aes(x = lfc, y = logpadj, 
-             shape = tissue, color = direction,
-             label = comparison)) +
-  geom_point() +
-  geom_text()
 
+## differentiall expressed gene results
+df2 <- read_csv("./data/allDEG.csv")  
 df2$tissue <- factor(df2$tissue, levels = tissuelevels)
-
 df2$direction <- factor(df2$direction, levels = charlevels)
+df2$comparison <- factor(df2$comparison, levels = comparisonlevels)
 
-
-df2 %>% filter(gene %in% c( "AVP", "AVPR1A", "BRINP1", "CREBRF", "DBH", "DRD1",
-                            "GNAQ", "HUBB", "KALRN", "MBD2", "NPAS1", "NPAS3", 
-                            "NR3C1", "OPRK1", "OXT", "OXTR", "PRL", "PREN", "ZFX")) %>%
-  ggplot(aes(x = lfc, y = logpadj, 
-             shape = tissue, color = direction,
-             label = comparison,
-             alpha = sex)) +
-  geom_point(size = 3) +
-  geom_text(size = 3, angle = 45) +
-  scale_color_manual(values = allcolors) +
-  scale_alpha_manual(values = c(1,0.75)) +
-  facet_wrap(~gene) +
-  theme_classic() +
-  theme(legend.position = "bottom",
-        strip.text = element_text(face = "italic")) +
-  labs(x = "log fold change (lfc)", y = "log-10 adjusted p-value") +
-  geom_vline(xintercept = 0, color = "grey", linetype = "dashed") +
-  ylim(-2,12.5) +
-  xlim(-3,4)
-
-
- parentalbehavior <- read_table("data/GO_term_parentalbehavior.txt")
+## Go terms
+parentalbehavior <- read_table("data/GO_term_parentalbehavior.txt")
 names(parentalbehavior)[1] <- "allGO"
-
 parentalbehavior$id <- sapply(strsplit(parentalbehavior$allGO,'\t'), "[", 1)
 parentalbehavior$gene <- sapply(strsplit(parentalbehavior$allGO,'\t'), "[", 2)
 parentalbehavior$name <- sapply(strsplit(parentalbehavior$allGO,'\t'), "[", 3)
 parentalbehavior$GO <- sapply(strsplit(parentalbehavior$allGO,'\t'), "[", 6)
 parentalbehavior$allGO <- NULL
-
 parentalbehaviorgenes <- parentalbehavior %>% 
   mutate(gene = str_to_upper(gene)) %>%  pull(gene)
 parentalbehaviorgenes
-
-
-df4 <- df2 %>% filter(gene %in% parentalbehaviorgenes) %>%
-  select(sex:gene) %>%
-  group_by(sex, tissue, gene) %>% 
-  summarize(stages = str_c(direction, collapse = " "))  %>%
-  pivot_wider(values_from = stages, names_from = gene) 
-df4
 
 ## get gene ids
 gene_names <- df %>% 
@@ -77,7 +45,7 @@ gene_names <- df %>%
 ui <- fluidPage(
   
   # Application title
-  titlePanel("Gene expression in parental pigeons"),
+  titlePanel("Exploring gene expression in parental pigeons."),
   
  # titlePanel(title=div(img(src="expdesign.png"))),
   
@@ -86,13 +54,12 @@ ui <- fluidPage(
     sidebarPanel(
       wellPanel( 
         HTML(paste(h4("Plot gene expression"))),
-        HTML(paste("Select a gene from the pull down menu. 
-                   View its expression in one or more tissues or sexes.")),
+        HTML(paste("Select a genes, tissues, and sexes to plot from the pull down menu.")),
         selectInput(inputId = "gene",
-                    label = "Which gene",
+                    label = "Which gene(s)?",
                     choices = c(gene_names),
-                    selected = c("BRCA1", "MYC"),
-                    multiple = TRUE),
+                    selected = c("BRCA1"),
+                    multiple = FALSE),
         selectInput(inputId = "tissue",
                     label = "Which tissue(s)?",
                     choices = tissuelevels,
@@ -101,49 +68,96 @@ ui <- fluidPage(
         selectInput(inputId = "sex",
                     label = "Which sex(es)?",
                     choices = sexlevels,
-                    selected = "female",
-                    multiple = TRUE)
-      ),
+                    selected = c("female"),
+                    multiple = TRUE)),
       wellPanel( 
-        HTML(
-          paste(h4("Play gene expression"), 
-          "Listen to mean value of gene expression over time. 
-                Each sound represents the mean value of expression for the 
-          gene in each tissue and sex, following the plot from left to right. <i>Note: Prototype limited to PRL in female pituitary.</i> "
-          )
-        ),
-        actionButton("play", "Listen")
-      )),
+        HTML(paste(h4("Play gene expression"), 
+          "<i>Note: Not currently working :(</i> 
+           Listen to mean value of gene expression over time. 
+           Each sound represents the mean value of expression for the 
+          gene in each tissue and sex, following the plot from left to right. ")),
+        actionButton("play", "Listen"))),
     
     # boxplot
     mainPanel(
       
+      p("We recently confirmed that prolactin 
+        (PRL) gene expression fluctuates throughout parental care 
+        in a manner that is consistent with its role in promoting lactation 
+        and maintaining parental behaviors.
+        Interestingly, we identified about 100 genes whose expression was correlated with PRL,
+        including (BRCA1, which is associated with breast cancer).
+        Additionally, we identified thousands of genes whose expression changed over 
+        the course of parental care.
+        Exploring the relationship between PRL and other differentially 
+        expressed genes could provide important insights into the `symphony` of gene expression 
+        that regulates behavior at the organismal and cellular level."),
+      
+      p("This application allows you to explore RNA-seq data from a 
+        study designed to characterize changes 
+        in the hypothalamus, pituitary, and gonads of male and female pigeons 
+        (aka Rock Doves) over the course of parental care. Stages sampled include 
+        non-breeding, nest-building, egg incuation, and nestling care."),
       tags$img(src = "expdesign.png", width = "100%"),
+      p(h4("Plot gene expression")),
+      p("These two graphs provide a mutli-faceted view of the data. 
+        Each point represents the expression level of one gene from one sample. 
+        The box plots show the mean and standard deviation of gene expression for each parental timepoint. 
+        The smoothed line helps convey how gene expression changes over time.
+        The default plots shows the relationship between PRL and BRCA1 in the female pituitary, 
+        but you can compare any differentailly expressed gene to PRL."),
+      
       plotOutput("boxPlot", width = "100%"),
-      p("Note: Plots may take a few seconds to load. Thanks for your patience."),
-      tags$a(href="https://github.com/raynamharris/musicalgenes", "Source code available at GitHub @raynamharris/musicalgenes")
-    )
-  )
+      
+    
+      
+      
+      p("We used DESeq2 to caluculate differential gene expression between sequential parental timepoints.         Our manuscript highlighted significant changes in prolactin (PRL) 
+        in the pituitary between control and nest building, 
+        incubation days 9 and 17, and between hatch and nestling care day 5. 
+        With this tool, you can confirm those observation and explored different genes of interest."),
+      
+      tableOutput("DEGtable"),
+      
+      p(""),
+      
+      p("Here are the median values of gene expression for each group. 
+        These can be a useful reference when intrepreting the statistics differences."),
+      tableOutput("summaryTable"),
+      
+      p("Finally, here is a scatter plot showing the correlation between PRL and the gene of interest.
+        The default scatter plot shows that BRCA1 is positively correlated with PRL."),
+      
   
-)
+      plotOutput("scatterplot"),
+      
+      tags$a(href="https://github.com/raynamharris/musicalgenes", "Source code available at GitHub @raynamharris/musicalgenes"),
+      
+      p("To cite this tool, please cite....")
+      
+      
+      )
+      )
+ 
+      )
 
 ## server
 server <- function(input, output){
   
   output$boxPlot <- renderPlot({
     
-    df$treatment <- factor(df$treatment, levels = charlevels)
-    df$tissue <- factor(df$tissue, levels = tissuelevels)
     
-    p <- df  %>%
-      dplyr::filter(gene %in% input$gene,
+    reactivedf <- df  %>%
+      dplyr::filter(gene %in% c("PRL", input$gene),
                     tissue %in%  input$tissue,
                     sex %in% input$sex) %>%
-      drop_na() %>%
-      ggplot( aes(x = treatment, y = counts, color = sex)) +
+      drop_na() 
+    
+      p <- ggplot(reactivedf, aes(x = treatment, y = counts, color = sex)) +
       geom_boxplot(aes(fill = treatment)) + 
+      geom_point() +
       geom_smooth(aes(x = as.numeric(treatment))) +
-      facet_grid(tissue~gene) + 
+      facet_wrap(tissue~gene, scales = "free_y") + 
       theme_classic(base_size = 16) +
       scale_fill_manual(values = allcolors, guide=FALSE) +
       scale_color_manual(values = allcolors) +
@@ -163,6 +177,58 @@ server <- function(input, output){
                              style="display:none;")  
     )
   })
+  
+  
+  
+  output$DEGtable <- renderTable({
+    
+
+    df2 %>%
+      dplyr::filter(gene %in% c("PRL", input$gene),
+                    tissue %in%  input$tissue,
+                    sex %in% input$sex) %>%
+      mutate(lfcpadj = paste(round(lfc,2), scientific(padj, digits = 3), sep = ", ")) %>%
+      select(sex, tissue, comparison, gene, lfcpadj) %>%
+      arrange(comparison) %>%
+      pivot_wider(names_from = comparison, values_from = lfcpadj)
+  
+  })
+  
+  
+  output$summaryTable <- renderTable({
+    
+    reactivedf <- df  %>%
+      dplyr::filter(gene %in% c("PRL", input$gene),
+                    tissue %in%  input$tissue,
+                    sex %in% input$sex) %>%
+      drop_na()  %>%
+      group_by(sex, tissue, treatment, gene) %>%
+      summarize(expression = median(counts)) %>%
+      pivot_wider(names_from = gene, values_from = expression)
+    reactivedf
+  })
+
+  
+  output$scatterplot <- renderPlot({
+    
+    df %>%
+      dplyr::filter(gene %in% c("PRL", input$gene),
+                    tissue %in%  input$tissue,
+                    sex %in% input$sex) %>%
+      select(sex:counts)  %>%
+      pivot_wider(names_from = gene, values_from = counts) %>%
+      ggplot(aes_string(x = "PRL", y = input$gene)) +
+      geom_point(aes(color = treatment)) +
+      geom_smooth(method = "lm" ,aes(color = sex)) +
+      facet_wrap(~tissue, ncol = 1, scales = "free") + 
+      theme_classic(base_size = 14) +
+      scale_fill_manual(values = allcolors, guide=FALSE) +
+      scale_color_manual(values = allcolors)  +
+      theme(legend.position = "bottom")
+    
+  })
+  
+  
   
 }
 
