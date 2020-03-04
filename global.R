@@ -1,7 +1,6 @@
 # setup ----
 library(shiny)
 library(tidyverse)
-library(cowplot)
 library(sonify)
 library(stringr)
 library(scales)
