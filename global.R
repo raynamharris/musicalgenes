@@ -9,11 +9,13 @@ library(scales)
 options(shiny.maxRequestSize = 30 * 1024^2)
 
 # experimental levels ----
+
 charlevels <- c(
   "control", "bldg",
   "lay", "inc.d3", "inc.d9", "inc.d17",
   "hatch", "n5", "n9"
 )
+
 sexlevels <- c("female", "male")
 
 tissuelevels <- c("hypothalamus", "pituitary", "gonad")
@@ -58,7 +60,7 @@ df2 <- read_csv("./data/allDEG.csv") %>%
     comparison = factor(comparison, levels = comparisonlevels)
   )
 
-## Go terms
+## Go terms associated with parental care
 parentalbehavior <- read_table("data/GO_term_parentalbehavior.txt")
 names(parentalbehavior) <- "allGO"
 
@@ -76,8 +78,17 @@ parentalbehaviorgenes <- parentalbehavior %>%
   mutate(gene = str_to_upper(gene)) %>%
   pull(gene)
 
+## tsne data
+
+tsne <- read_csv("data/tsne.csv")
+tsne$tissue <- factor(tsne$tissue, levels = c("hypothalamus", "pituitary", "gonads"))
+tsne <- tsne %>% mutate(tissue = fct_recode(tissue, "gonad" = "gonads"))
+
+
 ## get gene ids
 gene_names <- df %>%
   dplyr::distinct(gene) %>%
   dplyr::arrange(gene) %>%
   pull()
+
+

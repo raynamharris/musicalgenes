@@ -87,4 +87,20 @@ function(input, output) {
       scale_color_manual(values = allcolors) +
       theme(legend.position = "bottom")
   })
+  
+  output$tsne <- renderPlot({
+    
+    tsne %>%
+      dplyr::filter( tissue %in%  input$tissue,
+                     sex %in% input$sex,
+                     treatment %in% input$treatment) %>%
+      ggplot(aes(x = V1, y = V2, color = treatment)) +
+      geom_point() +
+      stat_ellipse() +
+      theme_classic(base_size = 14) +
+      scale_fill_manual(values = allcolors, guide=FALSE) +
+      scale_color_manual(values = allcolors)  +
+      theme(legend.position = "none") +
+      facet_wrap(tissue~sex, scales = "free")
+  })
 }
