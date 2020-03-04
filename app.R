@@ -56,8 +56,17 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       wellPanel( 
+        
+        
+        HTML(paste("This application allows you to explore RNA-seq data from a 
+        study designed to characterize changes 
+          in the hypothalamus, pituitary, and gonads of male and female pigeons 
+          (aka Rock Doves) over the course of parental care. Stages sampled 
+          include non-breeding, nest-building, egg incuation, 
+          and nestling care. Select a genes, tissues, and sexes to plot from the pull down menu.")),
+        
+
         HTML(paste(h4("Plot gene expression"))),
-        HTML(paste("Select a genes, tissues, and sexes to plot from the pull down menu.")),
         selectInput(inputId = "gene",
                     label = "Which gene?",
                     choices = c(gene_names),
@@ -74,7 +83,7 @@ ui <- fluidPage(
                     selected = c("female"),
                     multiple = TRUE)),
       wellPanel( 
-        HTML(paste(h4("Play gene expression"), 
+        HTML(paste( h4("Play gene expression"), 
           "<i>Note: Not currently working :(</i> 
            Listen to mean value of gene expression over time. 
            Each sound represents the mean value of expression for the 
@@ -86,7 +95,7 @@ ui <- fluidPage(
       
       tabsetPanel(
         tabPanel("Prolactin & breast cancer",
-                 mainPanel(
+                 fluidRow(
       
       p("We recently confirmed that prolactin 
         (PRL) gene expression fluctuates throughout parental care 
@@ -103,12 +112,7 @@ ui <- fluidPage(
         gene expression 
         that regulates behavior at the organismal and cellular level."),
       
-      p("This application allows you to explore RNA-seq data from a 
-        study designed to characterize changes 
-        in the hypothalamus, pituitary, and gonads of male and female pigeons 
-        (aka Rock Doves) over the course of parental care. Stages sampled 
-        include non-breeding, nest-building, egg incuation, 
-        and nestling care."),
+      
       tags$img(src = "expdesign.png", width = "100%"),
       
       p(h4("Plot gene expression")),
@@ -135,10 +139,10 @@ ui <- fluidPage(
       tableOutput("DEGtable"),
       
       
-      p("Here are the median values of gene expression for each group. 
-        These can be a useful reference when intrepreting the 
-        statistics differences."),
-      tableOutput("summaryTable"),
+     # p("Here are the median values of gene expression for each group. 
+      #  These can be a useful reference when intrepreting the 
+      #  statistics differences."),
+     # tableOutput("summaryTable"),
       
       p("Finally, here is a scatter plot showing the correlation between 
         PRL and the gene of interest.
