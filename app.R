@@ -5,6 +5,7 @@ library(sonify)
 library(stringr)
 library(scales)
 library(forcats)
+library(apaTables)
 
 options(shiny.maxRequestSize=30*1024^2)
 
@@ -161,6 +162,7 @@ ui <- fluidPage(
         correlated with PRL."),
       
       plotOutput("scatterplot"),
+    
       
       tags$a(href="https://github.com/raynamharris/musicalgenes", 
              "Source code available at GitHub @raynamharris/musicalgenes"),
@@ -298,10 +300,11 @@ server <- function(input, output){
       scale_color_manual(values = allcolors)  +
       theme(legend.position = "none") +
       facet_wrap(tissue~sex, scales = "free")
-     
   })
   
   
+  
+
   
 }
 

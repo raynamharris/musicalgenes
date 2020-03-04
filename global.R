@@ -13,6 +13,8 @@ comparisonlevels <- c("control_bldg", "bldg_lay","lay_inc.d3",
                       "inc.d3_inc.d9", "inc.d9_inc.d17","inc.d17_hatch",
                       "hatch_n5", "n5_n9")
 
+
+
 # experimental colors
 colorschar <-  c("control" = "#cc4c02", 
                  "bldg"= "#fe9929", 
