@@ -60,24 +60,24 @@ ui <- fluidPage(
     sidebarPanel(
       wellPanel( 
         
+        HTML(paste(h4("Interactive data exploration."))),
         
         HTML(paste("This application allows you to explore RNA-seq data from a 
         study designed to characterize changes 
           in the hypothalamus, pituitary, and gonads of male and female pigeons 
           (aka Rock Doves) over the course of parental care. Stages sampled 
           include non-breeding, nest-building, egg incuation, 
-          and nestling care. Select a genes, tissues, and sexes to plot from the pull down menu.")),
+          and nestling care. Select tissues, and sexes to plot from the pull down menu.")),
         
-
-        HTML(paste(h4("Interactive exploration and analysis of gene expression. "))),
+        HTML(paste(h4(" "))),
       
         selectInput(inputId = "tissue",
-                    label = "Which tissue? Hipothalamus, pituitary or gonads?",
+                    label = "Which tissue?",
                     choices = tissuelevels,
                     selected = "pituitary",
                     multiple = TRUE),
         selectInput(inputId = "sex",
-                    label = "Which sex? Female or male?",
+                    label = "Which sex?",
                     choices = sexlevels,
                     selected = c("female"),
                     multiple = TRUE)),
@@ -130,7 +130,7 @@ ui <- fluidPage(
         but you can compare any differentailly expressed gene to PRL."),
       
       selectInput(inputId = "gene",
-                  label = "In addition to PRL, which gene do you want to view?",
+                  label = "Chose a gene to compare to PRL.",
                   choices = c(gene_names),
                   selected = c("BRCA1"),
                   multiple = FALSE),
