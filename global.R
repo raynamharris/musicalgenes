@@ -1,11 +1,17 @@
 # setup ----
+options(shiny.maxRequestSize = 30 * 1024^2)
+
 library(shiny)
-library(tidyverse)
 library(sonify)
 library(stringr)
 library(scales)
 
-options(shiny.maxRequestSize = 30 * 1024^2)
+library(dplyr)
+library(tidyr)
+library(DBI)
+library(RSQLite)
+library(dbplyr)
+library(ggplot2)
 
 # experimental levels ----
 
@@ -19,19 +25,23 @@ sexlevels <- c("female", "male")
 
 tissuelevels <- c("hypothalamus", "pituitary", "gonad")
 
-comparisonlevels <- c("control_bldg", "bldg_lay","lay_inc.d3", 
-                      "inc.d3_inc.d9", "inc.d9_inc.d17","inc.d17_hatch",
-                      "hatch_n5", "n5_n9")
+comparisonlevels <- c(
+  "control_bldg", "bldg_lay", "lay_inc.d3",
+  "inc.d3_inc.d9", "inc.d9_inc.d17", "inc.d17_hatch",
+  "hatch_n5", "n5_n9"
+)
 # experimental colors
-colorschar <-  c("control" = "#cc4c02", 
-                 "bldg"= "#fe9929", 
-                 "lay"= "#fed98e", 
-                 "inc.d3"= "#78c679", 
-                 "inc.d9"= "#31a354", 
-                 "inc.d17"= "#006837", 
-                 "hatch"= "#08519c",
-                 "n5"= "#3182bd", 
-                 "n9"= "#6baed6")
+colorschar <- c(
+  "control" = "#cc4c02",
+  "bldg" = "#fe9929",
+  "lay" = "#fed98e",
+  "inc.d3" = "#78c679",
+  "inc.d9" = "#31a354",
+  "inc.d17" = "#006837",
+  "hatch" = "#08519c",
+  "n5" = "#3182bd",
+  "n9" = "#6baed6"
+)
 
 colorssex <- c("female" = "#969696", "male" = "#525252")
 
@@ -44,86 +54,33 @@ colorstissue <- c(
 allcolors <- c(colorschar, colorssex, colorstissue)
 
 # data ----
+
+## SQLite Pool Connection
+con <- dbConnect(SQLite(), "data/musicalgenes.sqlite")
+
 ## candidate counts
-df <- read_csv("data/candidatecounts.csv") %>% 
-  mutate(
-    treatment = factor(treatment, levels = charlevels),
-    tissue = factor(tissue, levels = tissuelevels)
-  )
+
+candidatecounts <- tbl(con, "candidatecounts")
+
+candidatecounts$treatment <- factor(candidatecounts$treatment, levels =  charlevels)
 
 ## differentiall expressed gene results
-df2 <- read_csv("data/allDEG.csv") %>% 
-  mutate(
-    tissue = factor(tissue, levels = tissuelevels),
-    direction = factor(direction, levels = charlevels),
-    comparison = factor(comparison, levels = comparisonlevels)
-  )
+alldeg <- tbl(con, "alldeg")
+
 
 ## Go terms associated with parental care
-parentalbehavior <- read_table("data/GO_term_parentalbehavior.txt")
-names(parentalbehavior) <- "allGO"
-
-parentalbehavior <- parentalbehavior %>% 
-  mutate(
-    id = sapply(strsplit(allGO, "	"), "[", 1),
-    gene= sapply(strsplit(allGO, "	"), "[", 2),
-    name = sapply(strsplit(allGO, "	"), "[", 3),
-    GO = sapply(strsplit(allGO, "	"), "[", 6)
-  )
-
-parentalbehavior$allGO <- NULL
+parentalbehavior <- tbl(con, "parentalbehavior")
 
 parentalbehaviorgenes <- parentalbehavior %>%
-  mutate(gene = str_to_upper(gene)) %>%
+  mutate(gene = toupper(gene)) %>%
   pull(gene)
 
 ## tsne data
 
-tsne <- read_csv("data/tsne.csv")
-tsne$tissue <- factor(tsne$tissue, levels = c("hypothalamus", "pituitary", "gonads"))
-tsne <- tsne %>% mutate(tissue = fct_recode(tissue, "gonad" = "gonads"))
-
+tsne <- tbl(con, "tsne")
 
 ## get gene ids
-gene_names <- df %>%
+gene_names <- candidatecounts %>%
   dplyr::distinct(gene) %>%
   dplyr::arrange(gene) %>%
   pull()
-
-## get all data
-
-
-
-
-
-
-  
-library(RPostgreSQL)
-library(dplyr)
-library(dbplyr)
-
-con <- dbConnect(
-  dbDriver("PostgreSQL"),
-  host = Sys.getenv("psql_rayna_ip"),
-  port = Sys.getenv("psql_rayna_port"),
-  user = Sys.getenv("psql_rayna_usr"),
-  password = Sys.getenv("psql_rayna_pwd"),
-  dbname = Sys.getenv("psql_rayna_db")
-)
-
-tbl(con, in_schema("public", "alldeg")) %>% 
-  filter(gene == "AOC1")
-
-tbl(con, in_schema("public", "allvsd")) %>% 
-  filter(gene == "PRL")
-
-#allDEGs <- as_tibble(tbl(con, in_schema("public", "alldeg")))
-#allvsds <- as_tibble(tbl(con, in_schema("public", "allvsd"))) %>% 
-#  filter(gene == "AOC1")
-
-#allDEGs <- allDEGs %>% 
-#  mutate(
-#    tissue = factor(tissue, levels = tissuelevels),
-#    direction = factor(direction, levels = charlevels),
-##    comparison = factor(comparison, levels = comparisonlevels)
-#  )
