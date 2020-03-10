@@ -19,7 +19,7 @@ shinyUI(
                      and nestling care. Select tissues, and sexes to plot from the pull down menu.")),
           
           HTML(paste(h4(" "))),
-          
+        
           selectInput(inputId = "tissue",
                       label = "Which tissue?",
                       choices = tissuelevels,
@@ -30,9 +30,10 @@ shinyUI(
                       choices = sexlevels,
                       selected = c("female"),
                       multiple = TRUE)),
+        
         wellPanel(
           HTML(paste(
-            h4("Listen to the sound of gene expression chaning over time!"),
+            h4("Listen to the sound of gene expression changing over time!"),
             "<i>Note: Not currently working :(</i> 
            Listen to mean value of gene expression over time. 
            Each sound represents the mean value of expression for the 
@@ -111,6 +112,10 @@ shinyUI(
               
               plotOutput("scatterplot"),
               
+              verbatimTextOutput("cortestres"),
+              
+              
+              
               tags$a(
                 href = "https://github.com/raynamharris/musicalgenes",
                 "Source code available at GitHub @raynamharris/musicalgenes"
@@ -147,7 +152,14 @@ shinyUI(
                                choices = charlevels,
                                selected = c("inc.d3", "inc.d9", "inc.d17", "hatch", "n5"),
                                multiple = TRUE),
-                   plotOutput("tsne")
+                   plotOutput("tsne") #,
+                   
+                  # plotOutput(barplot)
+                   
+                   
+                   
+                   
+                   
           )
         )
       )

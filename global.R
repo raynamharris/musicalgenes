@@ -45,14 +45,14 @@ allcolors <- c(colorschar, colorssex, colorstissue)
 
 # data ----
 ## candidate counts
-df <- read_csv("./data/candidatecounts.csv") %>% 
+df <- read_csv("data/candidatecounts.csv") %>% 
   mutate(
     treatment = factor(treatment, levels = charlevels),
     tissue = factor(tissue, levels = tissuelevels)
   )
 
 ## differentiall expressed gene results
-df2 <- read_csv("./data/allDEG.csv") %>% 
+df2 <- read_csv("data/allDEG.csv") %>% 
   mutate(
     tissue = factor(tissue, levels = tissuelevels),
     direction = factor(direction, levels = charlevels),
@@ -90,4 +90,40 @@ gene_names <- df %>%
   dplyr::arrange(gene) %>%
   pull()
 
+## get all data
 
+
+
+
+
+
+  
+library(RPostgreSQL)
+library(dplyr)
+library(dbplyr)
+
+con <- dbConnect(
+  dbDriver("PostgreSQL"),
+  host = Sys.getenv("psql_rayna_ip"),
+  port = Sys.getenv("psql_rayna_port"),
+  user = Sys.getenv("psql_rayna_usr"),
+  password = Sys.getenv("psql_rayna_pwd"),
+  dbname = Sys.getenv("psql_rayna_db")
+)
+
+tbl(con, in_schema("public", "alldeg")) %>% 
+  filter(gene == "AOC1")
+
+tbl(con, in_schema("public", "allvsd")) %>% 
+  filter(gene == "PRL")
+
+#allDEGs <- as_tibble(tbl(con, in_schema("public", "alldeg")))
+#allvsds <- as_tibble(tbl(con, in_schema("public", "allvsd"))) %>% 
+#  filter(gene == "AOC1")
+
+#allDEGs <- allDEGs %>% 
+#  mutate(
+#    tissue = factor(tissue, levels = tissuelevels),
+#    direction = factor(direction, levels = charlevels),
+##    comparison = factor(comparison, levels = comparisonlevels)
+#  )
