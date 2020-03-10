@@ -1,14 +1,20 @@
 function(input, output) {
+  gene_filter <- reactive({ as.character(input$gene) })
+  tissue_filter <- reactive({ as.character(input$tissue) })
+  sex_filter <- reactive({ as.character(input$sex) })
+  treatment_filter <- reactive({ as.character(input$treatment) })
+  
   output$boxPlot <- renderPlot({
-    reactivedf <- df %>%
-      dplyr::filter(
-        gene %in% c("PRL", input$gene),
-        tissue %in% input$tissue,
-        sex %in% input$sex
+    reactivecandidatecounts <- candidatecounts %>%
+      filter(
+        gene %in% c("PRL", !!as.character(input$gene)),
+        tissue %in% !!as.character(input$tissue),
+        sex %in% !!as.character(input$sex)
       ) %>%
+      collect() %>%
       drop_na()
 
-    p <- ggplot(reactivedf, aes(x = treatment, y = counts, color = sex)) +
+    p <- ggplot(reactivecandidatecounts, aes(x = treatment, y = counts, color = sex)) +
       geom_boxplot(aes(fill = treatment)) +
       geom_point() +
       geom_smooth(aes(x = as.numeric(treatment))) +
@@ -38,44 +44,43 @@ function(input, output) {
     )
   })
 
-
-
   output$DEGtable <- renderTable({
-    df2 %>%
-      dplyr::filter(
-        gene %in% c("PRL", input$gene),
-        tissue %in% input$tissue,
-        sex %in% input$sex
+    alldeg %>%
+      filter(
+        gene %in% c("PRL", !!as.character(input$gene)),
+        tissue %in% !!as.character(input$tissue),
+        sex %in% !!as.character(input$sex)
       ) %>%
+      collect() %>%
       mutate(lfcpadj = paste(round(lfc, 2), scientific(padj, digits = 3), sep = ", ")) %>%
       select(sex, tissue, comparison, gene, lfcpadj) %>%
       arrange(comparison) %>%
       pivot_wider(names_from = comparison, values_from = lfcpadj)
   })
 
-
   output$summaryTable <- renderTable({
-    reactivedf <- df %>%
-      dplyr::filter(
-        gene %in% c("PRL", input$gene),
-        tissue %in% input$tissue,
-        sex %in% input$sex
+    reactivecandidatecounts <- candidatecounts %>%
+      filter(
+        gene %in% c("PRL", !!as.character(input$gene)),
+        tissue %in% !!as.character(input$tissue),
+        sex %in% !!as.character(input$sex)
       ) %>%
+      collect() %>%
       drop_na() %>%
       group_by(sex, tissue, treatment, gene) %>%
       summarize(expression = median(counts)) %>%
       pivot_wider(names_from = gene, values_from = expression)
-    reactivedf
+    reactivecandidatecounts
   })
 
-
   output$scatterplot <- renderPlot({
-    df %>%
-      dplyr::filter(
-        gene %in% c("PRL", input$gene),
-        tissue %in% input$tissue,
-        sex %in% input$sex
+    candidatecounts %>%
+      filter(
+        gene %in% c("PRL", !!as.character(input$gene)),
+        tissue %in% !!as.character(input$tissue),
+        sex %in% !!as.character(input$sex)
       ) %>%
+      collect() %>%
       select(sex:counts) %>%
       pivot_wider(names_from = gene, values_from = counts) %>%
       ggplot(aes_string(x = "PRL", y = input$gene)) +
@@ -87,20 +92,22 @@ function(input, output) {
       scale_color_manual(values = allcolors) +
       theme(legend.position = "bottom")
   })
-  
+
   output$tsne <- renderPlot({
-    
     tsne %>%
-      dplyr::filter( tissue %in%  input$tissue,
-                     sex %in% input$sex,
-                     treatment %in% input$treatment) %>%
+      filter(
+        tissue %in% !!as.character(input$tissue),
+        sex %in% !!as.character(input$sex),
+        treatment %in% !!as.character(input$treatment)
+      ) %>%
+      collect() %>%
       ggplot(aes(x = V1, y = V2, color = treatment)) +
       geom_point() +
       stat_ellipse() +
       theme_classic(base_size = 14) +
-      scale_fill_manual(values = allcolors, guide=FALSE) +
-      scale_color_manual(values = allcolors)  +
+      scale_fill_manual(values = allcolors, guide = FALSE) +
+      scale_color_manual(values = allcolors) +
       theme(legend.position = "none") +
-      facet_wrap(tissue~sex, scales = "free")
+      facet_wrap(tissue ~ sex, scales = "free")
   })
 }
