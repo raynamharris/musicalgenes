@@ -36,21 +36,46 @@ shinyUI(
           )
         ),
         wellPanel(
-          HTML(paste(
-            h4("Listen to the sound of gene expression changing over time!"),
-            "<i>Note: Not currently working :(</i> 
-           Listen to mean value of gene expression over time. 
-           Each sound represents the mean value of expression for the 
-          gene in each tissue and sex, following the plot from left to right. "
-          )),
-          actionButton("play", "Listen")
+          
         )
       ),
 
       ### main panel
       mainPanel(
         tabsetPanel(
+         
           tabPanel(
+            "Musical genes",
+            fluidRow(
+              p(h2("Listen to the transcriptional symphony of parental care")),
+              
+              tags$img(src = "expdesign.png", width = "100%"),
+              
+              selectInput(
+                inputId = "gene",
+                label = "Chose a gene to vizualize and sonify (aka 'plot and play').",
+                choices = c(gene_names),
+                selected = c("PRL"),
+                multiple = FALSE
+              ),
+              
+              plotOutput("musicplot", width = "100%"),
+              
+              actionButton("play", "Listen to the sound of prolactin in the pituitary."),
+              
+              p("Note: this only works if you run the app locally :(
+                However, when it does work, it plays the mean
+                mean value of gene expression over time for male and female pigeons. 
+                It was made with the package sonify"),
+              
+              
+              tableOutput("musicalgenes") 
+            )
+          ),
+          
+          
+          
+           tabPanel(
             "Prolactin & breast cancer",
             fluidRow(
               p(h2("Prolactin (PRL) gene expression during parental 
@@ -130,6 +155,7 @@ shinyUI(
               p("To cite this tool, please cite....")
             )
           ),
+          
           tabPanel(
             "Internal versus external hypothesis",
 
@@ -141,15 +167,15 @@ shinyUI(
 
 
 
-            p("In Figure 1 of our manuscript, we show many tSNE plots to give a broad overview of the data. 
-                     However, zooming in on a few specific timepoints and tissues is useful. 
-                     Here, we zoom in to show that indeed, samples from the pituitary on 
-                     incubation day 17 cluster more closely with hatch and nestling care 
-                     day 5 samples than with incubation days 3 and 9. This suggest that, 
-                     in the pituitary, internal mechanisms that prepare for chick arrival 
-                     have the greatest effect on gene expression rather than suggesting 
-                     that gene expression responds to changes in the external enviornament. 
-                     You can chose to view more or fewer group using the pull-down menus on the left."),
+            p("t-Distributed Stochastic Neighbor Embedding (t-SNE) 
+               is a technique for dimensionality reduction that is well suited 
+               for the visualization of high-dimensional datasets.
+               Samples that custer together are similar in expression. 
+               In the pituitary, we see that samples from incubation day and hatch cluster,
+               and we see samples from lay and incubation days 3 and 9 cluster.
+               This suggests that internal mechanisms which prepare for chick arrival 
+               have a greater effect on gene expression than changes in the external enviornament. 
+               "),
 
             selectInput(
               inputId = "treatment",

@@ -6,6 +6,8 @@ function(input, output) {
   treatment_filter <- reactive({ as.character(input$treatment) })
   
   output$boxPlot <- renderPlot({
+    
+    
     p <- candidatecounts %>%
       filter(
         gene %in% c("PRL", !!as.character(input$gene)),
@@ -31,6 +33,9 @@ function(input, output) {
       labs(y = "gene expression", x = NULL)
     p
   })
+  
+  
+  
 
   observeEvent(input$play, {
     insertUI(
@@ -162,4 +167,74 @@ output$cortestres <- renderPrint({
     p
     
   })
+  
+  
+  
+  output$musicplot <- renderPlot({
+    
+    candidatecounts <- as.data.frame(candidatecounts)
+    
+    p <- candidatecounts %>%
+      group_by(treatment, tissue, gene, sex)  %>% 
+      summarize(median = median(counts, na.rm = T), 
+                se = sd(counts,  na.rm = T)/sqrt(length(counts))) %>%
+      dplyr::mutate(scaled = rescale(median, to = c(0, 11))) %>%
+      dplyr::mutate(image = "www/musicnote.png")   %>%
+      filter(
+        gene %in% c(!!as.character(input$gene)),
+        tissue %in% !!as.character(input$tissue),
+        sex %in% !!as.character(input$sex)
+      ) %>% 
+      #collect() %>%
+     # drop_na() %>%
+      ggplot( aes(x = treatment, y = median)) +
+      geom_errorbar(aes(ymin = median - se, 
+                        ymax = median + se, color=treatment),  width=.5) +
+      geom_image(aes(image=image), size = 0.15) +
+      labs(subtitle = "Musical genes", 
+           y = "gene expression", x = "parental stage") +
+      facet_wrap(~sex, scales = "free_y", nrow = ) +
+      theme_bw(base_size = 16) +
+      theme(legend.position = "none", 
+            axis.text.x = element_text(angle = 45, hjust = 1),
+            panel.grid.major.x = element_blank(), 
+            panel.grid.minor.x = element_blank(),
+            panel.grid.minor.y = element_blank()) +
+      scale_color_manual(values = allcolors) 
+    p
+    
+    
+    
+  })
+  
+  
+  output$musicalgenes <- renderTable({
+    
+    ## average and rescale data
+   
+    candidatecounts <- as.data.frame(candidatecounts)
+    medianvalues <- candidatecounts %>%
+      filter(gene == "PRL", tissue == "pituitary") %>%
+      group_by(treatment) %>%
+      summarize(median = median(counts, na.rm = TRUE)) %>%
+      arrange(treatment)  %>%
+      filter(treatment != "NA") %>%
+      mutate(scaled = scales:::rescale(median, to = c(0,11))) %>%
+      mutate(averaged = round(scaled,0))
+    medianvalues$treatment <- factor(medianvalues$treatment, levels = charlevels)
+    
+    notes <- left_join(medianvalues, numberstonotes, by = "averaged") %>%
+      select(treatment, median, scaled, note)
+  
+    notes
+    
+    ## sonify data
+    #musicalgenes <-  sonify(x = medianvalues$median, interpolation = "constant")
+    
+    
+    
+    
+  })
+
+  
 }
