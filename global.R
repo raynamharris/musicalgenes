@@ -58,14 +58,16 @@ allcolors <- c(colorschar, colorssex, colorstissue)
 ## SQLite Pool Connection
 con <- dbConnect(SQLite(), "data/musicalgenes.sqlite")
 
-## candidate counts
+## candidate counts and differentiall expressed gene results
 
 candidatecounts <- tbl(con, "candidatecounts")
+alldeg <- tbl(con, "alldeg")
 
 candidatecounts$treatment <- factor(candidatecounts$treatment, levels =  charlevels)
+alldeg$treatment <- factor(alldeg$treatment, levels =  charlevels)
 
-## differentiall expressed gene results
-alldeg <- tbl(con, "alldeg")
+candidatecounts$tissue <- factor(candidatecounts$tissue, levels =  tissuelevels)
+alldeg$tissue <- factor(alldeg$tissue, levels =  tissuelevels)
 
 
 ## Go terms associated with parental care
