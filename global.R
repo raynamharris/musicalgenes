@@ -8,6 +8,7 @@ library(scales)
 
 library(dplyr)
 library(tidyr)
+library(forcats)
 library(DBI)
 library(RSQLite)
 library(dbplyr)

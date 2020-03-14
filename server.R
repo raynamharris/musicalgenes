@@ -13,6 +13,10 @@ function(input, output) {
         sex %in% !!as.character(input$sex)
       ) %>%
       collect() %>%
+      mutate(
+        treatment = factor(treatment, levels = charlevels),
+        tissue = factor(tissue, levels = tissuelevels)
+      ) %>% 
       drop_na() %>%
       ggplot(aes(x = treatment, y = counts, color = sex)) +
       geom_boxplot(aes(fill = treatment)) +
@@ -53,6 +57,11 @@ function(input, output) {
         sex %in% !!as.character(input$sex)
       ) %>%
       collect() %>%
+      mutate(
+        tissue = factor(tissue, levels = tissuelevels),
+        direction = factor(direction, levels = charlevels),
+        comparison = factor(comparison, levels = comparisonlevels)
+      ) %>% 
       mutate(lfcpadj = paste(round(lfc, 2), scientific(padj, digits = 3), sep = ", ")) %>%
       select(sex, tissue, comparison, gene, lfcpadj) %>%
       arrange(comparison) %>%
@@ -68,6 +77,10 @@ function(input, output) {
       ) %>%
       collect() %>%
       drop_na() %>%
+      mutate(
+        treatment = factor(treatment, levels = charlevels),
+        tissue = factor(tissue, levels = tissuelevels)
+      ) %>% 
       group_by(sex, tissue, treatment, gene) %>%
       summarize(expression = median(counts)) %>%
       pivot_wider(names_from = gene, values_from = expression)
@@ -83,6 +96,10 @@ function(input, output) {
       ) %>%
       collect() %>%
       select(sex:counts) %>%
+      mutate(
+        treatment = factor(treatment, levels = charlevels),
+        tissue = factor(tissue, levels = tissuelevels)
+      ) %>% 
       pivot_wider(names_from = gene, values_from = counts) %>%
       ggplot(aes_string(x = "PRL", y = input$gene)) +
       geom_point(aes(color = treatment)) +
@@ -117,13 +134,18 @@ output$cortestres <- renderPrint({
   
 
   output$tsne <- renderPlot({
-    tsne %>%
+    tsne_df <- tsne %>%
       filter(
         tissue %in% !!as.character(input$tissue),
         sex %in% !!as.character(input$sex),
         treatment %in% !!as.character(input$treatment)
       ) %>%
-      collect() %>%
+      collect()
+    
+    tsne_df$tissue <- factor(tsne_df$tissue, levels = c("hypothalamus", "pituitary", "gonads"))
+    tsne_df <- tsne_df %>% mutate(tissue = fct_recode(tissue, "gonad" = "gonads"))
+    
+    tsne_df %>% 
       ggplot(aes(x = V1, y = V2, color = treatment)) +
       geom_point() +
       stat_ellipse() +
