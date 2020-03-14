@@ -3,6 +3,7 @@ options(shiny.maxRequestSize = 30 * 1024^2)
 
 library(shiny)
 library(sonify)
+library(tuneR)
 library(stringr)
 library(scales)
 
@@ -13,6 +14,8 @@ library(DBI)
 library(RSQLite)
 library(dbplyr)
 library(ggplot2)
+library(ggimage)
+library(cowplot)
 
 # experimental levels ----
 
@@ -87,3 +90,9 @@ gene_names <- candidatecounts %>%
   dplyr::distinct(gene) %>%
   dplyr::arrange(gene) %>%
   pull()
+
+
+numberstonotes <- data.frame(
+  averaged = c(0:6),
+  note = c("C",  "D",  "E", "F", "G",  "A", "B")
+)
