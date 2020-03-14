@@ -31,7 +31,7 @@ shinyUI(
             inputId = "sex",
             label = "Which sex?",
             choices = sexlevels,
-            selected = c("female"),
+            selected = c("female", "male"),
             multiple = TRUE
           )
         ),
@@ -66,7 +66,7 @@ shinyUI(
               
               plotOutput("musicplot", width = "100%"),
               
-              actionButton("play", "Listen to the sound of prolactin in the pituitary."),
+              actionButton("play", "Listen to the sound of prolactin in the female pituitary."),
               
               p("Note: this only works if you run the app locally :(
                 However, when it does work, it plays the mean

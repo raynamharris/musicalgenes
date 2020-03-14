@@ -186,15 +186,14 @@ output$cortestres <- renderPrint({
       #collect() %>%
      # drop_na() %>%
       ggplot( aes(x = treatment, y = median)) +
-      geom_errorbar(aes(ymin = median - se, 
-                        ymax = median + se),  width=.5, color = "white") +
+     # geom_errorbar(aes(ymin = median - se, 
+     #                   ymax = median + se),  width=.5, color = "white") +
       geom_image(aes(image=image), size = 0.15) +
-      labs(subtitle = "Musical genes", 
-           y = "gene expression", x = "parental stage") +
+      labs( y = "gene expression", x = "parental stage") +
       facet_wrap(~sex, scales = "free_y", nrow = ) +
       theme_classic(base_size = 16) +
       theme(legend.position = "none", 
-            axis.text.x = element_text(angle = 45, hjust = 1),
+            axis.text.x = element_text(angle = 45, hjust = 1)
             ) +
       scale_color_manual(values = allcolors) 
     p
@@ -215,14 +214,15 @@ output$cortestres <- renderPrint({
                      sex %in% !!as.character(input$sex)) %>%
       group_by(sex, tissue, treatment) %>%
       summarize(median = median(counts, na.rm = TRUE)) %>%
-      arrange(treatment)  %>%
+      arrange(sex, treatment)  %>%
       filter(treatment != "NA") %>%
       mutate(scaled = scales:::rescale(median, to = c(0,6))) %>%
       mutate(averaged = round(scaled,0))
     medianvalues$treatment <- factor(medianvalues$treatment, levels = charlevels)
     
     notes <- left_join(medianvalues, numberstonotes, by = "averaged")   %>%
-      select(sex, tissue, treatment, median, note )
+      select(sex, tissue, treatment,note ) %>%
+      pivot_wider(names_from = sex, values_from = note)
     
     notes
     
