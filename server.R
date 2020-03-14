@@ -7,7 +7,6 @@ function(input, output) {
   
   output$boxPlot <- renderPlot({
     
-    
     p <- candidatecounts %>%
       filter(
         gene %in% c("PRL", !!as.character(input$gene)),
@@ -33,7 +32,6 @@ function(input, output) {
       labs(y = "gene expression", x = NULL)
     p
   })
-  
   
   
 
@@ -189,17 +187,15 @@ output$cortestres <- renderPrint({
      # drop_na() %>%
       ggplot( aes(x = treatment, y = median)) +
       geom_errorbar(aes(ymin = median - se, 
-                        ymax = median + se, color=treatment),  width=.5) +
+                        ymax = median + se),  width=.5, color = "white") +
       geom_image(aes(image=image), size = 0.15) +
       labs(subtitle = "Musical genes", 
            y = "gene expression", x = "parental stage") +
       facet_wrap(~sex, scales = "free_y", nrow = ) +
-      theme_bw(base_size = 16) +
+      theme_classic(base_size = 16) +
       theme(legend.position = "none", 
             axis.text.x = element_text(angle = 45, hjust = 1),
-            panel.grid.major.x = element_blank(), 
-            panel.grid.minor.x = element_blank(),
-            panel.grid.minor.y = element_blank()) +
+            ) +
       scale_color_manual(values = allcolors) 
     p
     
@@ -214,18 +210,20 @@ output$cortestres <- renderPrint({
    
     candidatecounts <- as.data.frame(candidatecounts)
     medianvalues <- candidatecounts %>%
-      filter(gene == "PRL", tissue == "pituitary") %>%
-      group_by(treatment) %>%
+      filter(gene %in% c(!!as.character(input$gene)),
+                     tissue %in% !!as.character(input$tissue),
+                     sex %in% !!as.character(input$sex)) %>%
+      group_by(sex, tissue, treatment) %>%
       summarize(median = median(counts, na.rm = TRUE)) %>%
       arrange(treatment)  %>%
       filter(treatment != "NA") %>%
-      mutate(scaled = scales:::rescale(median, to = c(0,11))) %>%
+      mutate(scaled = scales:::rescale(median, to = c(0,6))) %>%
       mutate(averaged = round(scaled,0))
     medianvalues$treatment <- factor(medianvalues$treatment, levels = charlevels)
     
-    notes <- left_join(medianvalues, numberstonotes, by = "averaged") %>%
-      select(treatment, median, scaled, note)
-  
+    notes <- left_join(medianvalues, numberstonotes, by = "averaged")   %>%
+      select(sex, tissue, treatment, median, note )
+    
     notes
     
     ## sonify data

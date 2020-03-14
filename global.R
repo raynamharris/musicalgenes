@@ -92,6 +92,6 @@ gene_names <- candidatecounts %>%
 
 
 numberstonotes <- data.frame(
-  averaged = c(0:11),
-  note = c("C",  "D",  "E", "F", "G",  "A", "B", "C",  "D",  "E", "F", "G")
+  averaged = c(0:6),
+  note = c("C",  "D",  "E", "F", "G",  "A", "B")
 )

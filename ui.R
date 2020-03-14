@@ -25,7 +25,7 @@ shinyUI(
             label = "Which tissue?",
             choices = tissuelevels,
             selected = "pituitary",
-            multiple = TRUE
+            multiple = FALSE
           ),
           selectInput(
             inputId = "sex",
@@ -47,13 +47,18 @@ shinyUI(
           tabPanel(
             "Musical genes",
             fluidRow(
-              p(h2("Listen to the transcriptional symphony of parental care")),
+              p(h2("Musical genes")),
               
               tags$img(src = "expdesign.png", width = "100%"),
               
+              
+              p("We sampled gene expression at these timepoints 
+                during the course of parental care in bi-parental pigeons."),
+              
+              
               selectInput(
                 inputId = "gene",
-                label = "Chose a gene to vizualize and sonify (aka 'plot and play').",
+                label = "Chose a gene to vizualize and sonify.",
                 choices = c(gene_names),
                 selected = c("PRL"),
                 multiple = FALSE
@@ -67,6 +72,9 @@ shinyUI(
                 However, when it does work, it plays the mean
                 mean value of gene expression over time for male and female pigeons. 
                 It was made with the package sonify"),
+              
+              p("Alternatively, you can play the notes on a keyboard. 
+                Feel free to change the tissue or sex."),
               
               
               tableOutput("musicalgenes") 
