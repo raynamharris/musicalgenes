@@ -244,13 +244,15 @@ output$cortestres <- renderPrint({
     medianvalues$treatment <- factor(medianvalues$treatment, levels = charlevels)
     
     notes <- left_join(medianvalues, numberstonotes, by = "averaged")   %>%
-      select(sex, tissue, treatment,note ) %>%
-      pivot_wider(names_from = sex, values_from = note )%>%
-      mutate(treatment = factor(treatment, levels = charlevels))
+      select(sex, tissue, treatment, note ) %>%
+      pivot_wider(names_from = sex, values_from = note ) %>%
+      mutate(treatment = factor(treatment, levels = charlevels)) %>%
+      pivot_longer(-c(tissue, treatment),  names_to = "sex", values_to = "note") %>%
+      pivot_wider(names_from = treatment, values_from = note)
     
     notes
     
-    ## sonify data
+    ## sonify datat
     #musicalgenes <-  sonify(x = medianvalues$median, interpolation = "constant")
     
   
