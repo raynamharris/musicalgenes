@@ -194,7 +194,10 @@ output$cortestres <- renderPrint({
     
     candidatecounts <- as.data.frame(candidatecounts)
     
-    p <- candidatecounts %>%
+    treble <- image_read("www/fig_treble.png")
+    base <- image_read("www/fig_base.png")
+      
+    f <- candidatecounts %>%
       group_by(treatment, tissue, gene, sex)  %>% 
       summarize(median = median(counts, na.rm = T), 
                 se = sd(counts,  na.rm = T)/sqrt(length(counts))) %>%
@@ -203,24 +206,53 @@ output$cortestres <- renderPrint({
       filter(
         gene %in% c(!!as.character(input$gene)),
         tissue %in% !!as.character(input$tissue),
-        sex %in% !!as.character(input$sex)
+        sex == "female"
       ) %>% 
-      #collect() %>%
-     # drop_na() %>%
+      collect() %>%
+      drop_na() %>%
       ggplot( aes(x = treatment, y = median)) +
-     # geom_errorbar(aes(ymin = median - se, 
-     #                   ymax = median + se),  width=.5, color = "white") +
-      geom_image(aes(image=image), size = 0.15) +
-      labs( y = "gene expression", x = "parental stage") +
-      facet_wrap(~sex, scales = "free_y", nrow = ) +
-      theme_classic(base_size = 16) +
-      theme(legend.position = "none", 
-            axis.text.x = element_text(angle = 45, hjust = 1)
-            ) +
-      scale_color_manual(values = allcolors) 
-    p
+     geom_errorbar(aes(ymin = median - se, 
+                       ymax = median + se),  width=.5, color = "white") +
+      geom_image(aes(image=image), size = 0.1) +
+      theme_void(base_size = 16) +
+      theme(legend.position = "none") +
+      scale_color_manual(values = allcolors) +
+      labs(y = " ", caption = "  ", title = "female ", subtitle = "") +
+      theme(plot.margin=unit(c(4,1,4,2),"cm"))
     
     
+    m <- candidatecounts %>%
+      group_by(treatment, tissue, gene, sex)  %>% 
+      summarize(median = median(counts, na.rm = T), 
+                se = sd(counts,  na.rm = T)/sqrt(length(counts))) %>%
+      dplyr::mutate(scaled = rescale(median, to = c(0, 7))) %>%
+      dplyr::mutate(image = "www/musicnote.png")   %>%
+      filter(
+        gene %in% c(!!as.character(input$gene)),
+        tissue %in% !!as.character(input$tissue),
+        sex == "male"
+      ) %>% 
+      collect() %>%
+     drop_na() %>%
+      ggplot( aes(x = treatment, y = median)) +
+      geom_errorbar(aes(ymin = median - se, 
+                         ymax = median + se),  width=.5, color = "white") +
+      geom_image(aes(image=image), size = 0.1)+
+      theme_void(base_size = 16) +
+      theme(legend.position = "none") +
+      scale_color_manual(values = allcolors) +
+      labs(y = " ", caption = "  ",title = "male  ",  subtitle = "") +
+      theme(plot.margin=unit(c(4,1,4,2),"cm"))
+    
+    female <- ggdraw() + 
+      draw_image(treble) + 
+      draw_plot(f)
+    
+    male  <- ggdraw() + 
+      draw_image(base) + 
+      draw_plot(m)
+    
+    plot_grid(female, male, nrow = 1)
     
   })
   
@@ -230,16 +262,17 @@ output$cortestres <- renderPrint({
     ## average and rescale data
    
     candidatecounts <- as.data.frame(candidatecounts)
+   
     medianvalues <- candidatecounts %>%
       filter(gene %in% c(!!as.character(input$gene)),
                      tissue %in% !!as.character(input$tissue),
                      sex %in% !!as.character(input$sex)) %>%
       group_by(sex, tissue, treatment) %>%
-      summarize(median = median(counts, na.rm = TRUE)) %>%
+      summarize(median = median(counts, na.rm = TRUE) + 2) %>%
       arrange(sex, treatment)  %>%
       filter(treatment != "NA") %>%
-      mutate(scaled = scales:::rescale(median, to = c(0,6))) %>%
-      mutate(averaged = round(scaled,0)) 
+      mutate(scaled = scales:::rescale(median, to = c(0,7))) %>%
+      mutate(averaged = round(scaled,0) ) 
       
     medianvalues$treatment <- factor(medianvalues$treatment, levels = charlevels)
     

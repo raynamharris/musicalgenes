@@ -16,6 +16,7 @@ library(dbplyr)
 library(ggplot2)
 library(ggimage)
 library(cowplot)
+library(magick)
 
 # experimental levels ----
 
@@ -67,6 +68,7 @@ con <- dbConnect(SQLite(), "data/musicalgenes.sqlite")
 candidatecounts <- tbl(con, "candidatecounts")
 alldeg <- tbl(con, "alldeg")
 
+
 candidatecounts$treatment <- factor(candidatecounts$treatment, levels =  charlevels)
 alldeg$treatment <- factor(alldeg$treatment, levels =  charlevels)
 
@@ -93,6 +95,6 @@ gene_names <- candidatecounts %>%
 
 
 numberstonotes <- data.frame(
-  averaged = c(0:6),
-  note = c("C",  "D",  "E", "F", "G",  "A", "B")
+  averaged = c(0:7),
+  note = c("A", "B",  "C",  "D", "E", "F",  "G", "AA")
 )

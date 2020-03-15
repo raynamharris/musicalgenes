@@ -37,7 +37,9 @@ shinyUI(
         ),
         wellPanel(
           actionButton("play", 
-                       "Listen to the sound of prolactin in the female pituitary."),
+                       HTML("Listen to the sound of prolactin
+                       <br/> in the female pituitary.")
+                       ),
           
           p(""),
           p("Note: this only works if you run the app locally :(
@@ -70,18 +72,16 @@ shinyUI(
               
               selectInput(
                 inputId = "gene",
-                label = "Chose a gene to vizualize and sonify.",
+                label = "Chose a gene to vizualize as notes on a scale.",
                 choices = c(gene_names),
                 selected = c("PRL"),
                 multiple = FALSE
               ),
               
-              plotOutput("musicplot", width = "100%"),
+              plotOutput("musicplot", width = "100%") ,
               
-              
-              
-              
-              p("The notes above are written in the table below for reference."),
+              p("Alternatlively, the notes can be printed as notes on a scale (with A, B, C, D, E, F, G, and AA
+                representing `do re mi fa so la ti do`, or A being the lowest and AA being the highest)."),
               
               tableOutput("musicalgenes") 
               
