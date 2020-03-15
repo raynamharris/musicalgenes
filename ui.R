@@ -36,7 +36,14 @@ shinyUI(
           )
         ),
         wellPanel(
+          actionButton("play", 
+                       "Listen to the sound of prolactin in the female pituitary."),
           
+          p(""),
+          p("Note: this only works if you run the app locally :(
+            However, when it does work, it plays the mean
+            mean value of gene expression over time for male and female pigeons. 
+            This sound clip was made with the R package `sonify`.")
         )
       ),
 
@@ -54,7 +61,12 @@ shinyUI(
               
               p("We sampled gene expression at these timepoints 
                 during the course of parental care in bi-parental pigeons."),
-              
+              p("Genes do not exert their actions alone; 
+                they work in concert with other genes."),
+              p("With R, we can listen data-generated sound,
+                or we can plot data a notes on a scale."),
+              p("This is one step towards making data science
+                accessible to those with diminished eyesight."),
               
               selectInput(
                 inputId = "gene",
@@ -66,18 +78,13 @@ shinyUI(
               
               plotOutput("musicplot", width = "100%"),
               
-              actionButton("play", "Listen to the sound of prolactin in the female pituitary."),
               
-              p("Note: this only works if you run the app locally :(
-                However, when it does work, it plays the mean
-                mean value of gene expression over time for male and female pigeons. 
-                It was made with the package sonify"),
               
-              p("Alternatively, you can play the notes on a keyboard. 
-                Feel free to change the tissue or sex."),
               
+              p("The notes above are written in the table below for reference."),
               
               tableOutput("musicalgenes") 
+              
             )
           ),
           
