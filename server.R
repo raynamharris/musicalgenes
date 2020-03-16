@@ -30,9 +30,9 @@ function(input, output) {
       ) %>% 
       drop_na() %>%
       ggplot(aes(x = treatment, y = counts, color = sex)) +
-      geom_boxplot(aes(fill = treatment)) +
-      geom_point() +
-      geom_smooth(aes(x = as.numeric(treatment))) +
+      geom_boxplot(aes(fill = treatment), outlier.shape = NA) +
+      geom_jitter(aes(color = sex), position=position_dodge(0.8)) +
+      #geom_smooth(aes(x = as.numeric(treatment))) +
       facet_wrap( ~ gene, scales = "free_y", ncol = 2) +
       theme_classic(base_size = 16) +
       scale_fill_manual(values = allcolors, guide = FALSE) +
@@ -44,7 +44,7 @@ function(input, output) {
         axis.title = element_text(face = "italic"),
         strip.text = element_text(face = "italic")
       ) +
-      labs(y = "gene expression", x = NULL)
+      labs(y = "gene expression", x = NULL, subtitle = input$tissue)
     p
   })
   
@@ -118,11 +118,14 @@ function(input, output) {
       ggplot(aes_string(x = "PRL", y = input$gene)) +
       geom_point(aes(color = treatment)) +
       geom_smooth(method = "lm", aes(color = sex)) +
-      facet_wrap(~tissue, ncol = 1, scales = "free") +
+      #facet_wrap(~tissue, ncol = 1, scales = "free") +
       theme_classic(base_size = 14) +
       scale_fill_manual(values = allcolors, guide = FALSE) +
       scale_color_manual(values = allcolors) +
-      theme(legend.position = "bottom")
+      theme(legend.position = "bottom",
+            axis.title = element_text(face = "italic")) +
+      guides(color = guide_legend(nrow = 2)) +
+      labs(subtitle = input$tissue)
   })
 
   

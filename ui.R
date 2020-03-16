@@ -14,7 +14,7 @@ shinyUI(
           HTML(paste("This application allows you to explore RNA-seq data from a 
                      study designed to characterize changes 
                      in the hypothalamus, pituitary, and gonads of male and female pigeons 
-                     (aka Rock Doves) over the course of parental care. Stages sampled 
+                     (aka Rock Doves) during parental care. Stages sampled 
                      include non-breeding, nest-building, egg incuation, 
                      and nestling care. Select tissues, and sexes to plot from the pull down menu.")),
 
@@ -59,7 +59,7 @@ shinyUI(
           p("Note: this only works if you run the app locally :(
             However, when it does work, it plays the mean
             mean value of gene expression over time for male and female pigeons. 
-            This sound clip was made with the R package `sonify`.")
+            This sound clip was made with the R package 'sonify'.")
         ), 
         
         wellPanel(
@@ -72,7 +72,7 @@ shinyUI(
           "Source code available at GitHub @raynamharris/musicalgenes"
         ),
         
-        p("This software application is a product of the `Birds, Brains, and Banter (B3)`
+        p("This software application is a product of the 'Birds, Brains, and Banter (B3)'
           Laboratory at the University of California at Davis.
           This and related research is funded by the National Science Foundation,
           in a grant to Rebecca Calisi and Matthew MacManes.
@@ -95,16 +95,16 @@ shinyUI(
             fluidRow(
               p(h2("Musical genes: from data to sounds")),
               
-              tags$img(src = "musicalgenes.png", width = "100%"),
+              tags$img(src = "fig_musicalgenes.png", width = "100%"),
               
     
               p(""),
               p("Genes do not exert their actions alone; 
                 they work in concert with other genes.
                 We are working towards creating a 
-                `symphony of gene expression over the course of parental care` using data!
+                'symphony of gene expression over the course of parental care' using data!
                 We often create figures and tables with R, 
-                but we an also use R to genearte sound!
+                but we can also use R to generate sound!
                 This is one step towards making data science
                 accessible to those with diminished eyesight.
                 Here, each notes represents the mean value of gene expression 
@@ -145,26 +145,28 @@ shinyUI(
                 Interestingly, we identified about 100 genes whose expression 
                 was correlated with PRL,
                 including (BRCA1, which is associated with breast cancer).
+                
                 Additionally, we identified thousands of genes whose expression 
                 changed over 
                 the course of parental care.
+                
                 Exploring the relationship between PRL and other differentially 
-                expressed genes could provide important insights into the `symphony` of 
+                expressed genes could provide important insights into the 'symphony' of 
                 gene expression 
                 that regulates behavior at the organismal and cellular level."),
 
 
-              p("The graph(s) provide a mutli-faceted view of the data. 
+              p("The graph(s) provide a multi-faceted view of the data. 
         Each point represents the expression level of one gene from one sample. 
         The box plots show the mean and standard deviation of gene 
-        expression for each parental timepoint. 
+        expression for each parental time point. 
         The smoothed line helps convey how gene expression changes over time. "),
               
               
               p("The default plot shows the relationship between PRL 
-                and whatever gene is selected on the right. 
-                Click `BRCA1` to view the similarities and differences between
-                PRL and BRCA1."),
+                and whatever gene is selected from the pull-down menu. 
+                Click 'BRCA1' to view the similarities and differences between
+                BRCA1 and PRL."),
 
         
               
@@ -172,17 +174,17 @@ shinyUI(
               plotOutput("boxPlot", width = "100%"),
 
               p("We used DESeq2 to caluculate differential gene expression 
-        between sequential parental timepoints.         
+        between sequential parental time points.         
         This table provides the log fold change and the p-value for 
-                significante changes between timepoints, separated by an `_`.
+                significantly changes between time points, separated by an '_'.
                 If your gene of interest doesn't appear in the table,
-                then it never significantly chnaged over the parental care cycle."),
+                then it never significantly changed over the parental care cycle."),
 
               
               tableOutput("DEGtable"),
           
               # p("Here are the median values of gene expression for each group.
-              #  These can be a useful reference when intrepreting the
+              #  These can be a useful reference when interpreting the
               #  statistics differences."),
               # tableOutput("summaryTable"),
 
@@ -207,17 +209,17 @@ shinyUI(
             tags$img(src = "internalexternal_hypothesis.png", width = "100%"),
 
             p("Ultimately, our goal is to understand how internal mechanisms 
-              (like a physiological closck) and external stimuli (the arrival of offspring)
+              (like a physiological clock) and external stimuli (the arrival of offspring)
               alter gene expression. Does the body prepare for parenthood or does it react to parenthood?"),
 
             p("t-Distributed Stochastic Neighbor Embedding (t-SNE) 
                is a technique for dimensionality reduction that is well suited 
                for the visualization of high-dimensional datasets.
-               Samples that custer together are similar in expression. 
-               In the pituitary, we see that samples from incubation day and hatch cluster,
+               Samples that cluster together are similar in expression. 
+               In the pituitary, we see that samples from incubation day and hatch cluster together,
                and we see samples from lay and incubation days 3 and 9 cluster.
-               This suggests that internal mechanisms which prepare for chick arrival 
-               have a greater effect on gene expression than changes in the external enviornament. 
+               This suggests that internal mechanisms that prepare for chick arrival 
+               have a greater effect on gene expression than changes in the external enviornment 
                "),
 
             selectInput(
