@@ -154,14 +154,17 @@ shinyUI(
                 that regulates behavior at the organismal and cellular level."),
 
 
-              p("These two graphs provide a mutli-faceted view of the data. 
+              p("The graph(s) provide a mutli-faceted view of the data. 
         Each point represents the expression level of one gene from one sample. 
         The box plots show the mean and standard deviation of gene 
         expression for each parental timepoint. 
-        The smoothed line helps convey how gene expression changes over time.
-        The default plots shows the relationship between PRL and BRCA1 
-        in the female pituitary, 
-        but you can compare any differentailly expressed gene to PRL."),
+        The smoothed line helps convey how gene expression changes over time. "),
+              
+              
+              p("The default plot shows the relationship between PRL 
+                and whatever gene is selected on the right. 
+                Click `BRCA1` to view the similarities and differences between
+                PRL and BRCA1."),
 
         
               
@@ -170,22 +173,22 @@ shinyUI(
 
               p("We used DESeq2 to caluculate differential gene expression 
         between sequential parental timepoints.         
-        Our manuscript highlighted significant changes in prolactin (PRL) 
-        in the pituitary between control and nest building, 
-        incubation days 9 and 17, and between hatch and nestling care day 5. 
-        With this tool, you can confirm those observation and 
-        explored different genes of interest."),
+        This table provides the log fold change and the p-value for 
+                significante changes between timepoints, separated by an `_`.
+                If your gene of interest doesn't appear in the table,
+                then it never significantly chnaged over the parental care cycle."),
 
+              
+              tableOutput("DEGtable"),
           
               # p("Here are the median values of gene expression for each group.
               #  These can be a useful reference when intrepreting the
               #  statistics differences."),
               # tableOutput("summaryTable"),
 
-              p("Finally, here is a scatter plot showing the correlation between 
+              p("Finally, here is a scatter plot showing the linear relationship between 
         PRL and the gene of interest.
-        The default scatter plot shows that BRCA1 is positively 
-        correlated with PRL."),
+        Points are colored by tissue and the line is colored by sex. "),
               
               #verbatimTextOutput("cortestres"),
 
