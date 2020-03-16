@@ -1,7 +1,7 @@
 shinyUI(
   fluidPage(
     # Application title
-    titlePanel("Exploring gene expression in parental pigeons."),
+    titlePanel("Exploring gene expression in parental pigeons"),
 
     # titlePanel(title=div(img(src="expdesign.png"))),
 
@@ -9,7 +9,7 @@ shinyUI(
     sidebarLayout(
       sidebarPanel(
         wellPanel(
-          HTML(paste(h4("Interactively explore transcriptional changes associated parental care transitions."))),
+          HTML(paste(h4("Interactively explore data"))),
 
           HTML(paste("This application allows you to explore RNA-seq data from a 
                      study designed to characterize changes 
@@ -38,6 +38,7 @@ shinyUI(
           )
         ),
         wellPanel(
+          HTML(paste(h4("Listen to data"))),
           actionButton("play", 
                        HTML("Listen to the sound of prolactin
                        <br/> in the female pituitary.")
@@ -48,7 +49,30 @@ shinyUI(
             However, when it does work, it plays the mean
             mean value of gene expression over time for male and female pigeons. 
             This sound clip was made with the R package `sonify`.")
+        ), 
+        
+        wellPanel(
+        
+        
+          HTML(paste(h4("Acknowledgments"))),
+          
+        tags$a(
+          href = "https://github.com/raynamharris/musicalgenes",
+          "Source code available at GitHub @raynamharris/musicalgenes"
+        ),
+        
+        p("This software application is a product of the `Birds, Brains, and Banter (B3)`
+          Laboratory at the University of California at Davis.
+          This and related research is funded by the National Science Foundation,
+          in a grant to Rebecca Calisi and Matthew MacManes.
+          The software was written by Rayna Harris, with assistance from Mauricio Vargas.
+          Suzanne Austin, Andrew Lang, Victoria Farrar, April Booth, Tanner Feustel 
+          contritubed to data collection, analysis, and interpretation.
+          Owen Marshall helped develop the musical gene avenue.")
+        
         )
+        
+        
       ),
 
       ### main panel
@@ -94,7 +118,7 @@ shinyUI(
           
           
            tabPanel(
-            "Prolactin: lactaction and cancer?",
+            "Prolactin, does it promote lactaction and cancer?",
             fluidRow(
               p(h2("Prolactin (PRL) gene expression during parental 
                    care and it implication for breast cancer research")),
@@ -162,19 +186,10 @@ shinyUI(
         PRL and the gene of interest.
         The default scatter plot shows that BRCA1 is positively 
         correlated with PRL."),
-
-              plotOutput("scatterplot"),
- 
               
               #verbatimTextOutput("cortestres"),
-                
- 
-              tags$a(
-                href = "https://github.com/raynamharris/musicalgenes",
-                "Source code available at GitHub @raynamharris/musicalgenes"
-              ),
 
-              p("To cite this tool, please cite....")
+              plotOutput("scatterplot")
             )
           ),
           
@@ -188,7 +203,9 @@ shinyUI(
 
             tags$img(src = "internalexternal_hypothesis.png", width = "100%"),
 
-
+            p("Ultimately, our goal is to understand how internal mechanisms 
+              (like a physiological closck) and external stimuli (the arrival of offspring)
+              alter gene expression. Does the body prepare for parenthood or does it react to parenthood?"),
 
             p("t-Distributed Stochastic Neighbor Embedding (t-SNE) 
                is a technique for dimensionality reduction that is well suited 

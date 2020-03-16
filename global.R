@@ -13,6 +13,7 @@ library(forcats)
 library(DBI)
 library(RSQLite)
 library(dbplyr)
+
 library(ggplot2)
 library(ggimage)
 library(cowplot)
