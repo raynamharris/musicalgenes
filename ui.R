@@ -28,6 +28,7 @@ shinyUI(
             multiple = FALSE
           ),
           
+          tableOutput("genename"),
 
           selectInput(
             inputId = "tissue",
@@ -35,13 +36,23 @@ shinyUI(
             choices = tissuelevels,
             selected = "pituitary",
             multiple = FALSE
+          ),
+          
+         
+          
+          selectInput(
+            inputId = "sex",
+            label = "Chose one or both sexes to vizualize.",
+            choices = sexlevels,
+            selected = c("female", "male"),
+            multiple = TRUE
           )
         ),
         wellPanel(
           HTML(paste(h4("Listen to data"))),
           actionButton("play", 
                        HTML("Listen to the sound of prolactin
-                       <br/> in the female pituitary.")
+                       <br/> (PRL) in the female pituitary.")
                        ),
           
           p(""),
@@ -100,10 +111,10 @@ shinyUI(
                 in a given tissue (can be changed) for female and male
                 pigeons across the parental care cycle. "),
               
-            
-              tableOutput("genename"),
+             
+             
               
-              plotOutput("musicplot", width = "100%") ,
+              plotOutput("musicplot", width = "80%") ,
               
               p("Alternatlively, the notes can be printed as notes on a scale 
                   (from A to G to AA, with AA being the highest)."),
@@ -154,14 +165,7 @@ shinyUI(
 
         
               
-              selectInput(
-                inputId = "sex",
-                label = "Chose one or both sexes to vizualize.",
-                choices = sexlevels,
-                selected = c("female", "male"),
-                multiple = TRUE
-              ),
-
+              
               plotOutput("boxPlot", width = "100%"),
 
               p("We used DESeq2 to caluculate differential gene expression 
@@ -172,11 +176,7 @@ shinyUI(
         With this tool, you can confirm those observation and 
         explored different genes of interest."),
 
-              tableOutput("genename"),
-              
-            
-
-
+          
               # p("Here are the median values of gene expression for each group.
               #  These can be a useful reference when intrepreting the
               #  statistics differences."),

@@ -33,7 +33,7 @@ function(input, output) {
       geom_boxplot(aes(fill = treatment)) +
       geom_point() +
       geom_smooth(aes(x = as.numeric(treatment))) +
-      facet_wrap(tissue ~ gene, scales = "free_y", ncol = 2) +
+      facet_wrap( ~ gene, scales = "free_y", ncol = 2) +
       theme_classic(base_size = 16) +
       scale_fill_manual(values = allcolors, guide = FALSE) +
       scale_color_manual(values = allcolors) +
@@ -41,7 +41,8 @@ function(input, output) {
       theme(
         axis.text.x = element_text(angle = 45, hjust = 1),
         legend.position = "bottom",
-        strip.text.x = element_text(face = "italic")
+        axis.title = element_text(face = "italic"),
+        strip.text = element_text(face = "italic")
       ) +
       labs(y = "gene expression", x = NULL)
     p
