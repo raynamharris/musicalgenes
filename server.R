@@ -5,6 +5,16 @@ function(input, output) {
   sex_filter <- reactive({ as.character(input$sex) })
   treatment_filter <- reactive({ as.character(input$treatment) })
   
+  
+  output$genename <- renderTable({
+    
+    mygene <- hugo %>%
+      filter(gene %in% c(!!as.character(input$gene))) 
+    mygene
+    
+  })
+  
+  
   output$boxPlot <- renderPlot({
     
     p <- candidatecounts %>%
@@ -269,9 +279,9 @@ output$cortestres <- renderPrint({
     
     ## average and rescale data
    
-    candidatecounts <- as.data.frame(candidatecounts)
+    candidatecountsdf <- as.data.frame(candidatecounts)
    
-    medianvalues <- candidatecounts %>%
+    medianvalues <- candidatecountsdf %>%
       mutate(
         treatment = factor(treatment, levels = charlevels),
         tissue = factor(tissue, levels = tissuelevels)
@@ -297,10 +307,9 @@ output$cortestres <- renderPrint({
     
     ## sonify datat
     #musicalgenes <-  sonify(x = medianvalues$median, interpolation = "constant")
-    
-  
-    
   })
 
+  
+  
   
 }

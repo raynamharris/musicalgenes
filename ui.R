@@ -19,6 +19,15 @@ shinyUI(
                      and nestling care. Select tissues, and sexes to plot from the pull down menu.")),
 
           HTML(paste(h4(" "))),
+          
+          selectInput(
+            inputId = "gene",
+            label = "Which gene?",
+            choices = c(gene_names),
+            selected = c("PRL"),
+            multiple = FALSE
+          ),
+          
 
           selectInput(
             inputId = "tissue",
@@ -68,17 +77,7 @@ shinyUI(
                 pigeons across the parental care cycle. "),
               
             
-              selectInput(
-                inputId = "gene",
-                label = "Chose a gene to vizualize as notes on a scale.",
-                choices = c(gene_names),
-                selected = c("PRL"),
-                multiple = FALSE,
-                width= "400px"
-              ),
-              
-          
-              
+              tableOutput("genename"),
               
               plotOutput("musicplot", width = "100%") ,
               
@@ -95,7 +94,7 @@ shinyUI(
           
           
            tabPanel(
-            "Prolactin & breast cancer",
+            "Prolactin: lactaction and cancer?",
             fluidRow(
               p(h2("Prolactin (PRL) gene expression during parental 
                    care and it implication for breast cancer research")),
@@ -129,17 +128,11 @@ shinyUI(
         in the female pituitary, 
         but you can compare any differentailly expressed gene to PRL."),
 
-              selectInput(
-                inputId = "gene",
-                label = "Chose a gene to compare to PRL.",
-                choices = c(gene_names),
-                selected = c("BRCA1"),
-                multiple = FALSE
-              ),
+        
               
               selectInput(
                 inputId = "sex",
-                label = "Which sex?",
+                label = "Chose one or both sexes to vizualize.",
                 choices = sexlevels,
                 selected = c("female", "male"),
                 multiple = TRUE
@@ -155,7 +148,9 @@ shinyUI(
         With this tool, you can confirm those observation and 
         explored different genes of interest."),
 
-              tableOutput("DEGtable"),
+              tableOutput("genename"),
+              
+            
 
 
               # p("Here are the median values of gene expression for each group.

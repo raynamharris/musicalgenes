@@ -90,3 +90,6 @@ numberstonotes <- data.frame(
   averaged = c(0:7),
   note = c("A", "B",  "C",  "D", "E", "F",  "G", "AA")
 )
+
+hugo <- read.csv("data/hugo.csv") %>% dplyr::distinct(gene, name)
+head(hugo)
