@@ -170,27 +170,32 @@ output$cortestres <- renderPrint({
       scale_fill_manual(values = allcolors, guide = FALSE) +
       scale_color_manual(values = allcolors) +
       theme(legend.position = "none") +
-      facet_wrap(tissue ~ sex, scales = "free") +
-      labs(x = 'tSNE 1', y = "tSNE 2")
+      facet_wrap(~ sex, scales = "free") +
+      labs(x = 'tSNE 1', y = "tSNE 2", subtitle = input$tissue)
   })
   
   
   output$barplot <- renderPlot({
     
-    p <- allDEGs %>%
-      filter(tissue %in% input$tissue,
-             comparison %in% input$treatment,
-             sex %in% input$sex) %>%
+  
+    p <- alldeg %>%
+     filter(tissue %in% !!as.character(input$tissue),
+            #direction %in% !!as.character(input$treatment),
+            sex %in% !!as.character(input$sex)) %>%
+      collect() %>%
+      mutate(
+        comparison = factor(comparison, levels = comparisonlevels)
+      ) %>% 
       ggplot(aes(x = comparison,  fill = direction)) +
       geom_bar(position = "dodge") +
-      #facet_wrap(tissue ~ sex) +
+      facet_wrap(~sex) +
       theme_classic(base_size = 14) +
       theme(axis.text.x = element_text(angle = 45, hjust = 1),
             legend.position = "none")  +
       guides(fill = guide_legend(nrow = 1)) +
       labs(x = "Sequential parental care stage comparisons", 
            y = "Total DEGs",
-           subtitle = " ") +
+           subtitle = input$tissue) +
       scale_fill_manual(values = allcolors,
                         name = " ",
                         drop = FALSE) +

@@ -129,10 +129,9 @@ shinyUI(
           
           
            tabPanel(
-            "Prolactin, does it promote lactaction and cancer?",
+            "Data-driven discovery",
             fluidRow(
-              p(h2("Prolactin (PRL) gene expression during parental 
-                   care and it implication for breast cancer research")),
+              p(h2("Prolactin: Does is promote lacation and breast cancer?")),
 
 
               tags$img(src = "expdesign.png", width = "100%"),
@@ -142,15 +141,10 @@ shinyUI(
                 (PRL) gene expression fluctuates throughout parental care 
                 in a manner that is consistent with its role in promoting lactation 
                 and maintaining parental behaviors.
-                Interestingly, we identified about 100 genes whose expression 
+                Using a data-driven approach, we identified about 100 genes whose expression 
                 was correlated with PRL,
                 including (BRCA1, which is associated with breast cancer).
-                
-                Additionally, we identified thousands of genes whose expression 
-                changed over 
-                the course of parental care.
-                
-                Exploring the relationship between PRL and other differentially 
+                 Exploring the relationship between PRL and other differentially 
                 expressed genes could provide important insights into the 'symphony' of 
                 gene expression 
                 that regulates behavior at the organismal and cellular level."),
@@ -199,7 +193,7 @@ shinyUI(
           ),
           
           tabPanel(
-            "Internal versus external hypothesis",
+            "Hypothesis-driven discovery",
 
 
             p(h2("Do internal mechanisms or external stimuli 
@@ -219,7 +213,7 @@ shinyUI(
                In the pituitary, we see that samples from incubation day and hatch cluster together,
                and we see samples from lay and incubation days 3 and 9 cluster.
                This suggests that internal mechanisms that prepare for chick arrival 
-               have a greater effect on gene expression than changes in the external enviornment 
+               have a greater effect on gene expression than changes in the external enviornment. 
                "),
 
             selectInput(
@@ -229,7 +223,17 @@ shinyUI(
               selected = c("inc.d3", "inc.d9", "inc.d17", "hatch", "n5"),
               multiple = TRUE
             ),
-            plotOutput("tsne")
+            
+            plotOutput("tsne"),
+            
+            p("If we look at the total number of differentially expressed genes that are different 
+              between each sequential stage, we see additional evidence that that 
+              gene expression in the pituitary on
+              incubation day 17 and hatch are highly similar, suggesting that internal cues
+              have a greater effect on gene expression than external stimuli.
+              "),
+            
+            plotOutput("barplot")
  
           )
         )
