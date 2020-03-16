@@ -26,13 +26,6 @@ shinyUI(
             choices = tissuelevels,
             selected = "pituitary",
             multiple = FALSE
-          ),
-          selectInput(
-            inputId = "sex",
-            label = "Which sex?",
-            choices = sexlevels,
-            selected = c("female", "male"),
-            multiple = TRUE
           )
         ),
         wellPanel(
@@ -77,6 +70,9 @@ shinyUI(
                 selected = c("PRL"),
                 multiple = FALSE
               ),
+              
+          
+              
               
               plotOutput("musicplot", width = "100%") ,
               
@@ -131,6 +127,14 @@ shinyUI(
                 choices = c(gene_names),
                 selected = c("BRCA1"),
                 multiple = FALSE
+              ),
+              
+              selectInput(
+                inputId = "sex",
+                label = "Which sex?",
+                choices = sexlevels,
+                selected = c("female", "male"),
+                multiple = TRUE
               ),
 
               plotOutput("boxPlot", width = "100%"),

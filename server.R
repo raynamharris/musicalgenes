@@ -211,14 +211,14 @@ output$cortestres <- renderPrint({
       collect() %>%
       drop_na() %>%
       ggplot( aes(x = treatment, y = median)) +
-     geom_errorbar(aes(ymin = median - se, 
-                       ymax = median + se),  width=.5, color = "white") +
-      geom_image(aes(image=image), size = 0.1) +
+    geom_errorbar(aes(ymin = median - se, 
+                      ymax = median + se , color = treatment),  width=0) +
+      geom_image(aes(image=image), size = 0.125) +
       theme_void(base_size = 16) +
       theme(legend.position = "none") +
       scale_color_manual(values = allcolors) +
       labs(y = " ", caption = "  ", title = "female ", subtitle = "") +
-      theme(plot.margin=unit(c(4,1,4,2),"cm"))
+      theme(plot.margin=unit(c(4,1,4,2),"cm")) 
     
     
     m <- candidatecounts %>%
@@ -236,8 +236,8 @@ output$cortestres <- renderPrint({
      drop_na() %>%
       ggplot( aes(x = treatment, y = median)) +
       geom_errorbar(aes(ymin = median - se, 
-                         ymax = median + se),  width=.5, color = "white") +
-      geom_image(aes(image=image), size = 0.1)+
+                        ymax = median + se, color = treatment),  width=0) +
+      geom_image(aes(image=image), size = 0.125)+
       theme_void(base_size = 16) +
       theme(legend.position = "none") +
       scale_color_manual(values = allcolors) +
