@@ -49,26 +49,32 @@ shinyUI(
           tabPanel(
             "Musical genes",
             fluidRow(
-              p(h2("Musical genes")),
+              p(h2("Musical genes: from data to sounds")),
               
-              tags$img(src = "expdesign.png", width = "100%"),
+              tags$img(src = "musicalgenes.png", width = "100%"),
               
-              
-              p("We sampled gene expression at these timepoints 
-                during the course of parental care in bi-parental pigeons."),
+    
+              p(""),
               p("Genes do not exert their actions alone; 
-                they work in concert with other genes."),
-              p("With R, we can listen data-generated sound,
-                or we can plot data a notes on a scale."),
-              p("This is one step towards making data science
-                accessible to those with diminished eyesight."),
+                they work in concert with other genes.
+                We are working towards creating a 
+                `symphony of gene expression over the course of parental care` using data!
+                We often create figures and tables with R, 
+                but we an also use R to genearte sound!
+                This is one step towards making data science
+                accessible to those with diminished eyesight.
+                Here, each notes represents the mean value of gene expression 
+                in a given tissue (can be changed) for female and male
+                pigeons across the parental care cycle. "),
               
+            
               selectInput(
                 inputId = "gene",
                 label = "Chose a gene to vizualize as notes on a scale.",
                 choices = c(gene_names),
                 selected = c("PRL"),
-                multiple = FALSE
+                multiple = FALSE,
+                width= "400px"
               ),
               
           
@@ -76,10 +82,12 @@ shinyUI(
               
               plotOutput("musicplot", width = "100%") ,
               
-              p("Alternatlively, the notes can be printed as notes on a scale (with A, B, C, D, E, F, G, and AA
-                representing `do re mi fa so la ti do`, or A being the lowest and AA being the highest)."),
+              p("Alternatlively, the notes can be printed as notes on a scale 
+                  (from A to G to AA, with AA being the highest)."),
               
-              tableOutput("musicalgenes") 
+              tableOutput("musicalgenes") ,
+              
+              p("Click the next tab for alternative vizualizations.")
               
             )
           ),
@@ -179,7 +187,8 @@ shinyUI(
             "Internal versus external hypothesis",
 
 
-            p(h2("Do internal mechanisms or external stimuli have a larger effect on gene expression?")),
+            p(h2("Do internal mechanisms or external stimuli 
+                 have a larger effect on gene expression?")),
 
 
             tags$img(src = "internalexternal_hypothesis.png", width = "100%"),

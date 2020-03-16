@@ -198,6 +198,10 @@ output$cortestres <- renderPrint({
     base <- image_read("www/fig_base.png")
       
     f <- candidatecounts %>%
+      mutate(
+        treatment = factor(treatment, levels = charlevels),
+        tissue = factor(tissue, levels = tissuelevels)
+      ) %>% 
       group_by(treatment, tissue, gene, sex)  %>% 
       summarize(median = median(counts, na.rm = T), 
                 se = sd(counts,  na.rm = T)/sqrt(length(counts))) %>%
@@ -211,17 +215,21 @@ output$cortestres <- renderPrint({
       collect() %>%
       drop_na() %>%
       ggplot( aes(x = treatment, y = median)) +
-    geom_errorbar(aes(ymin = median - se, 
+      geom_errorbar(aes(ymin = median - se, 
                       ymax = median + se , color = treatment),  width=0) +
       geom_image(aes(image=image), size = 0.125) +
       theme_void(base_size = 16) +
       theme(legend.position = "none") +
       scale_color_manual(values = allcolors) +
-      labs(y = " ", caption = "  ", title = "female ", subtitle = "") +
+      labs(y = " ", caption = "  ", title = "females", subtitle = "") +
       theme(plot.margin=unit(c(4,1,4,2),"cm")) 
     
     
     m <- candidatecounts %>%
+      mutate(
+        treatment = factor(treatment, levels = charlevels),
+        tissue = factor(tissue, levels = tissuelevels)
+      ) %>% 
       group_by(treatment, tissue, gene, sex)  %>% 
       summarize(median = median(counts, na.rm = T), 
                 se = sd(counts,  na.rm = T)/sqrt(length(counts))) %>%
@@ -233,7 +241,7 @@ output$cortestres <- renderPrint({
         sex == "male"
       ) %>% 
       collect() %>%
-     drop_na() %>%
+      drop_na() %>%
       ggplot( aes(x = treatment, y = median)) +
       geom_errorbar(aes(ymin = median - se, 
                         ymax = median + se, color = treatment),  width=0) +
@@ -241,7 +249,7 @@ output$cortestres <- renderPrint({
       theme_void(base_size = 16) +
       theme(legend.position = "none") +
       scale_color_manual(values = allcolors) +
-      labs(y = " ", caption = "  ",title = "male  ",  subtitle = "") +
+      labs(y = " ", caption = "  ",title = "males",  subtitle = "") +
       theme(plot.margin=unit(c(4,1,4,2),"cm"))
     
     female <- ggdraw() + 
@@ -264,6 +272,10 @@ output$cortestres <- renderPrint({
     candidatecounts <- as.data.frame(candidatecounts)
    
     medianvalues <- candidatecounts %>%
+      mutate(
+        treatment = factor(treatment, levels = charlevels),
+        tissue = factor(tissue, levels = tissuelevels)
+      ) %>% 
       filter(gene %in% c(!!as.character(input$gene)),
                      tissue %in% !!as.character(input$tissue),
                      sex %in% !!as.character(input$sex)) %>%
@@ -274,8 +286,6 @@ output$cortestres <- renderPrint({
       mutate(scaled = scales:::rescale(median, to = c(0,7))) %>%
       mutate(averaged = round(scaled,0) ) 
       
-    medianvalues$treatment <- factor(medianvalues$treatment, levels = charlevels)
-    
     notes <- left_join(medianvalues, numberstonotes, by = "averaged")   %>%
       select(sex, tissue, treatment, note ) %>%
       pivot_wider(names_from = sex, values_from = note ) %>%

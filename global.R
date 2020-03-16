@@ -68,14 +68,6 @@ con <- dbConnect(SQLite(), "data/musicalgenes.sqlite")
 candidatecounts <- tbl(con, "candidatecounts")
 alldeg <- tbl(con, "alldeg")
 
-
-candidatecounts$treatment <- factor(candidatecounts$treatment, levels =  charlevels)
-alldeg$treatment <- factor(alldeg$treatment, levels =  charlevels)
-
-candidatecounts$tissue <- factor(candidatecounts$tissue, levels =  tissuelevels)
-alldeg$tissue <- factor(alldeg$tissue, levels =  tissuelevels)
-
-
 ## Go terms associated with parental care
 parentalbehavior <- tbl(con, "parentalbehavior")
 
