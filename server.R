@@ -215,6 +215,8 @@ output$cortestres <- renderPrint({
     
     treble <- image_read("www/fig_treble.png")
     base <- image_read("www/fig_base.png")
+    
+    mytitle = paste(input$gene, input$tissue, sep = " in the ")
       
     f <- candidatecounts %>%
       mutate(
@@ -224,7 +226,7 @@ output$cortestres <- renderPrint({
       group_by(treatment, tissue, gene, sex)  %>% 
       summarize(median = median(counts, na.rm = T), 
                 se = sd(counts,  na.rm = T)/sqrt(length(counts))) %>%
-      dplyr::mutate(scaled = rescale(median, to = c(0, 11))) %>%
+      dplyr::mutate(scaled = rescale(median, to = c(0, 7))) %>%
       dplyr::mutate(image = "www/musicnote.png")   %>%
       filter(
         gene %in% c(!!as.character(input$gene)),
@@ -240,7 +242,7 @@ output$cortestres <- renderPrint({
       theme_void(base_size = 16) +
       theme(legend.position = "none") +
       scale_color_manual(values = allcolors) +
-      labs(y = " ", caption = "  ", title = "females", subtitle = "") +
+      labs(y = " ", caption = "  ", subtitle = "females", title = mytitle) +
       theme(plot.margin=unit(c(4,1,4,2),"cm")) 
     
     
@@ -268,7 +270,7 @@ output$cortestres <- renderPrint({
       theme_void(base_size = 16) +
       theme(legend.position = "none") +
       scale_color_manual(values = allcolors) +
-      labs(y = " ", caption = "  ",title = "males",  subtitle = "") +
+      labs(y = " ", caption = "  ", subtitle = "males",  title = "") +
       theme(plot.margin=unit(c(4,1,4,2),"cm"))
     
     female <- ggdraw() + 
@@ -319,6 +321,51 @@ output$cortestres <- renderPrint({
   })
 
   
+  ## new sonify attempt from https://github.com/zielinskipp/sonifier/blob/master/app.R and
+  ## https://zielinskipp.shinyapps.io/sonifier/
   
-  
+  observeEvent(input$button, {
+    
+    audiotag <- function(filename){tags$audio(src = filename,
+                                              type ="audio/wav", controls = NA)}
+    
+    candidatecountsdf <- as.data.frame(candidatecounts)
+    
+    medianvalues <- candidatecountsdf %>%
+      mutate(
+        treatment = factor(treatment, levels = charlevels),
+        tissue = factor(tissue, levels = tissuelevels)
+      ) %>% 
+      filter(gene %in% c(!!as.character(input$gene)),
+             tissue %in% !!as.character(input$tissue),
+             sex %in% !!as.character(input$sex)) %>%
+      group_by(sex, tissue, treatment) %>%
+      summarize(median = median(counts, na.rm = TRUE) + 2) %>%
+      arrange(sex, treatment)  %>%
+      filter(treatment != "NA") %>%
+      mutate(scaled = scales:::rescale(median, to = c(0,7))) %>%
+      mutate(averaged = round(scaled,0) ) 
+    
+    output$text <- renderText({
+      paste0("Your input, ", input$gene, ", sounds like this:")})
+    
+    sound <- sonify(x = medianvalues$median, interpolation = "constant", duration = 6)
+    
+    # Saves file
+    wvname <- paste0("sound", input$gene, input$tissue,".wav")
+    writeWave(sound, paste0("www/", wvname))
+    
+    # Creates audiotag
+    output$audiotag <- renderUI(audiotag(wvname))
+    
+    ## Dawnload handler
+    output$wav_dln <- downloadHandler(
+      filename = function(){
+        paste0("sound", input$button, ".wav")
+      },
+      content = function(filename){
+        writeWave(sound, filename)
+      }
+    )
+  })
 }

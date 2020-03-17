@@ -48,29 +48,34 @@ shinyUI(
             multiple = TRUE
           )
         ),
+        
+        
+        
         wellPanel(
-          HTML(paste(h4("Listen to data"))),
-          actionButton("play", 
-                       HTML("Listen to the sound of prolactin
-                       <br/> (PRL) in the female pituitary.")
-                       ),
+          
+          
+          HTML(paste(h4("Data availability"))),
+          
+          tags$a(
+            href = "https://github.com/raynamharris/musicalgenes",
+            "Source code available at GitHub @raynamharris/musicalgenes."
+          ),
           
           p(""),
-          p("Note: this only works if you run the app locally :(
-            However, when it does work, it plays the mean
-            mean value of gene expression over time for male and female pigeons. 
-            This sound clip was made with the R package 'sonify'.")
-        ), 
+          
+          tags$a(
+            href = "https://macmanes-lab.github.io/DoveParentsRNAseq/",
+            "Source data available at GitHub @macmanes-lab/DoveParentsRNAseq."
+          )
+          
+          ),
+        
         
         wellPanel(
         
         
           HTML(paste(h4("Acknowledgments"))),
           
-        tags$a(
-          href = "https://github.com/raynamharris/musicalgenes",
-          "Source code available at GitHub @raynamharris/musicalgenes"
-        ),
         
         p("This software application is a product of the 'Birds, Brains, and Banter (B3)'
           Laboratory at the University of California at Davis.
@@ -109,19 +114,26 @@ shinyUI(
                 accessible to those with diminished eyesight.
                 Here, each notes represents the mean value of gene expression 
                 in a given tissue (can be changed) for female and male
-                pigeons across the parental care cycle. "),
+                pigeons across the parental care cycle. 
+                "),
               
-             
-             
+              p(""),
+              
+              actionButton("button", "Listen to the sound of one gene 
+                             during parental care in females then males.
+                           "),
+              
+              downloadButton("wav_dln", label = "Download"),
               
               plotOutput("musicplot", width = "80%") ,
+              
+              
+              
               
               p("Alternatlively, the notes can be printed as notes on a scale 
                   (from A to G to AA, with AA being the highest)."),
               
-              tableOutput("musicalgenes") ,
-              
-              p("Click the next tab for alternative vizualizations.")
+              tableOutput("musicalgenes") 
               
             )
           ),
@@ -144,7 +156,7 @@ shinyUI(
                 Using a data-driven approach, we identified about 100 genes whose expression 
                 was correlated with PRL,
                 including (BRCA1, which is associated with breast cancer).
-                 Exploring the relationship between PRL and other differentially 
+           Exploring the relationship between PRL and other differentially 
                 expressed genes could provide important insights into the 'symphony' of 
                 gene expression 
                 that regulates behavior at the organismal and cellular level."),
