@@ -1,7 +1,7 @@
 shinyUI(
   fluidPage(
     # Application title
-    titlePanel("Exploring gene expression in parental pigeons"),
+    titlePanel("Musical Genes: a Shiny app for vizualizing and sonifying gene expression during parental care in pigeons"),
 
     # titlePanel(title=div(img(src="expdesign.png"))),
 
@@ -96,9 +96,9 @@ shinyUI(
         tabsetPanel(
          
           tabPanel(
-            "Musical genes",
+            "Listen to gene expression",
             fluidRow(
-              p(h2("Musical genes: from data to sounds")),
+              p(h2("Listen to gene expression")),
               
               tags$img(src = "fig_musicalgenes.png", width = "100%"),
               
@@ -139,9 +139,9 @@ shinyUI(
           
           
            tabPanel(
-            "Data-driven discovery",
+            "Vizualize gene expression",
             fluidRow(
-              p(h2("Prolactin: Does is promote lacation and breast cancer?")),
+              p(h2("Vizualize gene expression")),
 
 
               tags$img(src = "expdesign.png", width = "100%"),
@@ -202,59 +202,6 @@ shinyUI(
             )
           ),
           
-          tabPanel(
-            "Hypothesis-driven discovery",
-
-
-            p(h2("Do internal mechanisms or external stimuli 
-                 have a larger effect on gene expression?")),
-
-
-            tags$img(src = "internalexternal_hypothesis.png", width = "100%"),
-
-            p("Ultimately, our goal is to understand how internal mechanisms 
-              (like a physiological clock) and external stimuli (the arrival of offspring)
-              alter gene expression. Does the body prepare for parenthood or does it react to parenthood?"),
-
-            p("t-Distributed Stochastic Neighbor Embedding (t-SNE) 
-               is a technique for dimensionality reduction that is well suited 
-               for the visualization of high-dimensional datasets.
-               Samples that cluster together are similar in expression. 
-               In the pituitary, we see that samples from incubation day and hatch cluster together,
-               and we see samples from lay and incubation days 3 and 9 cluster.
-               This suggests that internal mechanisms that prepare for chick arrival 
-               have a greater effect on gene expression than changes in the external enviornment. 
-               "),
-
-            selectInput(
-              inputId = "treatment",
-              label = "Which parental stage?",
-              choices = charlevels,
-              selected = c("inc.d3", "inc.d9", "inc.d17", "hatch", "n5"),
-              multiple = TRUE
-            ),
-            
-            plotOutput("tsne"),
-            
-            p("If we look at the total number of differentially expressed genes that are different 
-              between each sequential stage, we see additional evidence that that 
-              gene expression in the pituitary on
-              incubation day 17 and hatch are highly similar, suggesting that internal cues
-              have a greater effect on gene expression than external stimuli.
-              "),
-            
-            plotOutput("barplot") ,
-            
-            p("Finally, if we compare the number of genes that are differentially expressed
-              between samples that are groupd by either their external environment 
-              or their internal levels of prolactin (PRL) in the pitutiary, 
-              we see that thousands of genes are differentially expressed between
-              samples with low or high levels of PRL.
-              "),
-            
-            tags$img(src = "fig3-1.png", width = "100%")
- 
-          ),
           
         
           tabPanel(
