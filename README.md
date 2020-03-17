@@ -13,10 +13,8 @@ If you want to examine the code or the raw datasets, click
 ## About
 
 
+Musical Genes is a Shiny that was developed to communicate gene expression data from pigeons during parental care using music as my medium. The user can choose a gene from this pull down menu. The default gene is prolactin or PRL. In the "musical genes" tab, I display the median value of prolactin as music notes on a scale. Click the buttons to listen or download. This tool allows us to listen to the peaks and valleys of gene expression while we look at the notes on the scale. You can do this for any gene in three tissues and both sexes. The dynamic range of the music notes reinforces the patters seen in the data. In addition to sonifying data, this tool was designed to as a way to facility peer-review and re-use of this data by other researchers. The 2nd and 3rd tabs provide interactive insight into the data-driven and hypothesis-driven research of our research efforts.
 
-
-
-  
 ## Shiny Contest
 
 ### Authors
