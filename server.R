@@ -361,7 +361,7 @@ output$cortestres <- renderPrint({
     ## Dawnload handler
     output$wav_dln <- downloadHandler(
       filename = function(){
-        paste0("sound", input$button, ".wav")
+        paste0("musicalgene", input$gene, input$tissue, ".wav")
       },
       content = function(filename){
         writeWave(sound, filename)
