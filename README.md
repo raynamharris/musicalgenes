@@ -52,6 +52,7 @@ Research
 ### Thumbnail Image Use dimensions 396x240.
 
 ![](www/fig_thumbnail.png)
+![](www/fig2_thumbnail.png)
 
 ### Screenshot of app (large)
 
