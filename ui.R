@@ -81,8 +81,21 @@ shinyUI(
           tags$a(
             href = "https://macmanes-lab.github.io/DoveParentsRNAseq/",
             "Source data available at GitHub @macmanes-lab/DoveParentsRNAseq."
+          ),
+          
+          
+          
+          p(""),
+          
+          tags$a(
+            href = "https://github.com/raynamharris/musicalgenes/issues/",
+            "Report bugs by opening a GitHub issue."
           )
         
+          
+          
+          
+          
           
           
           )
@@ -207,27 +220,45 @@ shinyUI(
           tabPanel(
             "About",
             fluidRow(
+              p(h2("About")),
               
               tags$img(src = "fig2_thumbnail.png", width = "100%"),
               
               
               
+              p("
+              
+              Musical Genes is a Shiny app that was developed to provide a way 
+              to vizualize and sonify gene expression data as a way to 
+             illustrate how genes work in concert with on another to regulate behavior.
+             
+              "),
               
               
-                
-                HTML(paste(h4("Acknowledgments"))),
-                
-                
-                p("This software application is a product of the 'Birds, Brains, and Banter (B3)'
+              
+              p("This software application is a product of the 'Birds, Brains, and Banter (B3)'
                   Laboratory at the University of California at Davis.
-                  This and related research is funded by the National Science Foundation,
-                  in a grant to Rebecca Calisi and Matthew MacManes.
-                  The software was written by Rayna Harris, 
+                This and related research is funded by the National Science Foundation,
+                in a grant to Rebecca Calisi and Matthew MacManes.
+                The software was written by Rayna Harris, 
                 with Shiny assistance from Mauricio Vargas and Picasso.
-                  Suzanne Austin, Andrew Lang, Victoria Farrar, April Booth, Tanner Feustel, and Rechelle Viernes 
-                  contritubed to data collection, analysis, and interpretation.
-                  Owen Marshall helped develop the musical gene avenue.")
+                Suzanne Austin, Andrew Lang, Victoria Farrar, April Booth, Tanner Feustel, and Rechelle Viernes 
+                contritubed to data collection, analysis, and interpretation.
+                Owen Marshall helped develop the musical gene avenue."),
+              
+              
+              p(" Watch this high-speed video to see how to 
+                interactively explore and listen to the data."),
+              
+              
+              HTML('<iframe width="90%" height = "300px"  
+                   src="https://www.youtube.com/embed/bQWDiI2oZdI" 
+                   frameborder="0" allow="accelerometer; autoplay; 
+                   encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
+              
+             
                 
+               
                
               
               
