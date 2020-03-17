@@ -245,7 +245,16 @@ shinyUI(
               have a greater effect on gene expression than external stimuli.
               "),
             
-            plotOutput("barplot")
+            plotOutput("barplot") ,
+            
+            p("Finally, if we compare the number of genes that are differentially expressed
+              between samples that are groupd by either their external environment 
+              or their internal levels of prolactin (PRL) in the pitutiary, 
+              we see that thousands of genes are differentially expressed between
+              samples with low or high levels of PRL.
+              "),
+            
+            tags$img(src = "fig3-1.png", width = "100%")
  
           )
         )
