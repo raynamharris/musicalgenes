@@ -8,6 +8,20 @@ shinyUI(
     # Inputs for boxplot
     sidebarLayout(
       sidebarPanel(
+        
+        wellPanel(
+          
+          HTML(paste(h4("Transcriptional Symphony"))),
+          
+          p("Genes work together in concert to regulate behavior. 
+            Wouldn't it be great if we could listen to this transcriptional symphony?
+            In the video below, I play the sounds of prolactin during parental care on a keyboard.
+            "),
+          
+          HTML('<iframe width="100%" height = "220px"  src="https://www.youtube.com/embed/PoKiIwIsLSo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
+          
+        ),
+        
         wellPanel(
           HTML(paste(h4("Interactively explore the data"))),
 
@@ -15,9 +29,9 @@ shinyUI(
                      study designed to characterize changes 
                      in the hypothalamus, pituitary, and gonads of male and female pigeons 
                      (aka Rock Doves) during parental care. Stages sampled 
-                     include non-breeding, nest-building, egg incuation, 
+                     include non-breeding, nest-building, egg incubation, 
                      and nestling care. Select tissues, and sexes to plot
-                     from the pull down menu.")),
+                     from the pulldown menu.")),
 
           HTML(paste(h4(" "))),
           
@@ -54,13 +68,7 @@ shinyUI(
         
         
         
-        wellPanel(
-          
-          HTML(paste(h4("Shiny Musical Gene Tutorial"))),
-          
-          HTML('<iframe width="100%"  src="https://www.youtube.com/embed/wRlC92lYG9I" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
-           
-        ),
+       
         
         
         
@@ -120,20 +128,18 @@ shinyUI(
               
     
               p(""),
-              p("Genes do not exert their actions alone; 
-                they work in concert with other genes.
-                We are working towards creating a 
-                'symphony of gene expression over the course of parental care' using data!
-                We often create figures and tables with R, 
-                but we can also use R to generate sound!
-                This is one step towards making data science
-                accessible to those with diminished eyesight.
-                Here, each notes represents the mean value of gene expression 
-                in a given tissue (can be changed) for female and male
-                pigeons across the parental care cycle. 
-                "),
               
-              p(""),
+              p("On this tab of the Shiny app, you can generate the sounds interactively using R.
+                We are working towards creating a 
+                'symphony of gene expression over the course of parental care' using data, 
+                but for now, you can only listen to one gene at a time. 
+                In the image below, each note represents the mean value of gene expression 
+                in a given tissue (can be changed) for female and male
+                pigeons across the parental care cycle. "),
+              
+              p("If you can't hear the sound when you click the button, 
+                download the file and play it locally.
+                "),
               
               actionButton("button", "Listen to the sound of one gene 
                              during parental care in females then males.
