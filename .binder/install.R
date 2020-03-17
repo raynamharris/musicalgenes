@@ -14,6 +14,7 @@ install.packages('RSQLite')
 install.packages('dbplyr')
 
 install.packages('ggplot2')
-install.packages('ggimage')
+install.packages('devtools')
+devtools::install_github("GuangchuangYu/ggimage")
 install.packages('cowplot')
 install.packages('magick')
