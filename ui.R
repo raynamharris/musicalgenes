@@ -9,14 +9,15 @@ shinyUI(
     sidebarLayout(
       sidebarPanel(
         wellPanel(
-          HTML(paste(h4("Interactively explore data"))),
+          HTML(paste(h4("Interactively explore the data"))),
 
           HTML(paste("This application allows you to explore RNA-seq data from a 
                      study designed to characterize changes 
                      in the hypothalamus, pituitary, and gonads of male and female pigeons 
                      (aka Rock Doves) during parental care. Stages sampled 
                      include non-breeding, nest-building, egg incuation, 
-                     and nestling care. Select tissues, and sexes to plot from the pull down menu.")),
+                     and nestling care. Select tissues, and sexes to plot
+                     from the pull down menu.")),
 
           HTML(paste(h4(" "))),
           
@@ -51,6 +52,19 @@ shinyUI(
         
         
         
+        
+        
+        wellPanel(
+          
+          HTML(paste(h4("Shiny Musical Gene Tutorial"))),
+          
+          HTML('<iframe width="100%"  src="https://www.youtube.com/embed/wRlC92lYG9I" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
+           
+        ),
+        
+        
+        
+        
         wellPanel(
           
           
@@ -67,6 +81,8 @@ shinyUI(
             href = "https://macmanes-lab.github.io/DoveParentsRNAseq/",
             "Source data available at GitHub @macmanes-lab/DoveParentsRNAseq."
           )
+        
+          
           
           ),
         
@@ -82,7 +98,7 @@ shinyUI(
           This and related research is funded by the National Science Foundation,
           in a grant to Rebecca Calisi and Matthew MacManes.
           The software was written by Rayna Harris, with assistance from Mauricio Vargas.
-          Suzanne Austin, Andrew Lang, Victoria Farrar, April Booth, Tanner Feustel 
+          Suzanne Austin, Andrew Lang, Victoria Farrar, April Booth, Tanner Feustel, and Rechelle Viernes 
           contritubed to data collection, analysis, and interpretation.
           Owen Marshall helped develop the musical gene avenue.")
         
