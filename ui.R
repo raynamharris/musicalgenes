@@ -65,14 +65,7 @@ shinyUI(
         ),
         
         
-        
-        
-        
-       
-        
-        
-        
-        
+   
         wellPanel(
           
           
@@ -92,25 +85,8 @@ shinyUI(
         
           
           
-          ),
+          )
         
-        
-        wellPanel(
-        
-        
-          HTML(paste(h4("Acknowledgments"))),
-          
-        
-        p("This software application is a product of the 'Birds, Brains, and Banter (B3)'
-          Laboratory at the University of California at Davis.
-          This and related research is funded by the National Science Foundation,
-          in a grant to Rebecca Calisi and Matthew MacManes.
-          The software was written by Rayna Harris, with assistance from Mauricio Vargas.
-          Suzanne Austin, Andrew Lang, Victoria Farrar, April Booth, Tanner Feustel, and Rechelle Viernes 
-          contritubed to data collection, analysis, and interpretation.
-          Owen Marshall helped develop the musical gene avenue.")
-        
-        )
         
         
       ),
@@ -278,7 +254,40 @@ shinyUI(
             
             tags$img(src = "fig3-1.png", width = "100%")
  
+          ),
+          
+        
+          tabPanel(
+            "About",
+            fluidRow(
+              
+              tags$img(src = "fig2_thumbnail.png", width = "100%"),
+              
+              
+              
+              
+              
+                
+                HTML(paste(h4("Acknowledgments"))),
+                
+                
+                p("This software application is a product of the 'Birds, Brains, and Banter (B3)'
+                  Laboratory at the University of California at Davis.
+                  This and related research is funded by the National Science Foundation,
+                  in a grant to Rebecca Calisi and Matthew MacManes.
+                  The software was written by Rayna Harris, 
+                with Shiny assistance from Mauricio Vargas and Picasso.
+                  Suzanne Austin, Andrew Lang, Victoria Farrar, April Booth, Tanner Feustel, and Rechelle Viernes 
+                  contritubed to data collection, analysis, and interpretation.
+                  Owen Marshall helped develop the musical gene avenue.")
+                
+               
+              
+              
+            )
           )
+          
+          
         )
       )
     )
