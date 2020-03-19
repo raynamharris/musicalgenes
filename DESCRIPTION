@@ -1,19 +1,35 @@
 Type: Compendium
 Package: musicalgenes
-Title: Musical Gene Expression
+Title: Musical Genes
 Version: 0.0.1
 Authors@R: 
-    person(given = "Rayna",
-           family = "Harris",
-           role = c("aut", "cre"),
+   c(person("Rayna", "Harris", role = c("aut", "cre"),
            email = "rmharris@ucdavis.edu",
-           comment = c(ORCID = "0000-0002-7943-5650"))
-Description: From gene expression counts to sounds in R
-License: What license it uses
+           comment = c(ORCID = "0000-0002-7943-5650")),
+      person("Rebecca", "Calisi", role = c("aut", "cre"))
+    )
+Description: A appplication for vizualizing and sonifying 
+             the transcriptional symphony of parental care
+License: CC-BY
 Depends: 
     sonify,
     signal,
     tuneR,
-    tidyverse
+    tidyverse,
+    shiny,
+    sonify,
+    tuneR,
+    stringr,
+    scales,
+    dplyr,
+    tidyr,
+    forcats,
+    DBI,
+    RSQLite,
+    dbplyr,
+    ggplot2,
+    ggimage,
+    cowplot,
+    magick
 Encoding: UTF-8
 LazyData: true

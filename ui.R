@@ -14,26 +14,12 @@ shinyUI(
           HTML(paste(h4("Transcriptional Symphony"))),
           
           p("Genes work together in concert to regulate behavior. 
-            Wouldn't it be great if we could listen to this transcriptional symphony?
-            In the video below, I play the sounds of prolactin during parental care on a keyboard.
+            What does this 'transcriptional symphony' sound like?
+            This app allows you to interactively visualize and sonify 
+            (or plot and play) gene expression
+            to better understand the biology of parental care.
             "),
           
-          HTML('<iframe width="100%" height = "220px"  src="https://www.youtube.com/embed/PoKiIwIsLSo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
-          
-        ),
-        
-        wellPanel(
-          HTML(paste(h4("Interactively explore the data"))),
-
-          HTML(paste("This application allows you to explore RNA-seq data from a 
-                     study designed to characterize changes 
-                     in the hypothalamus, pituitary, and gonads of male and female pigeons 
-                     (aka Rock Doves) during parental care. Stages sampled 
-                     include non-breeding, nest-building, egg incubation, 
-                     and nestling care. Select tissues, and sexes to plot
-                     from the pulldown menu.")),
-
-          HTML(paste(h4(" "))),
           
           selectInput(
             inputId = "gene",
@@ -44,7 +30,7 @@ shinyUI(
           ),
           
           tableOutput("genename"),
-
+          
           selectInput(
             inputId = "tissue",
             label = "Which tissue?",
@@ -53,15 +39,33 @@ shinyUI(
             multiple = FALSE
           ),
           
-         
+          
           
           selectInput(
             inputId = "sex",
-            label = "Chose one or both sexes to vizualize.",
+            label = "Which sex?",
             choices = sexlevels,
             selected = c("female", "male"),
             multiple = TRUE
           )
+          
+        ),
+        
+        wellPanel(
+          HTML(paste(h4("Parental Care on Piano"))),
+
+          
+          p("Before I built this app, I used a keyboard to play 
+            the sound of prolactin in the female pituitary 
+            working in conert other genes to regulate parental care. 
+          You can watch that video here and learn a little more about our experiment. 
+            "),
+          
+        
+          
+          HTML('<iframe width="100%" height = "220px"  src="https://www.youtube.com/embed/PoKiIwIsLSo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
+          
+          
         ),
         
         
@@ -109,42 +113,59 @@ shinyUI(
         tabsetPanel(
          
           tabPanel(
-            "Listen to gene expression",
+            "Sonify gene expression",
             fluidRow(
-              p(h2("Listen to gene expression")),
+              p(h2("Sonify gene expression")),
               
               tags$img(src = "fig_musicalgenes.png", width = "100%"),
               
     
               p(""),
               
-              p("On this tab of the Shiny app, you can generate the sounds interactively using R.
-                We are working towards creating a 
-                'symphony of gene expression over the course of parental care' using data, 
-                but for now, you can only listen to one gene at a time. 
-                In the image below, each note represents the mean value of gene expression 
-                in a given tissue (can be changed) for female and male
-                pigeons across the parental care cycle. "),
+              p("Data sonification is the presentation of data as sound.
+                We are sonifying data to illustrate the 
+                symphony of gene expression changes that occcur 
+                during parental care in male and female pigeons. 
+                Currently, you can only listen to one gene at a time,
+                but we hope to soon play many genes at once.
+
+                "),
               
               p("If you can't hear the sound when you click the button, 
                 download the file and play it locally.
                 "),
               
-              actionButton("button", "Listen to the sound of one gene 
-                             during parental care in females then males.
+              
+              actionButton("button", "Listen to the sound of gene expression 
+                             during parental care.
                            "),
               
               downloadButton("wav_dln", label = "Download"),
               
               plotOutput("musicplot", width = "80%") ,
               
+              p("While listening, you can follow along with this 
+              vizualization of the data, where  each note represents 
+                the mean value of gene expression 
+                in a given tissue for female and male
+                pigeons across the parental care cycle. 
+                "),
+              
+  
+             
+              
+              p("In addition to sonifying the data as sound and
+                  plotting the data as notes on a scale,
+                  we can also convert count to letters
+                  (from A to G to AA, with AA being the highest)
+                a print them in a table that can be used 
+                to aid playing the data any instrument."),
+              
+              tableOutput("musicalgenes") ,
               
               
+              tags$img(src = "https://codeabbey.github.io/data/chords_of_music.jpg", width = "75%")
               
-              p("Alternatlively, the notes can be printed as notes on a scale 
-                  (from A to G to AA, with AA being the highest)."),
-              
-              tableOutput("musicalgenes") 
               
             )
           ),
@@ -160,43 +181,42 @@ shinyUI(
               tags$img(src = "expdesign.png", width = "100%"),
 
 
-              p("We recently confirmed that prolactin 
-                (PRL) gene expression fluctuates throughout parental care 
-                in a manner that is consistent with its role in promoting lactation 
-                and maintaining parental behaviors.
-                Using a data-driven approach, we identified about 100 genes whose expression 
-                was correlated with PRL,
-                including (BRCA1, which is associated with breast cancer).
-           Exploring the relationship between PRL and other differentially 
-                expressed genes could provide important insights into the 'symphony' of 
-                gene expression 
-                that regulates behavior at the organismal and cellular level."),
+              p("Prolactin (PRL) stimulates lacation and parental care. 
+               Identifying genes whose expression is correlated with PRL 
+               can help us understand what genes work in concert to regulate
+                parental care behaviors and other physiological processes.  
+               "),
 
 
-              p("The graph(s) provide a multi-faceted view of the data. 
-        Each point represents the expression level of one gene from one sample. 
+              p("Here, you can interactively compare 
+              one of 50 genes-of-interest gene of interest to PRL
+              to see if they are correlated. 
+        In these graphs, each point represents the expression 
+        level of one gene from one sample. 
         The box plots show the mean and standard deviation of gene 
-        expression for each parental time point. 
-        The smoothed line helps convey how gene expression changes over time. "),
+        expression for each parental time point."),
               
               
-              p("The default plot shows the relationship between PRL 
-                and whatever gene is selected from the pull-down menu. 
-                Click 'BRCA1' to view the similarities and differences between
-                BRCA1 and PRL."),
-
-        
-              
+              p("We recommend selecting 'BRCA1' 
+                to view the stricking similarity between PRL
+                and BRCA1, a gene that has been implicated in breast cancer.
+                Then, go back and listen to BRCA1."),
               
               plotOutput("boxPlot", width = "100%"),
+              
+              plotOutput("scatterplot"),
 
-              p("We used DESeq2 to caluculate differential gene expression 
-        between sequential parental time points.         
-        This table provides the log fold change and the p-value for 
-                significantly changes between time points, separated by an '_'.
+              p("Even though it may look and sound like gene expression 
+                is changing over time, these changes may or may not be
+              statistically significant. The table below shows the 
+              log fold change and p-value from `DESeq2` for each
+                sequential parental time point comparison (separated by an '_'.) 
                 If your gene of interest doesn't appear in the table,
                 then it never significantly changed over the parental care cycle."),
 
+              
+              
+              
               
               tableOutput("DEGtable"),
           
@@ -207,11 +227,11 @@ shinyUI(
 
               p("Finally, here is a scatter plot showing the linear relationship between 
         PRL and the gene of interest.
-        Points are colored by tissue and the line is colored by sex. "),
+        Points are colored by tissue and the line is colored by sex. ")
               
-              #verbatimTextOutput("cortestres"),
+              #verbatimTextOutput("cortestres")
 
-              plotOutput("scatterplot")
+              
             )
           ),
           
@@ -230,8 +250,11 @@ shinyUI(
               
               Musical Genes is a Shiny app that was developed to provide a way 
               to vizualize and sonify gene expression data as a way to 
-             illustrate how genes work in concert with on another to regulate behavior.
-             
+             illustrate how genes work in concert with on another to regulate
+              behavior. We hope that scientists use this tool to test hypotheses 
+              or develop new ones about, and we hope that the sonification of data
+              allows for our research to reach broader audiences by using
+              sight and sound to convey scienctific information.  
               "),
               
               
