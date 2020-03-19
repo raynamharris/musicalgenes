@@ -1,7 +1,7 @@
 shinyUI(
   fluidPage(
     # Application title
-    titlePanel("Musical Genes: a Shiny app for vizualizing and sonifying gene expression during parental care in pigeons"),
+    titlePanel("Musical Genes: a Shiny app for vizualizing and sonifying gene expression during parental care"),
 
     # titlePanel(title=div(img(src="expdesign.png"))),
 
@@ -57,7 +57,7 @@ shinyUI(
           
           p("Before I built this app, I used a keyboard to play 
             the sound of prolactin in the female pituitary 
-            working in conert other genes to regulate parental care. 
+            working in concert other genes to regulate parental care. 
           You can watch that video here and learn a little more about our experiment. 
             "),
           
@@ -124,7 +124,7 @@ shinyUI(
               
               p("Data sonification is the presentation of data as sound.
                 We are sonifying data to illustrate the 
-                symphony of gene expression changes that occcur 
+                symphony of gene expression changes that occur 
                 during parental care in male and female pigeons. 
                 Currently, you can only listen to one gene at a time,
                 but we hope to soon play many genes at once.
@@ -198,7 +198,7 @@ shinyUI(
               
               
               p("We recommend selecting 'BRCA1' 
-                to view the stricking similarity between PRL
+                to view the striking similarity between PRL
                 and BRCA1, a gene that has been implicated in breast cancer.
                 Then, go back and listen to BRCA1."),
               
@@ -250,11 +250,11 @@ shinyUI(
               
               Musical Genes is a Shiny app that was developed to provide a way 
               to vizualize and sonify gene expression data as a way to 
-             illustrate how genes work in concert with on another to regulate
+             illustrate how genes work in concert to regulate
               behavior. We hope that scientists use this tool to test hypotheses 
               or develop new ones about, and we hope that the sonification of data
               allows for our research to reach broader audiences by using
-              sight and sound to convey scienctific information.  
+              sight and sound to convey scientific information.  
               "),
               
               
@@ -266,7 +266,7 @@ shinyUI(
                 The software was written by Rayna Harris, 
                 with Shiny assistance from Mauricio Vargas and Picasso.
                 Suzanne Austin, Andrew Lang, Victoria Farrar, April Booth, Tanner Feustel, and Rechelle Viernes 
-                contritubed to data collection, analysis, and interpretation.
+                contributed to data collection, analysis, and interpretation.
                 Owen Marshall helped develop the musical gene avenue."),
               
               
