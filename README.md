@@ -1,6 +1,6 @@
 # Musical Genes
 
-_A Shiny app for the vizualization and sonification of the gene expression during parental care in pigeons._
+_A Shiny app for the vizualization and sonification of the gene expression during parental care._
 
 Click the [Shiny link](https://raynamharris.shinyapps.io/musicalgenes/) for interactive data exploration on the web
 
@@ -12,18 +12,13 @@ If you want to examine the code or the raw datasets, click
   
 ## About
 
-
-Musical Genes is a Shiny that was developed to communicate gene expression data from pigeons during parental care using music as my medium. The user can choose a gene from this pull down menu. The default gene is prolactin or PRL. In the "musical genes" tab, I display the median value of prolactin as music notes on a scale. Click the buttons to listen or download. This tool allows us to listen to the peaks and valleys of gene expression while we look at the notes on the scale. You can do this for any gene in three tissues and both sexes. The dynamic range of the music notes reinforces the patters seen in the data. In addition to sonifying data, this tool was designed to as a way to facility peer-review and re-use of this data by other researchers. The 2nd and 3rd tabs provide interactive insight into the data-driven and hypothesis-driven research of our research efforts.
+Genes work together in concert to regulate behavior. What does this 'transcriptional symphony' sound like? Data sonification is the presentation of data as sound. Musical Genes is a Shiny app that allows users to interactively visualize and sonify (or plot and play) gene expression to better understand the biology of parental care. The user can choose a gene from this pulldown menu and listen to how it changes over time with the R packages `sonify` and `tuneR`. We also represent the levels of gene expression as notes on a scale that could be played on an instrument like a piano or guitar. Finally, we provide multiple visualizations that provide additional insight into genes that might work in concert to regulate biological processes of biomedical relevance.
 
 ## Shiny Contest
 
 ### Authors
 
 Rayna Harris and Rebecca Calisi 
-
-### Coautors??
-
- Matthew MacManes, Suzanne Austin, Andrew Lang, Victoria Farrar, April Booth, Tanner Feustel, and Rechelle Viernes, Mauricio Vargas, Owen Marshall.
 
 ### Username(s)
 
@@ -64,4 +59,4 @@ A Shiny app for the vizualization and sonification of the gene expression during
 
 ### Longer description
 
-Musical Genes is a Shiny that was developed to communicate gene expression data from pigeons during parental care using music as my medium. The user can choose a gene from this pull down menu. The default gene is prolactin or PRL. In the "musical genes" tab, I display the median value of prolactin as music notes on a scale. Click the buttons to listen or download. This tool allows us to listen to the peaks and valleys of gene expression while we look at the notes on the scale. You can do this for any gene in three tissues and both sexes. The dynamic range of the music notes reinforces the patters seen in the data. In addition to sonifying data, this tool was designed to as a way to facility peer-review and re-use of this data by other researchers. The 2nd and 3rd tabs provide interactive insight into the data-driven and hypothesis-driven research of our research efforts.
+Genes work together in concert to regulate behavior. What does this 'transcriptional symphony' sound like? Data sonification is the presentation of data as sound. Musical Genes is a Shiny app that allows users to interactively visualize and sonify (or plot and play) gene expression to better understand the biology of parental care. The user can choose a gene from this pulldown menu and listen to how it changes over time with the R packages `sonify` and `tuneR`. We also represent the levels of gene expression as notes on a scale that could be played on an instrument like a piano or guitar. Finally, we provide multiple visualizations that provide additional insight into genes that might work in concert to regulate biological processes of biomedical relevance.

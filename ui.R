@@ -228,9 +228,9 @@ shinyUI(
               p("Finally, here is a scatter plot showing the linear relationship between 
         PRL and the gene of interest.
         Points are colored by tissue and the line is colored by sex. ")
-              
+            
               #verbatimTextOutput("cortestres")
-
+              
               
             )
           ),
@@ -263,11 +263,8 @@ shinyUI(
                   Laboratory at the University of California at Davis.
                 This and related research is funded by the National Science Foundation,
                 in a grant to Rebecca Calisi and Matthew MacManes.
-                The software was written by Rayna Harris, 
-                with Shiny assistance from Mauricio Vargas and Picasso.
-                Suzanne Austin, Andrew Lang, Victoria Farrar, April Booth, Tanner Feustel, and Rechelle Viernes 
-                contributed to data collection, analysis, and interpretation.
-                Owen Marshall helped develop the musical gene avenue."),
+                The software was created and written by Rayna Harris and Rebecca Calisi.  Owen Marshall, Mauricio Vargas, Titus Brown,  Rechelle Viernes and Alexandra Colón Rodríguez contribued ideas and content. 
+                Suzanne Austin, Andrew Lang, Victoria Farrar, April Booth, Tanner Feustel, and Matthew MacManes contributed to the related research."),
               
               
               p(" Watch this high-speed video to see how to 
