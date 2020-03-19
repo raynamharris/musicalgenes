@@ -25,7 +25,7 @@ shinyUI(
             inputId = "gene",
             label = "Which gene?",
             choices = c(gene_names),
-            selected = c("PRL"),
+            selected = c("BRCA1"),
             multiple = FALSE
           ),
           
@@ -47,23 +47,12 @@ shinyUI(
             choices = sexlevels,
             selected = c("female", "male"),
             multiple = TRUE
-          )
+          ), 
           
-        ),
-        
-        wellPanel(
-          HTML(paste(h4("Parental Care on Piano"))),
-
           
-          p("Before I built this app, I used a keyboard to play 
-            the sound of prolactin in the female pituitary 
-            working in concert other genes to regulate parental care. 
-          You can watch that video here and learn a little more about our experiment. 
-            "),
+          tags$img(src = "https://codeabbey.github.io/data/chords_of_music.jpg", width = "100%")
           
-        
           
-          HTML('<iframe width="100%" height = "220px"  src="https://www.youtube.com/embed/PoKiIwIsLSo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
           
           
         ),
@@ -73,27 +62,24 @@ shinyUI(
         wellPanel(
           
           
-          HTML(paste(h4("Data availability"))),
+          
+          HTML(paste(h4("Open source software for reproducible research"))),
+          
+          
+          p("Shiny code:"),
           
           tags$a(
             href = "https://github.com/raynamharris/musicalgenes",
-            "Source code available at GitHub @raynamharris/musicalgenes."
+            "@raynamharris/musicalgenes"
           ),
           
-          p(""),
+          p(" "),
+          
+          p("Research compendium:"),
           
           tags$a(
             href = "https://macmanes-lab.github.io/DoveParentsRNAseq/",
-            "Source data available at GitHub @macmanes-lab/DoveParentsRNAseq."
-          ),
-          
-          
-          
-          p(""),
-          
-          tags$a(
-            href = "https://github.com/raynamharris/musicalgenes/issues/",
-            "Report bugs by opening a GitHub issue."
+            "@macmanes-lab/DoveParentsRNAseq"
           )
           )
         
@@ -147,7 +133,11 @@ shinyUI(
   
              
               
-              p("In addition to sonifying the data as sound and
+              p(" Before I built this app, I used a keyboard to play 
+                  the sound of prolactin in the female pituitary 
+                working in concert other genes to regulate parental care. 
+                You can watch that video here and learn a little more about our experiment. 
+              In addition to sonifying the data as sound and
                   plotting the data as notes on a scale,
                   we can also convert count to letters
                   (from A to G to AA, with AA being the highest)
@@ -156,8 +146,13 @@ shinyUI(
               
               tableOutput("musicalgenes") ,
               
+  
+
+            p(" "),
               
-              tags$img(src = "https://codeabbey.github.io/data/chords_of_music.jpg", width = "75%")
+              HTML('<iframe width="100%" height = "220px"  src="https://www.youtube.com/embed/PoKiIwIsLSo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
+              
+              
               
               
             )
@@ -235,13 +230,11 @@ shinyUI(
             fluidRow(
               p(h2("About")),
               
-              tags$img(src = "fig2_thumbnail.png", width = "100%"),
+              tags$img(src = "fig_thumbnail.png", width = "100%"),
               
               
               
-              p("
-              
-              Musical Genes is a Shiny app that was developed to provide a way 
+              p(" Musical Genes is a Shiny app that was developed to provide a way 
               to vizualize and sonify gene expression data as a way to 
              illustrate how genes work in concert to regulate
               behavior. We hope that scientists use this tool to test hypotheses 
@@ -256,8 +249,8 @@ shinyUI(
                   Laboratory at the University of California at Davis.
                 This and related research is funded by the National Science Foundation,
                 in a grant to Rebecca Calisi and Matthew MacManes.
-                The software was created and written by Rayna Harris and Rebecca Calisi.  Owen Marshall, Mauricio Vargas, Titus Brown,  Rechelle Viernes and Alexandra Colón Rodríguez contribued ideas and content. 
-                Suzanne Austin, Andrew Lang, Victoria Farrar, April Booth, Tanner Feustel, and Matthew MacManes contributed to the related research."),
+                The software was created and written by Rayna Harris and Rebecca Calisi.  Owen Marshall, Mauricio Vargas, Titus Brown, and Alexandra Colón Rodríguez contributed intellectually to the design. 
+                Suzanne Austin, Andrew Lang, Victoria Farrar, April Booth, Tanner Feustel, and Matthew MacManes contributed the experiment that is the foundation of this application."),
               
               
               p(" Watch this high-speed video to see how to 
@@ -268,13 +261,7 @@ shinyUI(
                    src="https://www.youtube.com/embed/bQWDiI2oZdI" 
                    frameborder="0" allow="accelerometer; autoplay; 
                    encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
-              
-             
-                
-               
-               
-              
-              
+
             )
           )
           
