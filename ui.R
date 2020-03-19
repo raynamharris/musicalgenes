@@ -95,13 +95,6 @@ shinyUI(
             href = "https://github.com/raynamharris/musicalgenes/issues/",
             "Report bugs by opening a GitHub issue."
           )
-        
-          
-          
-          
-          
-          
-          
           )
         
         
