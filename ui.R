@@ -150,7 +150,10 @@ shinyUI(
 
             p(" "),
               
-              HTML('<iframe width="100%" height = "220px"  src="https://www.youtube.com/embed/PoKiIwIsLSo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
+              HTML('<iframe width="80%" height = "300px" 
+                   src="https://www.youtube.com/embed/PoKiIwIsLSo" 
+                   frameborder="0" allow="accelerometer; autoplay; 
+                   encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
               
               
               
@@ -169,9 +172,9 @@ shinyUI(
               tags$img(src = "expdesign.png", width = "100%"),
 
 
-              p("Prolactin (PRL) stimulates lacation and parental care. 
-               Identifying genes whose expression is correlated with PRL 
-               can help us understand what genes work in concert to regulate
+              p("Prolactin", em("PRL"), "stimulates lacation and parental care. 
+               Identifying genes whose expression is correlated with", em("PRL"), 
+               "can help us understand what genes work in concert to regulate
                 parental care behaviors and other physiological processes.  
                "),
 
@@ -185,10 +188,10 @@ shinyUI(
         expression for each parental time point."),
               
               
-              p("We recommend selecting 'BRCA1' 
-                to view the striking similarity between PRL
-                and BRCA1, a gene that has been implicated in breast cancer.
-                Then, go back and listen to BRCA1."),
+              p("We recommend selecting", em("BRCA1"), 
+                "to view the striking similarity between", em("PRL"),
+                "and ", em("BRCA1"), ", a gene that has been implicated in breast cancer.
+                Then, go back and listen to", em("BRCA1")),
               
               plotOutput("boxPlot", width = "100%"),
               
@@ -230,7 +233,7 @@ shinyUI(
             fluidRow(
               p(h2("About")),
               
-              tags$img(src = "fig_thumbnail.png", width = "100%"),
+              tags$img(src = "fig_thumbnail.png", width = "80%"),
               
               
               
@@ -257,7 +260,7 @@ shinyUI(
                 interactively explore and listen to the data."),
               
               
-              HTML('<iframe width="90%" height = "300px"  
+              HTML('<iframe width="80%" height = "300px"
                    src="https://www.youtube.com/embed/bQWDiI2oZdI" 
                    frameborder="0" allow="accelerometer; autoplay; 
                    encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
