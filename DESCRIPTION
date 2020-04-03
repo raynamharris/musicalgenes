@@ -6,7 +6,10 @@ Authors@R:
    c(person("Rayna", "Harris", role = c("aut", "cre"),
            email = "rmharris@ucdavis.edu",
            comment = c(ORCID = "0000-0002-7943-5650")),
-      person("Rebecca", "Calisi", role = c("aut", "cre"))
+      person("Rebecca", "Calisi", role = c("aut", "cre"),
+      person("Titus", "Brown", role = c("ctb"),
+      person("Mauricio", "Vargas", role = c("ctb"),
+      person("Rechelle", "Viernes", role = c("ctb"))
     )
 Description: A appplication for vizualizing and sonifying 
              the transcriptional symphony of parental care
