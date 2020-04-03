@@ -1,7 +1,7 @@
 shinyUI(
   fluidPage(
     # Application title
-    titlePanel("Musical Genes: a Shiny app for vizualizing and sonifying gene expression during parental care"),
+    titlePanel("Musical Genes: a Shiny app for the visualization and sonification of the gene expression during parental care."),
 
     # titlePanel(title=div(img(src="expdesign.png"))),
 
@@ -124,7 +124,7 @@ shinyUI(
               plotOutput("musicplot", width = "80%") ,
               
               p("While listening, you can follow along with this 
-              vizualization of the data, where  each note represents 
+              visualization of the data, where  each note represents 
                 the mean value of gene expression 
                 in a given tissue for female and male
                 pigeons across the parental care cycle. 
@@ -164,9 +164,9 @@ shinyUI(
           
           
            tabPanel(
-            "Vizualize gene expression",
+            "Visualize gene expression",
             fluidRow(
-              p(h2("Vizualize gene expression")),
+              p(h2("Visualize gene expression")),
 
 
               tags$img(src = "expdesign.png", width = "100%"),
@@ -237,14 +237,7 @@ shinyUI(
               
               
               
-              p(" Musical Genes is a Shiny app that was developed to provide a way 
-              to vizualize and sonify gene expression data as a way to 
-             illustrate how genes work in concert to regulate
-              behavior. We hope that scientists use this tool to test hypotheses 
-              or develop new ones about, and we hope that the sonification of data
-              allows for our research to reach broader audiences by using
-              sight and sound to convey scientific information.  
-              "),
+              p("Genes work together in concert to regulate behavior. What does this 'transcriptional symphony' sound like? Data sonification is the presentation of data as sound. Musical Genes is a Shiny app that allows users to interactively visualize and sonify (or plot and play) gene expression to better understand the biology of parental care. The user can choose a gene from this pulldown menu and listen to how it changes over time with the R packages `sonify` and `tuneR`. We also represent the levels of gene expression as notes on a scale that could be played on an instrument like a piano or guitar. Finally, we provide additional visualizations that provide insight into genes that might work in concert to regulate biological processes of biomedical relevance. Exploration of this data could provide additional insights of biological processes that of biomedical relevance all while making beautiful music. "),
               
               
               
