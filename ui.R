@@ -90,7 +90,7 @@ shinyUI(
         wellPanel(
               
 
-              HTML('<center><img src="expdesign.png", width = "75%"></center>'),
+              HTML('<center><img src="expdesign.png", width = "90%"></center>'),
               
               plotOutput("boxPlot", width = "100%"),
               
