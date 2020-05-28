@@ -11,16 +11,13 @@ shinyUI(
         
         wellPanel(
           
-          p("Many genes in the transcriptome work in concert 
-            to regulate behaviors and physiological processes 
-            associated parental care. 
-            What does this 'transcriptional symphony' sound like?
+          p("A metaphorical 'transcirptional symphony' of genes working together
+            is thought to regulate behavior. What does this symphony sound like?
+            Data sonification is the presentation of data as sound. 
             Interactively visualize and sonify gene expression 
-            from parenting pigeons
             to better understand the biology of parental care and 
-            make beautiful music."),
-          
-          
+            develop new hypotheses."),
+            
           selectInput(
             inputId = "gene",
             label = "Pick a gene.",
@@ -47,7 +44,28 @@ shinyUI(
             choices = sexlevels,
             selected = c("female"),
             multiple = FALSE
-          )
+          ),
+          
+          p("The box-and-whisker plot to the right shows average and range of genes expression for each group. 
+            The music notes represent the mean for each group and correspond nicely to the tone played in the downloaded wav file.")
+        
+        ),
+        
+        wellPanel(
+          
+          
+          p("Many genes work in concert to to create a 'transcriptional symphony' of parental care.
+            Pick another gene to see it is is positively or negatively correlated with the first gene."),
+          
+          selectInput(
+            inputId = "gene2",
+            label = "Pick another gene.",
+            choices = c(gene_names),
+            selected = c("BRCA1"),
+            multiple = FALSE
+          ),
+          
+          tableOutput("genename2")
           
         ),
         
@@ -57,15 +75,14 @@ shinyUI(
           
           
           p("The code for this webpage is", 
-          
+            
             tags$a(
               href = "https://github.com/raynamharris/musicalgenes",
               "@raynamharris/musicalgenes"
             )
-            ),
+          ),
           
-          
-          p(" "),
+
           
           p("The data and code (or research compendium) behind the science are",
             
@@ -73,9 +90,9 @@ shinyUI(
               href = "https://macmanes-lab.github.io/DoveParentsRNAseq/",
               "@macmanes-lab/DoveParentsRNAseq"
               
-              )
+            )
           )
-          )
+        )
       
         
       ),
@@ -85,69 +102,51 @@ shinyUI(
         
         wellPanel(
               
+          h4("Listen"),       
 
-              HTML('<center><img src="fig_musicalgenes.png", width = "90%"></center>'),
+              HTML('<center><img src="fig_musicalgenes.png", width = "100%"></center>'),
               
               plotOutput("boxPlot", width = "100%"),
-              
-              
-              p(""),
-              
-              
-              
-             # HTML('<center><img src="fig_musicalgenes.png", width = "75%"></center>'),
- 
-              p(""),
-             
           
              
-             actionButton("button", "Sonify the average gene expression for each group."),
+             actionButton("button", "Sonify the average gene expression value."),
              
              downloadButton("wav_dln", label = "Download to play."),
              
-             p(""),
              
-             p("Data sonification is the presentation of data as sound. 
-              'Musical Genes' is a Shiny app that allows users to interactively 
-                visualize and sonify (or plot and play) gene expression to better 
-                understand the 'transcrptional symphony' that regulates parental care. 
-                The user can choose a gene from this pulldown menu and 
-                listen to how it changes over time with the R packages `sonify` and `tuneR`.
-The boxplots above show variation in gene expression over time. 
-                "),
+
+          
+             h4("Explore"),          
+             
+             plotOutput("scatterplot", width = "100%"),
              
              
+          h4("Learn more"),       
              
-             p("This tool is a product of the 'Birds, Brains, and Banter (B3)'
-               Laboratory at the University of California at Davis.
-               This and related research is funded by the National Science Foundation,
-               in a grant to Rebecca Calisi and Matthew MacManes.
-               The webpage was created and written by Rayna Harris and Rebecca Calisi.  
-                Owen Marshall, Mauricio Vargas, Titus Brown, and 
-                  Alexandra Colón Rodríguez contributed intellectually to the design. 
-               Suzanne Austin, Andrew Lang, Victoria Farrar, April Booth, 
-                Tanner Feustel, and Matthew MacManes contributed the 
-               experiment that is the foundation of this application."),
-             
-             
-             HTML(paste(h4("Parental care on piano"))),
-             
-             
-             
-             p(" "),
-            
-            p("I also use a keyboard to play 
-               the sound of prolactin in the female pituitary 
-              working in concert other genes to regulate parental care. 
-              You can watch that video here and learn more about our experiments."),
-             
-             HTML('<iframe width="80%" height = "300px" 
+             p("Before building this app, used a keyboard to play 
+               the sound of genes working together to regulate parental care. 
+               You can watch this video to learn more about the inspiration behind this app."),
+          
+
+          HTML('<iframe width="80%" height = "300px" 
                   src="https://www.youtube.com/embed/PoKiIwIsLSo" 
-                  frameborder="0" allow="accelerometer; autoplay; 
-                  encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'),
-             
-             
-             p("")
+               frameborder="0" allow="accelerometer; autoplay; 
+               encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'),
+      
+          
+          h4("Credit"), 
+          
+          p("This app is a product of the 'Birds, Brains, and Banter (B3)'
+               Laboratory at the University of California at Davis.
+            This and related research is funded by the National Science Foundation,
+            in a grant to Rebecca Calisi and Matthew MacManes.
+          The webpage was created and written by Rayna Harris and Rebecca Calisi.  
+                Owen Marshall, Mauricio Vargas, Titus Brown, and 
+            Alexandra Colón Rodríguez contributed intellectually to the design. 
+            Suzanne Austin, Andrew Lang, Victoria Farrar, April Booth, 
+            Tanner Feustel, and Matthew MacManes contributed the 
+            experiment that is the foundation of this application.")
+  
               
              )
           )

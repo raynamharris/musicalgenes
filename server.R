@@ -1,6 +1,7 @@
 function(input, output) {
   
   gene_filter <- reactive({ as.character(input$gene) })
+  gene2_filter <- reactive({ as.character(input$gene2) })
   tissue_filter <- reactive({ as.character(input$tissue) })
   sex_filter <- reactive({ as.character(input$sex) })
   treatment_filter <- reactive({ as.character(input$treatment) })
@@ -14,10 +15,18 @@ function(input, output) {
     
   })
   
+  output$genename2 <- renderTable({
+    
+    mygene <- hugo %>%
+      filter(gene %in% c(!!as.character(input$gene2))) 
+    mygene
+    
+  })
+  
   
   output$boxPlot <- renderPlot({
     
-    mysubtitle = paste(input$sex, input$tissue, input$gene, sep = " ")
+    mysubtitle = paste("Data:",input$sex, input$tissue, input$gene, sep = " ")
     
     p1 <- candidatecounts %>%
       filter(
@@ -33,7 +42,7 @@ function(input, output) {
       drop_na() %>%
       ggplot(aes(x = treatment, y = counts)) +
       geom_boxplot(aes(fill = treatment), outlier.shape = NA, fatten = 2) +
-      geom_jitter(aes(color = sex), position=position_dodge(0.8)) +
+      #geom_jitter(aes(color = sex), position=position_dodge(0.8)) +
       theme_minimal(base_size = 16) +
       scale_fill_manual(values = allcolors, guide = FALSE) +
       scale_color_manual(values = allcolors) +
@@ -46,8 +55,7 @@ function(input, output) {
         panel.grid.major  = element_blank(),  # remove major gridlines
         panel.grid.minor  = element_blank()  # remove minor gridlines)
       ) +
-      labs(y = "gene expression", x = NULL, subtitle =  mysubtitle) 
-    
+      labs(y = "gene expression", x = NULL) 
     
     candidatecounts <- as.data.frame(candidatecounts)
 
@@ -71,17 +79,17 @@ function(input, output) {
       ggplot( aes(x = treatment, y = mean)) +
       geom_errorbar(aes(ymin = mean - se, 
                         ymax = mean + se), color = "white", width=0) +
-      geom_image(aes(image=image), size = 0.22)+
+      geom_image(aes(image=image), size = 0.15)+
       theme_void(base_size = 16) +
       scale_fill_manual(values = allcolors, guide = FALSE) +
       scale_color_manual(values = allcolors) +
       scale_x_discrete(breaks = charlevels) +
       theme(legend.position = "none") +
       theme(axis.title.y = element_text(color = "black", angle = 90),
-            axis.text.y = element_text(color = "white")) +
-      labs(y = "music notes")
+            plot.caption = element_text(face = "italic", size = 16)) +
+      labs(y = "music notes", caption = mysubtitle)
 
-    plot_grid(p1,p2, rel_heights = c(3,1), ncol = 1)
+    plot_grid(p1,p2, rel_heights = c(1.2,1), ncol = 1, align = "v")
   })
   
   
@@ -138,9 +146,12 @@ function(input, output) {
   })
 
   output$scatterplot <- renderPlot({
+    
+    mysubtitle = paste("Data:",input$sex, input$tissue, sep = " ")
+    
     candidatecounts %>%
       filter(
-        gene %in% c("PRL", !!as.character(input$gene)),
+        gene %in% c(!!as.character(input$gene2), !!as.character(input$gene)),
         tissue %in% !!as.character(input$tissue),
         sex %in% !!as.character(input$sex)
       ) %>%
@@ -151,17 +162,18 @@ function(input, output) {
         tissue = factor(tissue, levels = tissuelevels)
       ) %>% 
       pivot_wider(names_from = gene, values_from = counts) %>%
-      ggplot(aes_string(x = "PRL", y = input$gene)) +
+      ggplot(aes_string(x = input$gene, y = input$gene2)) +
       geom_point(aes(color = treatment)) +
       geom_smooth(method = "lm", aes(color = sex)) +
       #facet_wrap(~tissue, ncol = 1, scales = "free") +
-      theme_classic(base_size = 14) +
+      theme_classic(base_size = 16) +
       scale_fill_manual(values = allcolors, guide = FALSE) +
       scale_color_manual(values = allcolors) +
-      theme(legend.position = "bottom",
-            axis.title = element_text(face = "italic")) +
+      theme(legend.position = "none",
+            axis.title = element_text(face = "italic"),
+            plot.caption = element_text(face = "italic", size = 16)) +
       guides(color = guide_legend(nrow = 2)) +
-      labs(subtitle = input$tissue)
+      labs(caption = mysubtitle)
   })
 
   
