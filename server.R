@@ -55,7 +55,16 @@ function(input, output) {
         panel.grid.major  = element_blank(),  # remove major gridlines
         panel.grid.minor  = element_blank()  # remove minor gridlines)
       ) +
-      labs(y = "gene expression", x = NULL) 
+      labs(y = "gene expression", x = NULL) +
+      geom_signif(comparisons = list( c( "control", "bldg"),
+                                      c( "bldg", "lay"),
+                                      c( "lay", "inc.d3"),
+                                      c("inc.d3", "inc.d9"),
+                                      c( "inc.d9", "inc.d17"),
+                                      c( "inc.d17", "hatch"),
+                                      c("hatch", "n5"),
+                                      c( "n5", "n9")),  
+                  map_signif_level=TRUE) 
     
     candidatecounts <- as.data.frame(candidatecounts)
 
@@ -67,7 +76,7 @@ function(input, output) {
       group_by(treatment, tissue, gene, sex)  %>% 
       summarize(mean = mean(counts, na.rm = T), 
                 se = sd(counts,  na.rm = T)/sqrt(length(counts))) %>%
-      #dplyr::mutate(scaled = rescale(median, to = c(0, 7))) %>%
+      #dplyr::mutate(scaled = rescale(mean, to = c(0, 7))) %>%
       dplyr::mutate(image = "www/musicnote.png")   %>%
       filter(
         gene %in% c(!!as.character(input$gene)),
@@ -89,7 +98,7 @@ function(input, output) {
             plot.caption = element_text(face = "italic", size = 16)) +
       labs(y = "music notes", caption = mysubtitle)
 
-    plot_grid(p1,p2, rel_heights = c(1.2,1), ncol = 1, align = "v")
+    plot_grid(p1,p2, rel_heights = c(1.4,1), ncol = 1, align = "v")
   })
   
   
@@ -140,7 +149,7 @@ function(input, output) {
         tissue = factor(tissue, levels = tissuelevels)
       ) %>% 
       group_by(sex, tissue, treatment, gene) %>%
-      summarize(expression = median(counts)) %>%
+      summarize(expression = mean(counts)) %>%
       pivot_wider(names_from = gene, values_from = expression)
     reactivecandidatecounts
   })
@@ -251,7 +260,7 @@ function(input, output) {
    
     candidatecountsdf <- as.data.frame(candidatecounts)
    
-    medianvalues <- candidatecountsdf %>%
+    meanvalues <- candidatecountsdf %>%
       mutate(
         treatment = factor(treatment, levels = charlevels),
         tissue = factor(tissue, levels = tissuelevels)
@@ -260,14 +269,14 @@ function(input, output) {
                      tissue %in% !!as.character(input$tissue),
                      sex %in% !!as.character(input$sex)) %>%
       group_by(sex, tissue, treatment) %>%
-      summarize(median = median(counts, na.rm = TRUE) + 2) %>%
+      summarize(mean = mean(counts, na.rm = TRUE) + 2) %>%
       arrange(sex, treatment)  %>%
       filter(treatment != "NA") %>%
-      #mutate(scaled = scales:::rescale(median, to = c(0,7))) %>%
-      mutate(scaled = median) %>%
+      #mutate(scaled = scales:::rescale(mean, to = c(0,7))) %>%
+      mutate(scaled = mean) %>%
       mutate(averaged = round(scaled,0) ) 
       
-    notes <- left_join(medianvalues, numberstonotes, by = "averaged")   %>%
+    notes <- left_join(meanvalues, numberstonotes, by = "averaged")   %>%
       select(sex, tissue, treatment, note ) %>%
       pivot_wider(names_from = sex, values_from = note ) %>%
       mutate(treatment = factor(treatment, levels = charlevels)) %>%
@@ -277,7 +286,7 @@ function(input, output) {
     notes
     
     ## sonify datat
-    #musicalgenes <-  sonify(x = medianvalues$median, interpolation = "constant")
+    #musicalgenes <-  sonify(x = meanvalues$mean, interpolation = "constant")
   })
 
   
@@ -291,7 +300,7 @@ function(input, output) {
     
     candidatecountsdf <- as.data.frame(candidatecounts)
     
-    medianvalues <- candidatecountsdf %>%
+    meanvalues <- candidatecountsdf %>%
       mutate(
         treatment = factor(treatment, levels = charlevels),
         tissue = factor(tissue, levels = tissuelevels)
@@ -300,16 +309,16 @@ function(input, output) {
              tissue %in% !!as.character(input$tissue),
              sex %in% !!as.character(input$sex)) %>%
       group_by(sex, tissue, treatment) %>%
-      summarize(median = median(counts, na.rm = TRUE) + 2) %>%
+      summarize(mean = mean(counts, na.rm = TRUE) + 2) %>%
       arrange(sex, treatment)  %>%
       filter(treatment != "NA") %>%
-      mutate(scaled = scales:::rescale(median, to = c(0,7))) %>%
+      mutate(scaled = scales:::rescale(mean, to = c(0,7))) %>%
       mutate(averaged = round(scaled,0) ) 
     
     output$text <- renderText({
       paste0("Your input, ", input$gene, ", sounds like this:")})
     
-    sound <- sonify(x = medianvalues$median, interpolation = "constant", duration = 6)
+    sound <- sonify(x = meanvalues$mean, interpolation = "constant", duration = 6)
     
     # Saves file
     wvname <- paste0("sound", input$gene, input$tissue,".wav")
