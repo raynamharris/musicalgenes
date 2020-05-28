@@ -11,19 +11,21 @@ shinyUI(
         
         wellPanel(
           
-          p("Prolactin", em("(PRL)"), "works in concert with other genes 
-            to regulate lactation and parental behavior. 
+          p("Many genes in the transcriptome work in concert 
+            to regulate behaviors and physiological processes 
+            associated parental care. 
             What does this 'transcriptional symphony' sound like?
-            Interactively visualize and sonify gene expression from parenting pigeons
+            Interactively visualize and sonify gene expression 
+            from parenting pigeons
             to better understand the biology of parental care and 
             make beautiful music."),
           
           
           selectInput(
             inputId = "gene",
-            label = "Pick a gene to compare to prolactin.",
+            label = "Pick a gene.",
             choices = c(gene_names),
-            selected = c("BRCA1"),
+            selected = c("PRL"),
             multiple = FALSE
           ),
           
@@ -41,17 +43,11 @@ shinyUI(
           
           selectInput(
             inputId = "sex",
-            label = "Pick a sex.",
+            label = "Chose female or male.",
             choices = sexlevels,
-            selected = c("female", "male"),
-            multiple = TRUE
-          ),
-          
-          # actionButton("button", "Sonify gene expression."),
-          
-          p("To listen average value of gene each group, click download."),
-          
-          downloadButton("wav_dln", label = "Download")
+            selected = c("female"),
+            multiple = FALSE
+          )
           
         ),
         
@@ -90,9 +86,10 @@ shinyUI(
         wellPanel(
               
 
-              HTML('<center><img src="expdesign.png", width = "90%"></center>'),
+              HTML('<center><img src="fig_musicalgenes.png", width = "90%"></center>'),
               
               plotOutput("boxPlot", width = "100%"),
+              
               
               p(""),
               
@@ -102,7 +99,13 @@ shinyUI(
  
               p(""),
              
+          
              
+             actionButton("button", "Sonify the average gene expression for each group."),
+             
+             downloadButton("wav_dln", label = "Download to play."),
+             
+             p(""),
              
              p("Data sonification is the presentation of data as sound. 
               'Musical Genes' is a Shiny app that allows users to interactively 

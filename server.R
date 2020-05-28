@@ -17,9 +17,11 @@ function(input, output) {
   
   output$boxPlot <- renderPlot({
     
-    p <- candidatecounts %>%
+    mysubtitle = paste(input$sex, input$tissue, input$gene, sep = " ")
+    
+    p1 <- candidatecounts %>%
       filter(
-        gene %in% c("PRL", !!as.character(input$gene)),
+        gene %in% c(!!as.character(input$gene)),
         tissue %in% !!as.character(input$tissue),
         sex %in% !!as.character(input$sex)
       ) %>%
@@ -29,23 +31,57 @@ function(input, output) {
         tissue = factor(tissue, levels = tissuelevels)
       ) %>% 
       drop_na() %>%
-      ggplot(aes(x = treatment, y = counts, color = sex)) +
-      geom_boxplot(aes(fill = treatment), outlier.shape = NA) +
+      ggplot(aes(x = treatment, y = counts)) +
+      geom_boxplot(aes(fill = treatment), outlier.shape = NA, fatten = 2) +
       geom_jitter(aes(color = sex), position=position_dodge(0.8)) +
-      #geom_smooth(aes(x = as.numeric(treatment))) +
-      facet_wrap( ~ gene, scales = "free_y", ncol = 2) +
-      theme_classic(base_size = 16) +
+      theme_minimal(base_size = 16) +
       scale_fill_manual(values = allcolors, guide = FALSE) +
       scale_color_manual(values = allcolors) +
       scale_x_discrete(breaks = charlevels) +
       theme(
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        legend.position = "bottom",
-        axis.title = element_text(face = "italic"),
-        strip.text = element_text(face = "italic")
+        axis.text.x = element_blank(),
+        legend.position = "none",
+        plot.subtitle  = element_text(face = "italic"),
+        strip.background  = element_blank(),
+        panel.grid.major  = element_blank(),  # remove major gridlines
+        panel.grid.minor  = element_blank()  # remove minor gridlines)
       ) +
-      labs(y = "gene expression", x = NULL, subtitle = input$tissue)
-    p
+      labs(y = "gene expression", x = NULL, subtitle =  mysubtitle) 
+    
+    
+    candidatecounts <- as.data.frame(candidatecounts)
+
+    p2 <- candidatecounts %>%
+      mutate(
+        treatment = factor(treatment, levels = charlevels),
+        tissue = factor(tissue, levels = tissuelevels)
+      ) %>% 
+      group_by(treatment, tissue, gene, sex)  %>% 
+      summarize(mean = mean(counts, na.rm = T), 
+                se = sd(counts,  na.rm = T)/sqrt(length(counts))) %>%
+      #dplyr::mutate(scaled = rescale(median, to = c(0, 7))) %>%
+      dplyr::mutate(image = "www/musicnote.png")   %>%
+      filter(
+        gene %in% c(!!as.character(input$gene)),
+        tissue %in% !!as.character(input$tissue),
+        sex %in% !!as.character(input$sex)
+      ) %>% 
+      collect() %>%
+      drop_na() %>%
+      ggplot( aes(x = treatment, y = mean)) +
+      geom_errorbar(aes(ymin = mean - se, 
+                        ymax = mean + se), color = "white", width=0) +
+      geom_image(aes(image=image), size = 0.22)+
+      theme_void(base_size = 16) +
+      scale_fill_manual(values = allcolors, guide = FALSE) +
+      scale_color_manual(values = allcolors) +
+      scale_x_discrete(breaks = charlevels) +
+      theme(legend.position = "none") +
+      theme(axis.title.y = element_text(color = "black", angle = 90),
+            axis.text.y = element_text(color = "white")) +
+      labs(y = "music notes")
+
+    plot_grid(p1,p2, rel_heights = c(3,1), ncol = 1)
   })
   
   
@@ -209,83 +245,6 @@ output$cortestres <- renderPrint({
   
   
   
-  output$musicplot <- renderPlot({
-    
-    candidatecounts <- as.data.frame(candidatecounts)
-    
-    treble <- image_read("www/fig_treble.png")
-    base <- image_read("www/fig_base.png")
-    
-    mytitle = paste(input$gene, input$tissue, sep = " in the ")
-      
-    f <- candidatecounts %>%
-      mutate(
-        treatment = factor(treatment, levels = charlevels),
-        tissue = factor(tissue, levels = tissuelevels)
-      ) %>% 
-      group_by(treatment, tissue, gene, sex)  %>% 
-      summarize(median = median(counts, na.rm = T), 
-                se = sd(counts,  na.rm = T)/sqrt(length(counts))) %>%
-      dplyr::mutate(scaled = rescale(median, to = c(0, 7))) %>%
-      dplyr::mutate(image = "www/musicnote.png")   %>%
-      filter(
-        gene %in% c(!!as.character(input$gene)),
-        tissue %in% !!as.character(input$tissue),
-        sex == "female"
-      ) %>% 
-      collect() %>%
-      drop_na() %>%
-      ggplot( aes(x = treatment, y = median)) +
-      geom_errorbar(aes(ymin = median - se, 
-                      ymax = median + se , color = treatment),  width=0) +
-      geom_image(aes(image=image), size = 0.125) +
-      theme_void(base_size = 16) +
-      theme(legend.position = "none") +
-      scale_color_manual(values = allcolors) +
-      labs(y = " ", caption = "  ", subtitle = "females", title = mytitle) +
-      theme(plot.margin=unit(c(4,1,4,2),"cm")) 
-    
-    
-    m <- candidatecounts %>%
-      mutate(
-        treatment = factor(treatment, levels = charlevels),
-        tissue = factor(tissue, levels = tissuelevels)
-      ) %>% 
-      group_by(treatment, tissue, gene, sex)  %>% 
-      summarize(median = median(counts, na.rm = T), 
-                se = sd(counts,  na.rm = T)/sqrt(length(counts))) %>%
-      dplyr::mutate(scaled = rescale(median, to = c(0, 7))) %>%
-      dplyr::mutate(image = "www/musicnote.png")   %>%
-      filter(
-        gene %in% c(!!as.character(input$gene)),
-        tissue %in% !!as.character(input$tissue),
-        sex == "male"
-      ) %>% 
-      collect() %>%
-      drop_na() %>%
-      ggplot( aes(x = treatment, y = median)) +
-      geom_errorbar(aes(ymin = median - se, 
-                        ymax = median + se, color = treatment),  width=0) +
-      geom_image(aes(image=image), size = 0.125)+
-      theme_void(base_size = 16) +
-      theme(legend.position = "none") +
-      scale_color_manual(values = allcolors) +
-      labs(y = " ", caption = "  ", subtitle = "males",  title = "") +
-      theme(plot.margin=unit(c(4,1,4,2),"cm"))
-    
-    female <- ggdraw() + 
-      draw_image(treble) + 
-      draw_plot(f)
-    
-    male  <- ggdraw() + 
-      draw_image(base) + 
-      draw_plot(m)
-    
-    plot_grid(female, male, nrow = 1)
-    
-  })
-  
-  
   output$musicalgenes <- renderTable({
     
     ## average and rescale data
@@ -304,7 +263,8 @@ output$cortestres <- renderPrint({
       summarize(median = median(counts, na.rm = TRUE) + 2) %>%
       arrange(sex, treatment)  %>%
       filter(treatment != "NA") %>%
-      mutate(scaled = scales:::rescale(median, to = c(0,7))) %>%
+      #mutate(scaled = scales:::rescale(median, to = c(0,7))) %>%
+      mutate(scaled = median) %>%
       mutate(averaged = round(scaled,0) ) 
       
     notes <- left_join(medianvalues, numberstonotes, by = "averaged")   %>%
