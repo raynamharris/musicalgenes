@@ -50,7 +50,7 @@ allcolors <- c(colorschar, colorssex, colorstissue)
 ## candidate counts
 candidatecounts <- read_csv("./data/candidatecounts.csv") %>%
   mutate(
-    treatment = factor(treatment, levels = charlevels),
+    treatment = factor(treatment, levels = alllevels),
     tissue = factor(tissue, levels = tissuelevels)
   )
 

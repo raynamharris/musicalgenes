@@ -149,7 +149,8 @@ function(input, output) {
     
     mysubtitle = paste("Data:",input$sex, input$tissue, sep = " ")
     
-    candidatecounts %>%
+
+    df <- candidatecounts %>%
       filter(
         gene %in% c(!!as.character(input$gene2), !!as.character(input$gene)),
         tissue %in% !!as.character(input$tissue),
@@ -161,8 +162,9 @@ function(input, output) {
         treatment = factor(treatment, levels = charlevels),
         tissue = factor(tissue, levels = tissuelevels)
       ) %>% 
-      pivot_wider(names_from = gene, values_from = counts) %>%
-      ggplot(aes_string(x = input$gene, y = input$gene2)) +
+      pivot_wider(names_from = gene, values_from = counts)  
+    
+    df %>% ggplot(aes_string(x = input$gene, y = input$gene2)) +
       geom_point(aes(color = treatment)) +
       geom_smooth(method = "lm", aes(color = sex)) +
       #facet_wrap(~tissue, ncol = 1, scales = "free") +
@@ -173,29 +175,15 @@ function(input, output) {
             axis.title = element_text(face = "italic"),
             plot.caption = element_text(face = "italic", size = 16)) +
       guides(color = guide_legend(nrow = 2)) +
-      labs(caption = mysubtitle)
+      labs(caption = mysubtitle) 
   })
 
   
-  
-output$cortestres <- renderPrint({
-  
-  gene <- candidatecounts %>%
-    filter(
-      gene %in% c("PRL", !!as.character(input$gene)),
-      tissue %in% !!as.character(input$tissue),
-      sex %in% !!as.character(input$sex)
-    ) %>%
-    select(sex:counts) %>%
-    pivot_wider(names_from = gene, values_from = counts)   %>%
-    select(-sex, -tissue, -treatment, -samples)
-  
-  print(paste("gene 1 is", names(gene[1]), sep = " "))
-  print(paste("gene 2 is", names(gene[2]), sep = " "))
-  
-  #res <- cor.test(gene[[1]], gene[[2]], method = "pearson")
-  #return(res)
-  })
+ outputPrint <- renderPrint({
+   
+
+   
+ }) 
   
 
   output$tsne <- renderPlot({

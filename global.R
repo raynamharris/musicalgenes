@@ -30,6 +30,13 @@ charlevels <- c(
   "hatch", "n5", "n9"
 )
 
+alllevels <- c("control", "bldg", "lay", "inc.d3", "m.inc.d3" ,  
+               "inc.d9", "m.inc.d9" , "early" ,
+               "inc.d17",  "m.inc.d17", "prolong" , 
+               "hatch",  "m.n2", "extend",
+               "n5",  
+               "n9")
+
 sexlevels <- c("female", "male")
 
 tissuelevels <- c("hypothalamus", "pituitary", "gonad")
@@ -85,6 +92,11 @@ tsne <- tbl(con, "tsne")
 
 ## get gene ids
 gene_names <- candidatecounts %>%
+  dplyr::distinct(gene) %>%
+  dplyr::arrange(gene) %>%
+  pull()
+
+gene_names2 <- candidatecounts %>%
   dplyr::distinct(gene) %>%
   dplyr::arrange(gene) %>%
   pull()

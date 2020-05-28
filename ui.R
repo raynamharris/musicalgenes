@@ -119,7 +119,8 @@ shinyUI(
              h4("Explore"),          
              
              plotOutput("scatterplot", width = "100%"),
-             
+          
+
              
           h4("Learn more"),       
              
