@@ -52,7 +52,8 @@ candidatecounts <- read_csv("./data/candidatecounts.csv") %>%
   mutate(
     treatment = factor(treatment, levels = alllevels),
     tissue = factor(tissue, levels = tissuelevels)
-  )
+  ) %>%
+  filter(treatment %in% charlevels)
 
 dbWriteTable(
   con,

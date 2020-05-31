@@ -321,7 +321,7 @@ function(input, output) {
     sound <- sonify(x = meanvalues$mean, interpolation = "constant", duration = 6)
     
     # Saves file
-    wvname <- paste0("sound", input$gene, input$tissue,".wav")
+    wvname <- paste0(input$sex, input$tissue, input$gene, ".wav")
     writeWave(sound, paste0("www/", wvname))
     
     # Creates audiotag

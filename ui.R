@@ -1,7 +1,7 @@
 shinyUI(
   fluidPage(
     # Application title
-    titlePanel("Musical Genes: Visualizing and sonifiying gene expression in parenting pigeons"),
+    titlePanel("Musical Genes: Visualize and sonifiy gene expression in parenting pigeons"),
 
     # titlePanel(title=div(img(src="expdesign.png"))),
 
@@ -11,18 +11,19 @@ shinyUI(
         
         wellPanel(
           
-          p("A metaphorical 'transcirptional symphony' of genes working together
-            is thought to regulate behavior. What does this symphony sound like?
+          p("A metaphorical 'transcriptional symphony' of genes 
+            'working in concert' is thought to regulate behavior. 
+            What does this symphony sound like?
             Data sonification is the presentation of data as sound. 
-            Interactively visualize and sonify gene expression 
-            to better understand the biology of parental care and 
-            develop new hypotheses."),
+            Here, you can interactively visualize and sonify gene expression 
+            to better understand the molecular mechanisms that regulate
+            parental care behavior and other important phenotypes."),
             
           selectInput(
             inputId = "gene",
             label = "Pick a gene.",
             choices = c(gene_names),
-            selected = c("PRL"),
+            selected = c("DRD1"),
             multiple = FALSE
           ),
           
@@ -32,7 +33,7 @@ shinyUI(
             inputId = "tissue",
             label = "Pick a tissue.",
             choices = tissuelevels,
-            selected = "pituitary",
+            selected = "hypothalamus",
             multiple = FALSE
           ),
           
@@ -46,22 +47,20 @@ shinyUI(
             multiple = FALSE
           ),
           
-          p("The box-and-whisker plot to the right shows average and range of genes expression for each group. 
-            The music notes represent the mean for each group and correspond nicely to the tone played in the downloaded wav file.")
+          p("The box-and-whisker plot median and range of gene expression at difference stages of reproduction, from building nests and incubating eggs to nurturing baby chicks. The music notes represent the mean for each group and correspond to the tone played in the downloaded .wav file.")
         
         ),
         
         wellPanel(
           
           
-          p("Many genes work in concert to to create a 'transcriptional symphony' of parental care.
-            Pick another gene to see it is is positively or negatively correlated with the first gene."),
+          p("Genes that are positively or negatively correlated increase and decrease their expression in syncrony. Genes with positive correlations are often co-regulated by the same transcription factor."),
           
           selectInput(
             inputId = "gene2",
             label = "Pick another gene.",
             choices = c(gene_names),
-            selected = c("BRCA1"),
+            selected = c("HTR2C"),
             multiple = FALSE
           ),
           
@@ -113,7 +112,7 @@ shinyUI(
              
              downloadButton("wav_dln", label = "Download to play."),
              
-             
+          uiOutput("audiotag"),
 
           
              h4("Explore"),          
