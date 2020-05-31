@@ -296,7 +296,8 @@ function(input, output) {
   observeEvent(input$button, {
     
     audiotag <- function(filename){tags$audio(src = filename,
-                                              type ="audio/wav", controls = NA)}
+                                              type ="audio/wav", controls = NA,
+                                              autoplay = T)}
     
     candidatecountsdf <- as.data.frame(candidatecounts)
     
