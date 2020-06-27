@@ -4,6 +4,9 @@ shinyUI(
     titlePanel("Musical Genes: Visualize and sonifiy gene expression in parenting pigeons"),
 
     # titlePanel(title=div(img(src="expdesign.png"))),
+  
+    
+    tags$div(lang="en", class="header"),
 
     # Inputs for boxplot
     sidebarLayout(
