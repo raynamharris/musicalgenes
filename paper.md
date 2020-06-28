@@ -7,6 +7,14 @@ tags:
   - animal behavior
   - parental care
   - data sonification
+authors:
+  - name: Rayna Harris and omany other
+    affiliation: 1
+  - name: Rebecca Calisi 
+    affiliation: 2
+affiliations:
+ - name: UC Davis
+   index: 1 
 date: 27 July 2020
 bibliography: paper.bib
 
