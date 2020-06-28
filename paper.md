@@ -11,7 +11,7 @@ authors:
   - name: Rayna Harris and omany other
     affiliation: 1
   - name: Rebecca Calisi 
-    affiliation: 2
+    affiliation: 1
 affiliations:
  - name: UC Davis
    index: 1 
