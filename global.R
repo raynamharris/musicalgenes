@@ -107,8 +107,8 @@ gene_names2 <- candidatecounts %>%
 
 
 numberstonotes <- data.frame(
-  averaged = c(0:7),
-  note = c("A", "B",  "C",  "D", "E", "F",  "G", "AA")
+  averaged = c(0:6),
+  note = c("A", "B",  "C",  "D", "E", "F",  "G")
 )
 
 hugo <- read.csv("data/hugo.csv") %>% dplyr::distinct(gene, name)

@@ -272,21 +272,18 @@ function(input, output) {
       summarize(mean = mean(counts, na.rm = TRUE) + 2) %>%
       arrange(sex, treatment)  %>%
       filter(treatment != "NA") %>%
-      #mutate(scaled = scales:::rescale(mean, to = c(0,7))) %>%
-      mutate(scaled = mean) %>%
-      mutate(averaged = round(scaled,0) ) 
-      
+      mutate(scaled = scales:::rescale(mean, to = c(0,6))) %>%
+      mutate(averaged = round(scaled,0)) 
+
     notes <- left_join(meanvalues, numberstonotes, by = "averaged")   %>%
       select(sex, tissue, treatment, note ) %>%
       pivot_wider(names_from = sex, values_from = note ) %>%
       mutate(treatment = factor(treatment, levels = charlevels)) %>%
       pivot_longer(-c(tissue, treatment),  names_to = "sex", values_to = "note") %>%
-      pivot_wider(names_from = treatment, values_from = note)
-    
-    notes
-    
-    ## sonify datat
-    #musicalgenes <-  sonify(x = meanvalues$mean, interpolation = "constant")
+      pivot_wider(names_from = treatment, values_from = note) %>%
+      select(charlevels)
+    notes$tissue <- NULL
+   notes
   })
 
   

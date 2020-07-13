@@ -109,14 +109,25 @@ shinyUI(
               HTML('<center><img src="fig_musicalgenes.png", width = "100%"></center>'),
               
               plotOutput("boxPlot", width = "100%"),
-          
              
+             
+          
              actionButton("button", "Sonify the average gene expression value."),
+        
              
              downloadButton("wav_dln", label = "Download to play."),
              
-          uiOutput("audiotag"),
+             uiOutput("audiotag"),
 
+          p(" "),
+          
+          p("You can play these notes on the instrument of your choice."),
+          
+          p(" "),
+          
+          tableOutput("musicalgenes")),
+        
+        wellPanel(
           
              h4("Explore"),          
              
