@@ -107,9 +107,15 @@ gene_names2 <- candidatecounts %>%
 
 
 numberstonotes <- data.frame(
-  averaged = c(0:6),
+  scaledmean = c(0:6),
   note = c("A", "B",  "C",  "D", "E", "F",  "G")
 )
+
+orchestra <- c("violin", "bass drum", "snare drum",
+               "french horn", "clarinet", "bassoon", "oboe",
+               "trumpet", "trombone", "tuba",
+               "upright bass", "viola", "cello",
+               "cymbals", "timpani")
 
 hugo <- read.csv("data/hugo.csv") %>% dplyr::distinct(gene, name)
 head(hugo)

@@ -55,7 +55,7 @@ function(input, output) {
         panel.grid.major  = element_blank(),  # remove major gridlines
         panel.grid.minor  = element_blank()  # remove minor gridlines)
       ) +
-      labs(y = "gene expression", x = NULL) +
+      labs(y = "gene expression", x = NULL, subtitle = mysubtitle) +
       geom_signif(comparisons = list( c( "control", "bldg"),
                                       c( "bldg", "lay"),
                                       c( "lay", "inc.d3"),
@@ -95,8 +95,9 @@ function(input, output) {
       scale_x_discrete(breaks = charlevels) +
       theme(legend.position = "none") +
       theme(axis.title.y = element_text(color = "black", angle = 90),
+            axis.text.x = element_text(color = "black"),
             plot.caption = element_text(face = "italic", size = 16)) +
-      labs(y = "music notes", caption = mysubtitle)
+      labs(y = "music notes")
 
     plot_grid(p1,p2, rel_heights = c(1.4,1), ncol = 1, align = "v")
   })
@@ -260,7 +261,7 @@ function(input, output) {
    
     candidatecountsdf <- as.data.frame(candidatecounts)
    
-    meanvalues <- candidatecountsdf %>%
+    notes <- candidatecountsdf %>%
       mutate(
         treatment = factor(treatment, levels = charlevels),
         tissue = factor(tissue, levels = tissuelevels)
@@ -268,22 +269,19 @@ function(input, output) {
       filter(gene %in% c(!!as.character(input$gene)),
                      tissue %in% !!as.character(input$tissue),
                      sex %in% !!as.character(input$sex)) %>%
-      group_by(sex, tissue, treatment) %>%
-      summarize(mean = mean(counts, na.rm = TRUE) + 2) %>%
-      arrange(sex, treatment)  %>%
+      group_by(sex, tissue, treatment, gene) %>%
+      summarize(scaledmean = mean(counts, na.rm = TRUE) + 2) %>%
+      ungroup() %>%
+      arrange(sex,treatment,gene)  %>%
       filter(treatment != "NA") %>%
-      mutate(scaled = scales:::rescale(mean, to = c(0,6))) %>%
-      mutate(averaged = round(scaled,0)) 
-
-    notes <- left_join(meanvalues, numberstonotes, by = "averaged")   %>%
-      select(sex, tissue, treatment, note ) %>%
-      pivot_wider(names_from = sex, values_from = note ) %>%
-      mutate(treatment = factor(treatment, levels = charlevels)) %>%
-      pivot_longer(-c(tissue, treatment),  names_to = "sex", values_to = "note") %>%
-      pivot_wider(names_from = treatment, values_from = note) %>%
-      select(charlevels)
-    notes$tissue <- NULL
+      mutate(scaledmean = round(scales:::rescale(scaledmean, to = c(0,6)),0)) %>%
+      left_join(., numberstonotes, by = "scaledmean")   %>%
+      select(sex, tissue, treatment, gene, note ) %>%
+      pivot_wider(names_from = treatment, values_from = note ) %>%
+      mutate(instument = sample(orchestra, 1, replace=F)) %>%
+      select(gene, instument, charlevels)
    notes
+    
   })
 
   
@@ -314,13 +312,14 @@ function(input, output) {
       mutate(averaged = round(scaled,0) ) 
     
     output$text <- renderText({
+    
       paste0("Your input, ", input$gene, ", sounds like this:")})
     
-    sound <- sonify(x = meanvalues$mean, interpolation = "constant", duration = 6)
+      sound <- sonify(x = meanvalues$mean, interpolation = "constant", duration = 6)
     
-    # Saves file
-    wvname <- paste0(input$sex, input$tissue, input$gene, ".wav")
-    writeWave(sound, paste0("www/", wvname))
+      # Saves file
+      wvname <- paste0(input$sex, input$tissue, input$gene, ".wav")
+      writeWave(sound, paste0("www/", wvname))
     
     # Creates audiotag
     output$audiotag <- renderUI(audiotag(wvname))
