@@ -25,6 +25,9 @@ library(magick)
 
 library(ggpubr)
 
+citation("sonify") ## for gene expression analysis
+
+
 
 # experimental levels ----
 
@@ -111,11 +114,11 @@ numberstonotes <- data.frame(
   note = c("A", "B",  "C",  "D", "E", "F",  "G")
 )
 
-orchestra <- c("violin", "bass drum", "snare drum",
+orchestra <- c("violin", 
                "french horn", "clarinet", "bassoon", "oboe",
                "trumpet", "trombone", "tuba",
                "upright bass", "viola", "cello",
-               "cymbals", "timpani")
+               "piano", "keyboard")
 
 hugo <- read.csv("data/hugo.csv") %>% dplyr::distinct(gene, name)
 head(hugo)

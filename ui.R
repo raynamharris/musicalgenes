@@ -53,7 +53,7 @@ shinyUI(
             multiple = FALSE
           ),
           
-          p("The box-and-whisker plot median and range of gene expression at difference stages of reproduction, from building nests and incubating eggs to nurturing baby chicks. The music notes represent the mean for each group and correspond to the tone played in the downloaded .wav file.")
+          p("After choosing a gene, tissue and sex, click the 'sonify' button to listen the mean value of gene expression.")
         
         ),
         
@@ -66,7 +66,7 @@ shinyUI(
           
           selectInput(
             inputId = "gene2",
-            label = "Choose another gene.",
+            label = "Choose another gene to see if it is correlated with the first gene",
             choices = c(gene_names),
             selected = c("HTR2C"),
             multiple = FALSE
@@ -109,12 +109,13 @@ shinyUI(
         
         wellPanel(
               
-          h4("Listen to the expression of one gene change over time"),      
+          h4("Listen to the sound of gene expression changing over time"),      
           
               HTML('<center><img src="fig_musicalgenes.png", width = "100%"></center>'),
               
-          p("Box plot and whisker plots illustrate average and range of data for each group. Stars above denote statistically significant chagnes in gene expression between sequential timepoints. Plotting music notes instead of points, bars or graphs reduces the utility of the data for statistical reasoninng but does allow the user to visualize the same pattern that is being used to create a tone via sonification. "),
+          p("Box plot and whisker plots illustrate average and range of data for each group. Stars above denote statistically significant chagnes in gene expression between sequential timepoints. Plotting music notes instead of points, bars or graphs reduces the utility of the data for statistical reasoninng but does allow the user to visualize the same pattern that is being used to create a tone via sonification. We can represent an averaged value of gene expression for each group as a music note tha can be played by an instrument in an orchestra."),
           
+          p(""),
           
               plotOutput("boxPlot", width = "100%"),
              
@@ -131,7 +132,7 @@ shinyUI(
           
           p(" "),
           
-          p("We can represent an averaged value of gene expression for each group as a music note tha can be played by an instrument in an orchestra."),
+          
           
           tableOutput("musicalgenes")),
           
@@ -145,10 +146,10 @@ shinyUI(
             "),
              
              
-             plotOutput("scatterplot", width = "100%"),
-          
-
-             
+             plotOutput("scatterplot", width = "100%")),
+        
+        
+        wellPanel(
           h4("Learn more"),       
              
              p("Before building this app, used a keyboard to play 

@@ -279,7 +279,8 @@ function(input, output) {
       select(sex, tissue, treatment, gene, note ) %>%
       pivot_wider(names_from = treatment, values_from = note ) %>%
       mutate(instument = sample(orchestra, 1, replace=F)) %>%
-      select(gene, instument, charlevels)
+      select(gene, charlevels, instument)# %>%
+      #unite("notes", control:n9, remove = FALSE, sep = "")
    notes
     
   })
