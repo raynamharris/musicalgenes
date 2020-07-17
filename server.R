@@ -16,14 +16,14 @@ function(input, output) {
     
   })
   
-  output$genename2 <- renderTable({
-    
-    mygene <- hugo %>%
-      filter(gene_name %in% c(!!as.character(input$gene2))) %>%
-      select(gene, name)
-    mygene
-    
-  })
+ # output$genename2 <- renderTable({
+ #   
+ #   mygene <- hugo %>%
+ #     filter(gene_name %in% c(!!as.character(input$gene2))) %>%
+ #     select(gene, name)
+ #   mygene
+ #   
+ # })
   
   
   output$boxPlot <- renderPlot({
@@ -78,7 +78,6 @@ function(input, output) {
       group_by(treatment, tissue, gene_name, gene, sex)  %>% 
       summarize(mean = mean(counts, na.rm = T), 
                 se = sd(counts,  na.rm = T)/sqrt(length(counts))) %>%
-      #dplyr::mutate(scaled = rescale(mean, to = c(0, 7))) %>%
       dplyr::mutate(image = "www/musicnote.png")   %>%
       filter(
         gene_name %in% c(!!as.character(input$gene)),
@@ -94,10 +93,11 @@ function(input, output) {
       theme_void(base_size = 16) +
       scale_fill_manual(values = allcolors, guide = FALSE) +
       scale_color_manual(values = allcolors) +
-      scale_x_discrete(breaks = charlevels) +
+      scale_x_discrete(breaks = charlevels,
+                       labels = charlabels) +
       theme(legend.position = "none") +
       theme(axis.title.y = element_text(color = "black", angle = 90),
-            axis.text.x = element_text(color = "black"),
+            axis.text.x = element_text(color = "black", size = 10),
             plot.caption = element_text(face = "italic", size = 16)) +
       labs(y = "music notes")
 

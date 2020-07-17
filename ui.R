@@ -33,7 +33,7 @@ shinyUI(
             multiple = FALSE
           ),
           
-          tableOutput("genename"),
+         # tableOutput("genename"),
           
           selectInput(
             inputId = "tissue",
@@ -57,24 +57,7 @@ shinyUI(
         
         ),
         
-        wellPanel(
-          
-          h4("Data exploration"),
-          
-          p("Many genes increase and decrease their expression in syncrony in response to internal physiological processes and external cues. What gene do you predict is positively or negatively correlated with the first gene you chose?
-            "),
-          
-          selectInput(
-            inputId = "gene2",
-            label = "Choose another gene to see if it is correlated with the first gene",
-            choices = c(gene_names),
-            selected = c("HTR2C: 5-hydroxytryptamine receptor 2C"),
-            multiple = FALSE
-          ),
-          
-          tableOutput("genename2")
-          
-        ),
+        
         
         wellPanel(
           
@@ -113,7 +96,7 @@ shinyUI(
           
               HTML('<center><img src="fig_musicalgenes.png", width = "100%"></center>'),
               
-          p("Box plot and whisker plots illustrate average and range of data for each group. Stars above denote statistically significant chagnes in gene expression between sequential timepoints. Plotting music notes instead of points, bars or graphs reduces the utility of the data for statistical reasoninng but does allow the user to visualize the same pattern that is being used to create a tone via sonification. We can represent an averaged value of gene expression for each group as a music note tha can be played by an instrument in an orchestra."),
+          p("Box and whisker plots illustrate the average and range of data for each group. Stars above the boxes indicate statistically significant changes in gene expression between sequential time points. Plotting music notes instead of points, bars or graphs reduces the utility of the data for statistical reasoning but does allow the user to visualize the same pattern that is being used to create a tone via sonification. We can represent an averaged value of gene expression for each group as a music note that can be played by an instrument in an orchestra."),
           
           p(""),
           
@@ -137,27 +120,16 @@ shinyUI(
           tableOutput("musicalgenes")),
           
         
-        wellPanel(
-          
-             h4("Explore relationships between two genes"),    
-             
-             
-             p("Patterns of correlation or co-regulated are typically explored by looking at figures such as heat maps, dendrograms, and scatter plots (shown the to the right). Future directions will explore tools for sonfication of many genes. 
-            "),
-             
-             
-             plotOutput("scatterplot", width = "100%")),
-        
         
         wellPanel(
           h4("Learn more"),       
              
-             p("Before building this app, used a keyboard to play 
+             p("Before building this app, I used a keyboard to play 
                the sound of genes working together to regulate parental care. 
                You can watch these videos to learn more about the inspiration behind this app."),
           
 
-          HTML('<iframe width="80%" height = "300px" 
+          HTML('<iframe width="47.5%" height = "200px" 
                   src="https://www.youtube.com/embed/PoKiIwIsLSo" 
                frameborder="0" allow="accelerometer; autoplay; 
                encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'),
@@ -165,7 +137,7 @@ shinyUI(
           
           
           
-          HTML('<<iframe width="80%" height="300px" 
+          HTML('<iframe width="47.5%" height="200px" 
                src="https://www.youtube.com/embed/sOIsyQhWl3s" 
               frameborder="0" allow="accelerometer; autoplay; 
                encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'),

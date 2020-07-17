@@ -5,9 +5,9 @@ account: raynamharris
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 1885054
-bundleId: 3388916
+bundleId: 3405021
 url: https://raynamharris.shinyapps.io/musicalgenes/
-when: 1594696486.32092
+when: 1595013874.99379
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: .binder/install.R|.binder/runtime.txt

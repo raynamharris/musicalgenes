@@ -37,6 +37,14 @@ charlevels <- c(
   "hatch", "n5", "n9"
 )
 
+charlabels <- c(
+  "control", "nest\nbuilding\n(bldg)",
+  "1st egg\nlaid\n(lay)", "incubation\nday3\n(inc.d3)", 
+  "incubation\nday9\n(inc.d9)", "incubation\nday17\n(inc.d17)",
+  "2nd chick\nhatched\n(hatch)", "nestling\ncare day 5\n(n5)", 
+  "nestling\ncare day 9\n(n9)"
+)
+
 alllevels <- c("control", "bldg", "lay", "inc.d3", "m.inc.d3" ,  
                "inc.d9", "m.inc.d9" , "early" ,
                "inc.d17",  "m.inc.d17", "prolong" , 
