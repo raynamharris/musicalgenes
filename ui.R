@@ -29,7 +29,7 @@ shinyUI(
             inputId = "gene",
             label = "Choose a gene.",
             choices = c(gene_names),
-            selected = c("DRD1"),
+            selected = c("DRD1: dopamine receptor D1"),
             multiple = FALSE
           ),
           
@@ -68,7 +68,7 @@ shinyUI(
             inputId = "gene2",
             label = "Choose another gene to see if it is correlated with the first gene",
             choices = c(gene_names),
-            selected = c("HTR2C"),
+            selected = c("HTR2C: 5-hydroxytryptamine receptor 2C"),
             multiple = FALSE
           ),
           
@@ -154,13 +154,23 @@ shinyUI(
              
              p("Before building this app, used a keyboard to play 
                the sound of genes working together to regulate parental care. 
-               You can watch this video to learn more about the inspiration behind this app."),
+               You can watch these videos to learn more about the inspiration behind this app."),
           
 
           HTML('<iframe width="80%" height = "300px" 
                   src="https://www.youtube.com/embed/PoKiIwIsLSo" 
                frameborder="0" allow="accelerometer; autoplay; 
                encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'),
+          
+          
+          
+          
+          HTML('<<iframe width="80%" height="300px" 
+               src="https://www.youtube.com/embed/sOIsyQhWl3s" 
+              frameborder="0" allow="accelerometer; autoplay; 
+               encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'),
+          
+          
       
           
           h4("Credit"), 

@@ -76,6 +76,12 @@ colorstissue <- c(
 
 allcolors <- c(colorschar, colorssex, colorstissue)
 
+# gene names and descriptions
+hugo <- read.csv("data/hugo.csv") %>% 
+  dplyr::distinct(gene, name) %>% 
+  mutate(gene_name = paste(gene, name, sep = ": "))
+head(hugo)
+
 # data ----
 
 ## SQLite Pool Connection
@@ -83,7 +89,10 @@ con <- dbConnect(SQLite(), "data/musicalgenes.sqlite")
 
 ## candidate counts and differentiall expressed gene results
 
-candidatecounts <- tbl(con, "candidatecounts")
+candidatecounts <- tbl(con, "candidatecounts") %>%
+  as_tibble(.) %>%
+  left_join(., hugo, by = "gene") 
+
 alldeg <- tbl(con, "alldeg")
 
 ## Go terms associated with parental care
@@ -99,15 +108,14 @@ tsne <- tbl(con, "tsne")
 
 ## get gene ids
 gene_names <- candidatecounts %>%
-  dplyr::distinct(gene) %>%
-  dplyr::arrange(gene) %>%
+  dplyr::distinct(gene_name) %>%
+  dplyr::arrange(gene_name) %>%
   pull()
 
 gene_names2 <- candidatecounts %>%
-  dplyr::distinct(gene) %>%
-  dplyr::arrange(gene) %>%
+  dplyr::distinct(gene_name) %>%
+  dplyr::arrange(gene_name) %>%
   pull()
-
 
 numberstonotes <- data.frame(
   scaledmean = c(0:6),
@@ -118,7 +126,7 @@ orchestra <- c("violin",
                "french horn", "clarinet", "bassoon", "oboe",
                "trumpet", "trombone", "tuba",
                "upright bass", "viola", "cello",
-               "piano", "keyboard")
+               "piano", "keyboard",
+               "saxaphone")
 
-hugo <- read.csv("data/hugo.csv") %>% dplyr::distinct(gene, name)
-head(hugo)
+

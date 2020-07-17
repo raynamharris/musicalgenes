@@ -10,7 +10,8 @@ function(input, output) {
   output$genename <- renderTable({
     
     mygene <- hugo %>%
-      filter(gene %in% c(!!as.character(input$gene))) 
+      filter(gene_name %in% c(!!as.character(input$gene))) %>%
+      select(gene, name)
     mygene
     
   })
@@ -18,7 +19,8 @@ function(input, output) {
   output$genename2 <- renderTable({
     
     mygene <- hugo %>%
-      filter(gene %in% c(!!as.character(input$gene2))) 
+      filter(gene_name %in% c(!!as.character(input$gene2))) %>%
+      select(gene, name)
     mygene
     
   })
@@ -26,11 +28,11 @@ function(input, output) {
   
   output$boxPlot <- renderPlot({
     
-    mysubtitle = paste("Data:",input$sex, input$tissue, input$gene, sep = " ")
+    mysubtitle = paste("Data from",input$sex, input$tissue, input$gene, sep = " ")
     
     p1 <- candidatecounts %>%
       filter(
-        gene %in% c(!!as.character(input$gene)),
+        gene_name %in% c(!!as.character(input$gene)),
         tissue %in% !!as.character(input$tissue),
         sex %in% !!as.character(input$sex)
       ) %>%
@@ -73,13 +75,13 @@ function(input, output) {
         treatment = factor(treatment, levels = charlevels),
         tissue = factor(tissue, levels = tissuelevels)
       ) %>% 
-      group_by(treatment, tissue, gene, sex)  %>% 
+      group_by(treatment, tissue, gene_name, gene, sex)  %>% 
       summarize(mean = mean(counts, na.rm = T), 
                 se = sd(counts,  na.rm = T)/sqrt(length(counts))) %>%
       #dplyr::mutate(scaled = rescale(mean, to = c(0, 7))) %>%
       dplyr::mutate(image = "www/musicnote.png")   %>%
       filter(
-        gene %in% c(!!as.character(input$gene)),
+        gene_name %in% c(!!as.character(input$gene)),
         tissue %in% !!as.character(input$tissue),
         sex %in% !!as.character(input$sex)
       ) %>% 
@@ -120,7 +122,7 @@ function(input, output) {
   output$DEGtable <- renderTable({
     alldeg %>%
       filter(
-        gene %in% c("PRL", !!as.character(input$gene)),
+        gene_name %in% c("PRL", !!as.character(input$gene)),
         tissue %in% !!as.character(input$tissue),
         sex %in% !!as.character(input$sex)
       ) %>%
@@ -139,7 +141,7 @@ function(input, output) {
   output$summaryTable <- renderTable({
     reactivecandidatecounts <- candidatecounts %>%
       filter(
-        gene %in% c("PRL", !!as.character(input$gene)),
+        gene_name %in% c("PRL: prolactin", !!as.character(input$gene_name)),
         tissue %in% !!as.character(input$tissue),
         sex %in% !!as.character(input$sex)
       ) %>%
@@ -157,12 +159,12 @@ function(input, output) {
 
   output$scatterplot <- renderPlot({
     
-    mysubtitle = paste("Data:",input$sex, input$tissue, sep = " ")
+    mysubtitle = paste("Data from",input$sex, input$tissue, sep = " ")
     
 
     df <- candidatecounts %>%
       filter(
-        gene %in% c(!!as.character(input$gene2), !!as.character(input$gene)),
+        gene_name %in% c(!!as.character(input$gene2), !!as.character(input$gene)),
         tissue %in% !!as.character(input$tissue),
         sex %in% !!as.character(input$sex)
       ) %>%
@@ -266,7 +268,7 @@ function(input, output) {
         treatment = factor(treatment, levels = charlevels),
         tissue = factor(tissue, levels = tissuelevels)
       ) %>% 
-      filter(gene %in% c(!!as.character(input$gene)),
+      filter(gene_name %in% c(!!as.character(input$gene)),
                      tissue %in% !!as.character(input$tissue),
                      sex %in% !!as.character(input$sex)) %>%
       group_by(sex, tissue, treatment, gene) %>%
@@ -302,7 +304,7 @@ function(input, output) {
         treatment = factor(treatment, levels = charlevels),
         tissue = factor(tissue, levels = tissuelevels)
       ) %>% 
-      filter(gene %in% c(!!as.character(input$gene)),
+      filter(gene_name %in% c(!!as.character(input$gene)),
              tissue %in% !!as.character(input$tissue),
              sex %in% !!as.character(input$sex)) %>%
       group_by(sex, tissue, treatment) %>%
