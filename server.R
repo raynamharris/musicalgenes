@@ -45,7 +45,7 @@ function(input, output) {
       ggplot(aes(x = treatment, y = counts)) +
       geom_boxplot(aes(fill = treatment), outlier.shape = NA, fatten = 2) +
       #geom_jitter(aes(color = sex), position=position_dodge(0.8)) +
-      theme_minimal(base_size = 16) +
+      theme_minimal(base_size = 14) +
       scale_fill_manual(values = allcolors, guide = FALSE) +
       scale_color_manual(values = allcolors) +
       scale_x_discrete(breaks = charlevels) +
@@ -90,7 +90,7 @@ function(input, output) {
       geom_errorbar(aes(ymin = mean - se, 
                         ymax = mean + se), color = "white", width=0) +
       geom_image(aes(image=image), size = 0.15)+
-      theme_void(base_size = 16) +
+      theme_void(base_size = 14) +
       scale_fill_manual(values = allcolors, guide = FALSE) +
       scale_color_manual(values = allcolors) +
       scale_x_discrete(breaks = charlevels,
@@ -180,7 +180,7 @@ function(input, output) {
       geom_point(aes(color = treatment)) +
       geom_smooth(method = "lm", aes(color = sex)) +
       #facet_wrap(~tissue, ncol = 1, scales = "free") +
-      theme_classic(base_size = 16) +
+      theme_classic(base_size = 14) +
       scale_fill_manual(values = allcolors, guide = FALSE) +
       scale_color_manual(values = allcolors) +
       theme(legend.position = "none",
