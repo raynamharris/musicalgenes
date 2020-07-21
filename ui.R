@@ -138,7 +138,7 @@ shinyUI(
           
           
           HTML('<iframe width="47.5%" height="200px" 
-               src="https://www.youtube.com/embed/sOIsyQhWl3s" 
+               src="https://www.youtube.com/embed/kVQpX8ZXHzo" 
               frameborder="0" allow="accelerometer; autoplay; 
                encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'),
           
