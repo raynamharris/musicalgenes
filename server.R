@@ -16,15 +16,7 @@ function(input, output) {
     
   })
   
- # output$genename2 <- renderTable({
- #   
- #   mygene <- hugo %>%
- #     filter(gene_name %in% c(!!as.character(input$gene2))) %>%
- #     select(gene, name)
- #   mygene
- #   
- # })
-  
+
   
   output$boxPlot <- renderPlot({
     
@@ -106,157 +98,6 @@ function(input, output) {
   
   
 
-  observeEvent(input$play, {
-    insertUI(
-      selector = "#play",
-      where = "afterEnd",
-      ui = tags$audio(
-        src = "PRLfemalepituitary.mp3",
-        type = "audio/mp3",
-        autoplay = NA, controls = NA,
-        style = "display:none;"
-      )
-    )
-  })
-
-  output$DEGtable <- renderTable({
-    alldeg %>%
-      filter(
-        gene_name %in% c("PRL", !!as.character(input$gene)),
-        tissue %in% !!as.character(input$tissue),
-        sex %in% !!as.character(input$sex)
-      ) %>%
-      collect() %>%
-      mutate(
-        tissue = factor(tissue, levels = tissuelevels),
-        direction = factor(direction, levels = charlevels),
-        comparison = factor(comparison, levels = comparisonlevels)
-      ) %>% 
-      mutate(lfcpadj = paste(round(lfc, 2), scientific(padj, digits = 3), sep = ", ")) %>%
-      select(sex, tissue, comparison, gene, lfcpadj) %>%
-      arrange(comparison) %>%
-      pivot_wider(names_from = comparison, values_from = lfcpadj)
-  })
-
-  output$summaryTable <- renderTable({
-    reactivecandidatecounts <- candidatecounts %>%
-      filter(
-        gene_name %in% c("PRL: prolactin", !!as.character(input$gene_name)),
-        tissue %in% !!as.character(input$tissue),
-        sex %in% !!as.character(input$sex)
-      ) %>%
-      collect() %>%
-      drop_na() %>%
-      mutate(
-        treatment = factor(treatment, levels = charlevels),
-        tissue = factor(tissue, levels = tissuelevels)
-      ) %>% 
-      group_by(sex, tissue, treatment, gene) %>%
-      summarize(expression = mean(counts)) %>%
-      pivot_wider(names_from = gene, values_from = expression)
-    reactivecandidatecounts
-  })
-
-  output$scatterplot <- renderPlot({
-    
-    mysubtitle = paste("Data from",input$sex, input$tissue, sep = " ")
-    
-
-    df <- candidatecounts %>%
-      filter(
-        gene_name %in% c(!!as.character(input$gene2), !!as.character(input$gene)),
-        tissue %in% !!as.character(input$tissue),
-        sex %in% !!as.character(input$sex)
-      ) %>%
-      collect() %>%
-      select(sex:counts) %>%
-      mutate(
-        treatment = factor(treatment, levels = charlevels),
-        tissue = factor(tissue, levels = tissuelevels)
-      ) %>% 
-      pivot_wider(names_from = gene, values_from = counts)  
-    
-    df %>% ggplot(aes_string(x = input$gene, y = input$gene2)) +
-      geom_point(aes(color = treatment)) +
-      geom_smooth(method = "lm", aes(color = sex)) +
-      #facet_wrap(~tissue, ncol = 1, scales = "free") +
-      theme_classic(base_size = 14) +
-      scale_fill_manual(values = allcolors, guide = FALSE) +
-      scale_color_manual(values = allcolors) +
-      theme(legend.position = "none",
-            axis.title = element_text(face = "italic"),
-            plot.caption = element_text(face = "italic", size = 16)) +
-      guides(color = guide_legend(nrow = 2)) +
-      labs(caption = mysubtitle) 
-  })
-
-  
- outputPrint <- renderPrint({
-   
-
-   
- }) 
-  
-
-  output$tsne <- renderPlot({
-    tsne_df <- tsne %>%
-      filter(
-        tissue %in% !!as.character(input$tissue),
-        sex %in% !!as.character(input$sex),
-        treatment %in% !!as.character(input$treatment)
-      ) %>%
-      collect()
-    
-    tsne_df$tissue <- factor(tsne_df$tissue, levels = c("hypothalamus", "pituitary", "gonads"))
-    tsne_df <- tsne_df %>% mutate(tissue = fct_recode(tissue, "gonad" = "gonads"))
-    
-    tsne_df %>% 
-      ggplot(aes(x = V1, y = V2, color = treatment)) +
-      geom_point() +
-      stat_ellipse() +
-      theme_classic(base_size = 14) +
-      scale_fill_manual(values = allcolors, guide = FALSE) +
-      scale_color_manual(values = allcolors) +
-      theme(legend.position = "none") +
-      facet_wrap(~ sex, scales = "free") +
-      labs(x = 'tSNE 1', y = "tSNE 2", subtitle = input$tissue)
-  })
-  
-  
-  output$barplot <- renderPlot({
-    
-  
-    p <- alldeg %>%
-     filter(tissue %in% !!as.character(input$tissue),
-            #direction %in% !!as.character(input$treatment),
-            sex %in% !!as.character(input$sex)) %>%
-      collect() %>%
-      mutate(
-        comparison = factor(comparison, levels = comparisonlevels)
-      ) %>% 
-      ggplot(aes(x = comparison,  fill = direction)) +
-      geom_bar(position = "dodge") +
-      facet_wrap(~sex) +
-      theme_classic(base_size = 14) +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1),
-            legend.position = "none")  +
-      guides(fill = guide_legend(nrow = 1)) +
-      labs(x = "Sequential parental care stage comparisons", 
-           y = "Total DEGs",
-           subtitle = input$tissue) +
-      scale_fill_manual(values = allcolors,
-                        name = " ",
-                        drop = FALSE) +
-      scale_color_manual(values = allcolors) +
-      geom_text(stat='count', aes(label=..count..), vjust =-0.5, 
-                position = position_dodge(width = 1),
-                size = 2, color = "black")  
-    p
-    
-  })
-  
-  
-  
   output$musicalgenes <- renderTable({
     
     ## average and rescale data
@@ -321,7 +162,11 @@ function(input, output) {
       sound <- sonify(x = meanvalues$mean, interpolation = "constant", duration = 6)
     
       # Saves file
-      wvname <- paste0(input$sex, input$tissue, input$gene, ".wav")
+      genename <- candidatecountsdf %>%
+        filter(gene_name %in% c(!!as.character(input$gene))) %>%
+        distinct(gene) %>% pull(gene)
+                 
+      wvname <- paste0(input$sex, input$tissue, genename, ".wav")
       writeWave(sound, paste0("www/", wvname))
     
     # Creates audiotag
