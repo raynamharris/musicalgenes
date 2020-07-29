@@ -1,11 +1,13 @@
 shinyUI(
   fluidPage(
+    
     # Application title
     titlePanel("Musical Genes: Visualize and sonifiy gene expression in parenting pigeons"),
 
     # titlePanel(title=div(img(src="expdesign.png"))),
   
-    
+    tags$head(includeScript("google-analytics.html")),
+
     tags$div(lang="en", class="header"),
 
     # Inputs for boxplot
@@ -137,11 +139,11 @@ shinyUI(
           
           
           
-          HTML('<iframe width="47.5%" height="200px" 
-               src="https://www.youtube.com/embed/kVQpX8ZXHzo" 
-              frameborder="0" allow="accelerometer; autoplay; 
-               encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'),
-          
+         # HTML('<iframe width="47.5%" height="200px" 
+          #     src="https://www.youtube.com/embed/kVQpX8ZXHzo" 
+          #    frameborder="0" allow="accelerometer; autoplay; 
+          #     encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'),
+    
           
       
           
