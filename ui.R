@@ -31,7 +31,7 @@ shinyUI(
             inputId = "gene",
             label = "Choose a gene.",
             choices = c(gene_names),
-            selected = c("DRD1: dopamine receptor D1"),
+            selected = c("PRL: prolactin"),
             multiple = FALSE
           ),
           
@@ -41,7 +41,7 @@ shinyUI(
             inputId = "tissue",
             label = "Choose a tissue.",
             choices = tissuelevels,
-            selected = "hypothalamus",
+            selected = "pituitary",
             multiple = FALSE
           ),
           
@@ -98,7 +98,6 @@ shinyUI(
           
               HTML('<center><img src="fig_musicalgenes.png", width = "100%"></center>'),
               
-          p("Box and whisker plots illustrate the average and range of data for each group. Stars above the boxes indicate statistically significant changes in gene expression between sequential time points. Plotting music notes instead of points, bars or graphs reduces the utility of the data for statistical reasoning but does allow the user to visualize the same pattern that is being used to create a tone via sonification. We can represent an averaged value of gene expression for each group as a music note that can be played by an instrument in an orchestra."),
           
           p(""),
           
@@ -119,7 +118,11 @@ shinyUI(
           
           
           
-          tableOutput("musicalgenes")),
+          tableOutput("musicalgenes"),
+          
+          p(" "),
+          
+          p("Box and whisker plots illustrate the average and range of data for each group. Stars above the boxes indicate statistically significant changes in gene expression between sequential time points. Plotting music notes instead of points, bars or graphs reduces the utility of the data for statistical reasoning but does allow the user to visualize the same pattern that is being used to create a tone via sonification. We can represent an averaged value of gene expression for each group as a music note that can be played by an instrument in an orchestra.")),
           
         
         
@@ -139,13 +142,11 @@ shinyUI(
           
           
           
-         # HTML('<iframe width="47.5%" height="200px" 
-          #     src="https://www.youtube.com/embed/kVQpX8ZXHzo" 
-          #    frameborder="0" allow="accelerometer; autoplay; 
-          #     encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'),
-    
-          
-      
+         HTML('<iframe width="47.5%" height="200px" 
+               src="https://www.youtube.com/embed/ssGuxnD_NCo" 
+              frameborder="0" allow="accelerometer; autoplay; 
+               encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'),
+
           
           h4("Credit"), 
           
