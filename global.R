@@ -47,7 +47,7 @@ charlabels <- c(
 
 alllevels <- c("control", "bldg", "lay", "inc.d3", "m.inc.d3" ,  
                "inc.d9", "m.inc.d9" , "early" ,
-               "inc.d17",  "m.inc.d17", "prolong" , 
+               "inc.d17", "m.inc.d17", "prolong" , 
                "hatch",  "m.n2", "extend",
                "n5",  
                "n9")
@@ -74,6 +74,15 @@ colorschar <- c(
   "n9" = "#6baed6"
 )
 
+colorsmanip <- c("m.inc.d3" = "#CDCDCD", 
+                 "m.inc.d9" = "#959595", 
+                 "m.inc.d17" = "#626262",
+                 "m.n2" = "#262625", 
+                 "early" = "#cbc9e2", 
+                 "prolong" = "#9e9ac8" , 
+                 "extend" = "#6a51a3" )
+
+
 colorssex <- c("female" = "#969696", "male" = "#525252")
 
 colorstissue <- c(
@@ -82,7 +91,7 @@ colorstissue <- c(
   "gonads" = "#7570b3"
 )
 
-allcolors <- c(colorschar, colorssex, colorstissue)
+allcolors <- c(colorschar, colorsmanip, colorssex, colorstissue)
 
 # gene names and descriptions
 hugo <- read.csv("data/hugo.csv") %>% 
@@ -97,8 +106,17 @@ con <- dbConnect(SQLite(), "data/musicalgenes.sqlite")
 
 ## candidate counts and differentiall expressed gene results
 
-candidatecounts <- tbl(con, "candidatecounts") %>%
-  as_tibble(.) %>%
+#candidatecounts <- tbl(con, "candidatecounts") %>%
+#  as_tibble(.) %>%
+#  left_join(., hugo, by = "gene") 
+
+candidatecounts <- read_csv("./data/candidatecounts.csv") %>%
+  mutate(
+    treatment = factor(treatment, levels = alllevels),
+    tissue = factor(tissue, levels = tissuelevels)
+  ) %>%
+  filter(treatment %in% alllevels) %>%
+  na.omit() %>%
   left_join(., hugo, by = "gene") 
 
 alldeg <- tbl(con, "alldeg")

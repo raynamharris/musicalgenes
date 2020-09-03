@@ -29,7 +29,7 @@ function(input, output) {
       ) %>%
       collect() %>%
       mutate(
-        treatment = factor(treatment, levels = charlevels),
+        treatment = factor(treatment, levels = alllevels),
         tissue = factor(tissue, levels = tissuelevels)
       ) %>% 
       drop_na() %>%
@@ -39,7 +39,7 @@ function(input, output) {
       theme_minimal(base_size = 14) +
       scale_fill_manual(values = allcolors, guide = FALSE) +
       scale_color_manual(values = allcolors) +
-      scale_x_discrete(breaks = charlevels) +
+      scale_x_discrete(breaks = alllevels) +
       theme(
         axis.text.x = element_blank(),
         legend.position = "none",
@@ -63,7 +63,7 @@ function(input, output) {
 
     p2 <- candidatecounts %>%
       mutate(
-        treatment = factor(treatment, levels = charlevels),
+        treatment = factor(treatment, levels = alllevels),
         tissue = factor(tissue, levels = tissuelevels)
       ) %>% 
       group_by(treatment, tissue, gene_name, gene, sex)  %>% 
@@ -84,8 +84,8 @@ function(input, output) {
       theme_void(base_size = 14) +
       scale_fill_manual(values = allcolors, guide = FALSE) +
       scale_color_manual(values = allcolors) +
-      scale_x_discrete(breaks = charlevels,
-                       labels = charlabels) +
+      scale_x_discrete(breaks = alllevels,
+                       labels = alllevels) +
       theme(legend.position = "none") +
       theme(axis.title.y = element_text(color = "black", angle = 90),
             axis.text.x = element_text(color = "black", size = 10),
@@ -105,7 +105,7 @@ function(input, output) {
    
     notes <- candidatecountsdf %>%
       mutate(
-        treatment = factor(treatment, levels = charlevels),
+        treatment = factor(treatment, levels = alllevels),
         tissue = factor(tissue, levels = tissuelevels)
       ) %>% 
       filter(gene_name %in% c(!!as.character(input$gene)),
@@ -121,7 +121,7 @@ function(input, output) {
       select(sex, tissue, treatment, gene, note ) %>%
       pivot_wider(names_from = treatment, values_from = note ) %>%
       mutate(instument = sample(orchestra, 1, replace=F)) %>%
-      select(gene, charlevels, instument)# %>%
+      select(gene, alllevels, instument)# %>%
       #unite("notes", control:n9, remove = FALSE, sep = "")
    notes
     
@@ -141,7 +141,7 @@ function(input, output) {
     
     meanvalues <- candidatecountsdf %>%
       mutate(
-        treatment = factor(treatment, levels = charlevels),
+        treatment = factor(treatment, levels = alllevels),
         tissue = factor(tissue, levels = tissuelevels)
       ) %>% 
       filter(gene_name %in% c(!!as.character(input$gene)),

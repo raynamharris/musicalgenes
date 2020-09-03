@@ -12,6 +12,15 @@ charlevels <- c(
   "hatch", "n5", "n9"
 )
 
+maniplevels <- c("m.inc.d3" ,  "early" ,  "m.inc.d9" , "m.inc.d17", "prolong" ,  "m.n2", "extend")
+
+alllevels <- c("control", "bldg", "lay", "inc.d3", "m.inc.d3" ,  
+               "inc.d9", "m.inc.d9" , "early" ,
+               "inc.d17",  "m.inc.d17", "prolong", 
+               "hatch",  "m.n2", "extend",
+               "n5",  
+               "n9")
+
 sexlevels <- c("female", "male")
 
 tissuelevels <- c("hypothalamus", "pituitary", "gonad")
@@ -22,7 +31,13 @@ comparisonlevels <- c(
   "hatch_n5", "n5_n9"
 )
 
-alllevels <- charlevels
+alllevels <- c("control", "bldg", "lay", "inc.d3", "m.inc.d3" ,  
+               "inc.d9", "m.inc.d9" , "early" ,
+               "inc.d17",  "m.inc.d17", "prolong", 
+               "hatch",  "m.n2", "extend",
+               "n5",  
+               "n9")
+
 
 # experimental colors
 colorschar <- c(
@@ -55,7 +70,8 @@ candidatecounts <- read_csv("./data/candidatecounts.csv") %>%
     treatment = factor(treatment, levels = alllevels),
     tissue = factor(tissue, levels = tissuelevels)
   ) %>%
-  filter(treatment %in% charlevels)
+  filter(treatment %in% alllevels) %>%
+  na.omit()
 
 dbWriteTable(
   con,
