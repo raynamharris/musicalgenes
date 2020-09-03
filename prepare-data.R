@@ -22,6 +22,8 @@ comparisonlevels <- c(
   "hatch_n5", "n5_n9"
 )
 
+alllevels <- charlevels
+
 # experimental colors
 colorschar <- c(
   "control" = "#cc4c02",

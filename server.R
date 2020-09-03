@@ -17,7 +17,6 @@ function(input, output) {
   })
   
 
-  
   output$boxPlot <- renderPlot({
     
     mysubtitle = paste("Data from",input$sex, input$tissue, input$gene, sep = " ")
