@@ -3,6 +3,7 @@ library(RSQLite)
 library(dplyr)
 library(readr)
 library(forcats)
+library(readr)
 
 con <- dbConnect(SQLite(), "data/musicalgenes.sqlite")
 

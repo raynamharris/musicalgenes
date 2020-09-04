@@ -80,7 +80,7 @@ function(input, output) {
       ggplot( aes(x = treatment, y = mean)) +
       geom_errorbar(aes(ymin = mean - se, 
                         ymax = mean + se), color = "white", width=0) +
-      geom_image(aes(image=image), size = 0.15)+
+      geom_image(aes(image=image), size = 0.075)+
       theme_void(base_size = 14) +
       scale_fill_manual(values = allcolors, guide = FALSE) +
       scale_color_manual(values = allcolors) +
