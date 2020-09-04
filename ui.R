@@ -96,19 +96,16 @@ shinyUI(
               
           h4("Listen to the sound of gene expression changing over time"),      
           
-              HTML('<center><img src="fig_musicalgenes.png", width = "100%"></center>'),
+          HTML('<center><img src="fig_musicalgenes.png", width = "100%"></center>'),
               
           
           p(""),
           
-              plotOutput("boxPlot", width = "100%"),
-             
+          plotOutput("boxPlot", width = "100%"),
             
-
           p(" "),
           
           actionButton("button", "Sonify the average gene expression value."),
-          
           
           downloadButton("wav_dln", label = "Download to play."),
           
@@ -116,14 +113,18 @@ shinyUI(
           
           p(" "),
           
-          
-          
           tableOutput("musicalgenes"),
           
           p(" "),
           
-          p("Box and whisker plots illustrate the average and range of data for each group. Stars above the boxes indicate statistically significant changes in gene expression between sequential time points. Plotting music notes instead of points, bars or graphs reduces the utility of the data for statistical reasoning but does allow the user to visualize the same pattern that is being used to create a tone via sonification. We can represent an averaged value of gene expression for each group as a music note that can be played by an instrument in an orchestra.")),
+          p("In the above image, box and whisker plots illustrate the average and range of data for each group. Stars above the boxes indicate statistically significant changes in gene expression between sequential time points. Plotting music notes instead of points, bars or graphs reduces the utility of the data for statistical reasoning but does allow the user to visualize the same pattern that is being used to create a tone via sonification. We can represent an averaged value of gene expression for each group as a music note that can be played by an instrument in an orchestra.")),
+        
+        wellPanel(  
           
+          h4("Future directions"),   
+          plotOutput("plot3D", width = "100%"),
+          p(" "),
+          p("In the future, we would like to be able sonify data showing the relationship between a gene of intereest across tissues (like shown with a 3D plot)." )),
         
         
         wellPanel(

@@ -7,6 +7,34 @@ function(input, output) {
   treatment_filter <- reactive({ as.character(input$treatment) })
   
   
+  output$plot3D <- renderPlot({
+  
+    candidatedata <- candidatecounts %>%
+        filter(gene_name %in% c(!!as.character(input$gene))) %>%
+        mutate(bird = sapply(strsplit(samples,'\\_'), "[", 1)) %>%
+        select(gene, sex,tissue,treatment, bird, counts)  %>%
+        pivot_wider(names_from = tissue, values_from = counts) %>%
+        select(bird, treatment, sex, gene, hypothalamus, pituitary, gonads) %>%
+        mutate(sex = factor(sex)) %>%
+        drop_na()
+      
+      colors <- c(colorschar, colorsmanip)
+      colors <- colors[as.numeric(candidatedata$treatment)]
+      print(colors)
+      
+      shapes = c(17, 16) 
+      shapes <- shapes[as.numeric(candidatedata$sex)]
+      print(shapes)
+      
+      p <- scatterplot3d(candidatedata[,c(6,7,5)], 
+                         color = colors, pch = shapes,
+                         main = input$gene,
+                         cex.symbols = 1.25)
+      return(p)
+    
+  })
+  
+  
   output$genename <- renderTable({
     
     mygene <- hugo %>%
@@ -49,15 +77,24 @@ function(input, output) {
         panel.grid.minor  = element_blank()  # remove minor gridlines)
       ) +
       labs(y = "gene expression", x = NULL, subtitle = mysubtitle) +
-      geom_signif(comparisons = list( c( "control", "bldg"),
-                                      c( "bldg", "lay"),
-                                      c( "lay", "inc.d3"),
+      geom_signif(comparisons = list( c("control", "bldg"),
+                                      c("bldg", "lay"),
+                                      c("lay", "inc.d3"),
                                       c("inc.d3", "inc.d9"),
-                                      c( "inc.d9", "inc.d17"),
-                                      c( "inc.d17", "hatch"),
+                                      c("inc.d9", "inc.d17"),
+                                      c("inc.d17", "hatch"),
                                       c("hatch", "n5"),
-                                      c( "n5", "n9")),  
-                  map_signif_level=TRUE) 
+                                      c("n5", "n9")),  
+                  map_signif_level=TRUE, step_increase = 0.1) +
+      geom_signif(comparisons = list( c("inc.d3", "m.inc.d3"),
+                                      c("inc.d9", "m.inc.d9"),
+                                      c("inc.d17", "m.inc.d17"),
+                                      c("hatch", "m.n2")),  
+                  map_signif_level=TRUE, step_increase = 0.1) +
+    geom_signif(comparisons = list(  c("inc.d9", "early"),
+                                    c("inc.d17", "prolong"),
+                                    c("hatch", "extend")),  
+                map_signif_level=TRUE) 
     
     candidatecounts <- as.data.frame(candidatecounts)
 
@@ -88,7 +125,8 @@ function(input, output) {
                        labels = alllevels) +
       theme(legend.position = "none") +
       theme(axis.title.y = element_text(color = "black", angle = 90),
-            axis.text.x = element_text(color = "black", size = 10),
+            axis.text.x = element_text(color = "black", size = 10, 
+                                       angle = 45, hjust = 1),
             plot.caption = element_text(face = "italic", size = 16)) +
       labs(y = "music notes")
 

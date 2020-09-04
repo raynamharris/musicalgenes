@@ -26,6 +26,8 @@ library(magick)
 library(ggpubr)
 library(readr)
 
+library(scatterplot3d) 
+
 citation("sonify") ## for gene expression analysis
 
 
@@ -55,7 +57,9 @@ alllevels <- c("control", "bldg", "lay", "inc.d3", "m.inc.d3" ,
 
 sexlevels <- c("female", "male")
 
-tissuelevels <- c("hypothalamus", "pituitary", "gonad")
+tissuelevel <- c("hypothalamus", "pituitary", "gonad")
+tissuelevels <- c("hypothalamus", "pituitary", "gonads")
+
 
 comparisonlevels <- c(
   "control_bldg", "bldg_lay", "lay_inc.d3",
