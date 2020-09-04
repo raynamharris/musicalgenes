@@ -160,4 +160,5 @@ orchestra <- c("violin",
                "piano", "keyboard",
                "saxaphone")
 
-
+orchestra <- sort(orchestra)
+orchestra

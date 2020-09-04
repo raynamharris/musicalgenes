@@ -20,11 +20,9 @@ function(input, output) {
       
       colors <- c(colorschar, colorsmanip)
       colors <- colors[as.numeric(candidatedata$treatment)]
-      print(colors)
       
       shapes = c(17, 16) 
       shapes <- shapes[as.numeric(candidatedata$sex)]
-      print(shapes)
       
       p <- scatterplot3d(candidatedata[,c(6,7,5)], 
                          color = colors, pch = shapes,
@@ -164,6 +162,48 @@ function(input, output) {
    notes
     
   })
+  
+  
+  
+  output$orchestratable <- renderTable(({
+    
+    candidatecountsdf <- as.data.frame(candidatecounts)
+    
+    genestoplay <- sample(gene_names, 14)
+    
+    
+    orchestratable <- candidatecountsdf %>%
+      mutate(
+        treatment = factor(treatment, levels = charlevels),
+        tissue = factor(tissue, levels = tissuelevels)
+      ) %>% 
+      #filter(gene_name %in% genestoplay,
+      #       tissue %in% !!as.character(input$tissue),
+      #       sex %in% !!as.character(input$sex)) %>%
+      filter(gene_name %in% genestoplay,
+             sex == "female",
+             tissue  == "pituitary") %>%
+      group_by(sex, tissue, treatment, gene) %>%
+      summarize(scaledmean = mean(counts, na.rm = TRUE) + 2) %>%
+      ungroup() %>%
+      arrange(sex,treatment,gene)  %>%
+      filter(treatment != "NA") %>%
+      mutate(scaledmean = round(scales:::rescale(scaledmean, to = c(0,6)),0)) %>%
+      left_join(., numberstonotes, by = "scaledmean")   %>%
+      select(sex, tissue, treatment, gene, note ) %>%
+      pivot_wider(names_from = treatment, values_from = note ) 
+    
+    numrows <- nrow(orchestratable)
+    orchestra <- sample(orchestra, numrows)
+
+    orchestratable$orchestra <- orchestra
+    
+    orchestratable <- orchestratable %>%
+      select(gene, orchestra, charlevels)
+    orchestratable
+  }))
+  
+  
 
   
   ## new sonify attempt from https://github.com/zielinskipp/sonifier/blob/master/app.R and

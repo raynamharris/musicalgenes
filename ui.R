@@ -59,8 +59,6 @@ shinyUI(
         
         ),
         
-        
-        
         wellPanel(
           
           HTML(paste(h4("Open source software for reproducible research"))),
@@ -121,11 +119,15 @@ shinyUI(
         
         wellPanel(  
           
-          h4("Future directions"),   
-          plotOutput("plot3D", width = "100%"),
-          p(" "),
-          p("In the future, we would like to be able sonify data showing the relationship between a gene of intereest across tissues (like shown with a 3D plot)." )),
-        
+          h4("Future directions"), 
+          
+          p("In the future, we would like to be able sonify data for multiple genes using sounds from instruments found in an orchestra." ),
+          
+          tableOutput("orchestratable"),
+          
+          p("Additionaly, we would like to be able sonify data showing the relationship between a single gene of interest across all three tissues (as shown with a 3D plot)." ),
+          
+          plotOutput("plot3D", width = "100%")),
         
         wellPanel(
           h4("Learn more"),       
