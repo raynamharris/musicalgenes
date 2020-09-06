@@ -202,10 +202,10 @@ function(input, output) {
     numrows <- nrow(orchestratable)
     orchestra <- sample(orchestra, numrows)
 
-    orchestratable$orchestra <- orchestra
+    orchestratable$instrument <- orchestra
     
     orchestratable <- orchestratable %>%
-      select(gene, orchestra, notes)
+      select(gene, instrument, notes)
     orchestratable
   }))
   
