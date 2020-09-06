@@ -115,6 +115,7 @@ con <- dbConnect(SQLite(), "data/musicalgenes.sqlite")
 #  as_tibble(.) %>%
 #  left_join(., hugo, by = "gene") 
 
+# data from https://github.com/macmanes-lab/DoveParentsRNAseq
 candidatecounts <- read_csv("./data/candidatecounts.csv") %>%
   mutate(
     treatment = factor(treatment, levels = alllevels),
