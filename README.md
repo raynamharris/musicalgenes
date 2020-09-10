@@ -28,7 +28,7 @@ Temporal and spatially controlled changes in gene expression
 ## Videos
 
 
-- [Musical Genes: a shiny app to Visualize and sonifiy gene expression in parenting pigeons, 59 seconds](https://youtu.be/ssGuxnD_NCo)
+- [Musical Genes: a shiny app to visualize and sonifiy gene expression in parenting pigeons, 59 seconds](https://youtu.be/ssGuxnD_NCo)
 - [How to use the shiny app, 25 seconds](https://www.youtube.com/watch?v=bQWDiI2oZdI)
 - [The prolactin-driven symphony of parental care in pigeons, 55 seconds](https://youtu.be/PoKiIwIsLSo)
 
