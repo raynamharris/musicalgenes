@@ -26,6 +26,10 @@ bibliography: paper.bib
 
 250 words max
 
+## Visual abstract
+
+![]
+
 ## Significance
 
 120 words max
@@ -54,13 +58,11 @@ Additionally, we calculated the mean value of gene expression for each group and
   
 All the R code available under CC-BY at https://github.com/raynamharris/musicalgenes.    
 
-
 ## Results  
   
 The default gene expression pattern shown by the shiny app is that of the prolactin gene (aslso refereed to as PRL) in the female pituitary, which has a musical pattern of CABBBCBCFEFGFFED (FIg. 2). Prolactin increases significantly between incubation day 9 and incubation day 17. Prolactin decrease significantly between non-reproductive control and nest building stages as well as between hatch and nestling care day 5. When offspring are removed at X, Prolactin decreases significantly when you remove offspring at incubation days 9, 17, and at hatch as well as when you extend the timing until hatch.   
   
 By simultaneously viewing the data, reading the statistical summary, and listening the the changes in mean expression, the user gains a deeper understand at the complexity of the variation in the data. The farther away the notes are on the scale, the greater the difference in expression. Smale changes in expression, as indicated by adjunct notes (e.g.  F to G or E to D) are typically not significant, but large changes (e.g A to D or G to D) often represent significant increases or decreases in expression over time.   
-
 
 ## Discussion  (3000 max)
   
