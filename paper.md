@@ -28,7 +28,8 @@ bibliography: paper.bib
 
 ## Visual abstract
 
-![]
+
+![screenshot](www/screenshot.png)
 
 ## Significance
 
