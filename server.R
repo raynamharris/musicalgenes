@@ -147,21 +147,21 @@ function(input, output) {
       filter(gene_name %in% c(!!as.character(input$gene)),
                      tissue %in% !!as.character(input$tissue),
                      sex %in% !!as.character(input$sex)) %>%
-      group_by(sex, tissue, treatment, gene) %>%
+      group_by(sex, tissue, treatment, gene_name) %>%
       summarize(scaledmean = mean(counts, na.rm = TRUE) + 2) %>%
       ungroup() %>%
-      arrange(sex,treatment,gene)  %>%
+      arrange(sex,treatment,gene_name)  %>%
       filter(treatment != "NA") %>%
       mutate(scaledmean = round(scales:::rescale(scaledmean, to = c(0,6)),0)) %>%
       left_join(., numberstonotes, by = "scaledmean")   %>%
-      select(sex, tissue, treatment, gene, note ) %>%
+      select(sex, tissue, treatment, gene_name, note ) %>%
       #pivot_wider(names_from = treatment, values_from = note ) %>%
       
-      #select(gene, alllevels, instument) %>%
-      group_by(gene) %>%
+      #select(gene_name, alllevels, instument) %>%
+      group_by(gene_name) %>%
       summarize(notes = str_c(note, collapse = "")) %>%
       mutate(instument = sample(orchestra, 1, replace=F))  %>%
-      select(gene, instument, notes)
+      select(gene_name, instument, notes)
    notes
     
   })
@@ -186,17 +186,17 @@ function(input, output) {
       #filter(gene_name %in% genestoplay,
       #       sex == "female",
       #       tissue  == "pituitary") %>%
-      group_by(sex, tissue, treatment, gene) %>%
+      group_by(sex, tissue, treatment, gene_name) %>%
       summarize(scaledmean = mean(counts, na.rm = TRUE) + 2) %>%
       ungroup() %>%
-      arrange(sex,treatment,gene)  %>%
+      arrange(sex,treatment,gene_name)  %>%
       filter(treatment != "NA") %>%
-      group_by(gene) %>%
+      group_by(gene_name) %>%
       mutate(scaledmean = round(scales:::rescale(scaledmean, to = c(0,6)),0)) %>%
       left_join(., numberstonotes, by = "scaledmean")   %>%
-      select(sex, tissue, treatment, gene, note ) %>%
+      select(sex, tissue, treatment, gene_name, note ) %>%
       #pivot_wider(names_from = treatment, values_from = note ) 
-       group_by(gene) %>%
+       group_by(gene_name) %>%
       summarize(notes = str_c(note, collapse = ""))
     
     numrows <- nrow(orchestratable)
@@ -205,7 +205,7 @@ function(input, output) {
     orchestratable$instrument <- orchestra
     
     orchestratable <- orchestratable %>%
-      select(gene, instrument, notes)
+      select(gene_name, instrument, notes)
     orchestratable
   }))
   
