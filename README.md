@@ -34,5 +34,5 @@ parental care behavior and other important phenotypes.
 
 _You can also [watch the same videos in this YouTube playlist](https://www.youtube.com/watch?v=ssGuxnD_NCo&list=PLNfIROxhN1JCCkQgRx2qzDz52VHPIhC_6)._
 
-[![screenshot2](www/screenshot.png)](https://www.youtube.com/watch?v=bQWDiI2oZdI)
+[![screenshot2](www/screenshot2.png)](https://www.youtube.com/watch?v=bQWDiI2oZdI)
 
