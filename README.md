@@ -15,13 +15,14 @@ For interactive data exploration on the web, [click the Shiny link](https://rayn
 ## Overview  
   
 Temporal and spatially controlled changes in gene expression 
-            are often described as a “symphony of gene expression.” 
-                What does these transcriptional symphony of parental 
-                  care in parenting pigeons sound like?
-              Data sonification is the presentation of data as sound. 
-            With the **Musical Genes** app, you can interactively visualize and sonify gene expression 
-            to better understand the molecular mechanisms that regulate
-            parental care behavior and other important phenotypes.
+are often described as a “symphony of gene expression.” 
+What does these transcriptional symphony of parental 
+care in parenting pigeons sound like?
+Data sonification is the presentation of data as sound. 
+With the **Musical Genes** app, you can interactively 
+visualize and sonify gene expression 
+to better understand the molecular mechanisms that regulate
+parental care behavior and other important phenotypes.
 
 ![screenshot](www/screenshot.png)
 
