@@ -24,7 +24,7 @@ visualize and sonify gene expression
 to better understand the molecular mechanisms that regulate
 parental care behavior and other important phenotypes.
 
-![screenshot](www/screenshot.png)
+[![screenshot](www/screenshot.png)](https://raynamharris.shinyapps.io/musicalgenes/)
 
 ## Videos
 
