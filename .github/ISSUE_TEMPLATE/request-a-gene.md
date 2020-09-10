@@ -1,7 +1,7 @@
 ---
 name: Request a gene
-about: Don't see your favorite gene in the list? Request to have it adde.
-title: ''
+about: Don't see your favorite gene in the list? Request to have it added.
+title: 'Gene Request'
 labels: ''
 assignees: ''
 
