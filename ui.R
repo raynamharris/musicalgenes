@@ -55,7 +55,14 @@ shinyUI(
             multiple = FALSE
           ),
           
-          p("After choosing a gene, tissue and sex, click the 'sonify' button to listen the mean value of gene expression.")
+          p("After choosing a gene, tissue and sex, click the 'sonify' button to listen the mean value of gene expression."),
+         p("Don't see your favorite gene?", 
+           
+           tags$a(
+             href = "https://github.com/raynamharris/musicalgenes/issues/new?assignees=&labels=&template=request-a-gene.md&title=Gene+Request",
+             "Check here to create a request."
+           )
+         )
         
         ),
         
