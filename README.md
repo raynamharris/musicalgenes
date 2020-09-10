@@ -30,7 +30,8 @@ parental care behavior and other important phenotypes.
 
 
 - [Musical Genes: a shiny app to visualize and sonifiy gene expression in parenting pigeons, 59 seconds](https://youtu.be/ssGuxnD_NCo)
-- [The prolactin-driven symphony of parental care in pigeons, 55 seconds](https://youtu.be/PoKiIwIsLSo)- [How to use the shiny app, 25 seconds](https://www.youtube.com/watch?v=bQWDiI2oZdI)
+- [The prolactin-driven symphony of parental care in pigeons, 55 seconds](https://youtu.be/PoKiIwIsLSo)
+- [How to use the shiny app, 25 seconds](https://www.youtube.com/watch?v=bQWDiI2oZdI)
 
 _You can also [watch the same videos in this YouTube playlist](https://www.youtube.com/watch?v=ssGuxnD_NCo&list=PLNfIROxhN1JCCkQgRx2qzDz52VHPIhC_6)._
 
