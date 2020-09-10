@@ -26,6 +26,8 @@ bibliography: paper.bib
 
 250 words max
 
+![](www/fig_musicalgenes2.png)
+
 ## Visual abstract
 
 
