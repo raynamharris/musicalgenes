@@ -12,7 +12,23 @@ For interactive data exploration on the web, [click the Shiny link](https://rayn
 
   <!-- badges: end -->
   
-Genes work together in concert to regulate behavior. What does this 'transcriptional symphony' sound like? Data sonification is the presentation of data as sound. Musical Genes is a Shiny app that allows users to interactively visualize and sonify (or plot and play) gene expression to better understand the biology of parental care. The user can choose a gene from this pulldown menu and listen to how it changes over time. We also represent the levels of gene expression as notes on a scale that could be played on an instrument like a piano or guitar. Finally, we provide multiple visualizations that provide additional insight into genes that might work in concert to regulate parental care. Exploration of this data could provide additional insights of biological processes that of biomedical relevance all while making beautiful music.
+## Overview  
+  
+Temporal and spatially controlled changes in gene expression 
+            are often described as a “symphony of gene expression.” 
+                What does these transcriptional symphony of parental 
+                  care in parenting pigeons sound like?
+              Data sonification is the presentation of data as sound. 
+            With the **Musical Genes** app, you can interactively visualize and sonify gene expression 
+            to better understand the molecular mechanisms that regulate
+            parental care behavior and other important phenotypes.
 
-[![musicalgenes](www/plotnplay.png)](https://www.youtube.com/watch?v=bQWDiI2oZdI)
+[![musicalgenes](www/screenshot.png)](https://www.youtube.com/watch?v=bQWDiI2oZdI)
+
+## Videos
+
+
+- [Musical Genes: a shiny app to Visualize and sonifiy gene expression in parenting pigeons, 59 seconds](https://youtu.be/ssGuxnD_NCo)
+- [How to use the shiny app, 25 seconds](https://www.youtube.com/watch?v=bQWDiI2oZdI)
+- [The prolactin-driven symphony of parental care in pigeons, 55 seconds](https://youtu.be/PoKiIwIsLSo)
 
