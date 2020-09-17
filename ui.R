@@ -107,6 +107,7 @@ shinyUI(
           p(""),
           
           plotOutput("boxPlot", width = "100%"),
+          plotOutput("musicPlot", width = "100%"),
             
           p(" "),
           
@@ -116,9 +117,7 @@ shinyUI(
           
           uiOutput("audiotag"),
           
-          p(" "),
-          
-          tableOutput("musicalgenes"),
+        
           
           p(" "),
           

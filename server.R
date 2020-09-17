@@ -60,14 +60,16 @@ function(input, output) {
       ) %>% 
       drop_na() %>%
       ggplot(aes(x = treatment, y = counts)) +
+      
       geom_boxplot(aes(fill = treatment), outlier.shape = NA, fatten = 2) +
-      #geom_jitter(aes(color = sex), position=position_dodge(0.8)) +
-      theme_minimal(base_size = 14) +
+      #geom_jitter(alpha = 0.8) +
+        theme_minimal(base_size = 16) +
       scale_fill_manual(values = allcolors, guide = FALSE) +
       scale_color_manual(values = allcolors) +
       scale_x_discrete(breaks = alllevels) +
       theme(
-        axis.text.x = element_blank(),
+        axis.text.x = element_text(color = "black", size = 16, 
+                                   angle = 45, hjust = 0.5),
         legend.position = "none",
         plot.subtitle  = element_text(face = "italic"),
         strip.background  = element_blank(),
@@ -93,10 +95,15 @@ function(input, output) {
                                     c("inc.d17", "prolong"),
                                     c("hatch", "extend")),  
                 map_signif_level=TRUE) 
+    p1
+  })
+  
+  
+  output$musicPlot <- renderPlot({
     
     candidatecounts <- as.data.frame(candidatecounts)
 
-    p2 <- candidatecounts %>%
+    df <- candidatecounts %>%
       mutate(
         treatment = factor(treatment, levels = alllevels),
         tissue = factor(tissue, levels = tissuelevels)
@@ -111,24 +118,37 @@ function(input, output) {
         sex %in% !!as.character(input$sex)
       ) %>% 
       collect() %>%
-      drop_na() %>%
+      drop_na() 
+    
+  
+    
+    p2 <- df %>%  
       ggplot( aes(x = treatment, y = mean)) +
       geom_errorbar(aes(ymin = mean - se, 
-                        ymax = mean + se), color = "white", width=0) +
-      geom_image(aes(image=image), size = 0.075)+
-      theme_void(base_size = 14) +
+                        ymax = mean + se), 
+                    color = "white", 
+                    width=0) +
+      geom_image(aes(image=image), size = 0.1)+
+      theme_minimal(base_size = 16) +
+      theme(
+        axis.text.x = element_text(color = "black", size = 16, 
+                                   angle = 45, hjust = 0.5),
+        legend.position = "none",
+        plot.subtitle  = element_text(face = "italic"),
+        strip.background  = element_blank(),
+        panel.grid.major  = element_blank(),  # remove major gridlines
+        panel.grid.minor  = element_blank()
+      ) +
       scale_fill_manual(values = allcolors, guide = FALSE) +
       scale_color_manual(values = allcolors) +
       scale_x_discrete(breaks = alllevels,
                        labels = alllevels) +
-      theme(legend.position = "none") +
-      theme(axis.title.y = element_text(color = "black", angle = 90),
-            axis.text.x = element_text(color = "black", size = 10, 
-                                       angle = 45, hjust = 1),
-            plot.caption = element_text(face = "italic", size = 16)) +
-      labs(y = "music notes")
-
-    plot_grid(p1,p2, rel_heights = c(1.4,1), ncol = 1, align = "v")
+      labs(y = "mean gene expression as music notes", x = NULL) +
+      scale_y_continuous(n.breaks = 5, 
+                         labels = c("E", "G",  "B",  "D",  "F"))
+    
+    p2
+    
   })
   
   
