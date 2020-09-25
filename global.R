@@ -11,8 +11,7 @@ library(tuneR)
 library(stringr)
 library(scales)
 
-library(dplyr)
-library(tidyr)
+library(tidyverse)
 library(forcats)
 library(DBI)
 library(RSQLite)
@@ -27,6 +26,8 @@ library(ggpubr)
 library(readr)
 
 library(scatterplot3d) 
+
+library(corrr)
 
 citation("sonify") ## for gene expression analysis
 
@@ -98,11 +99,16 @@ colorstissue <- c(
 
 allcolors <- c(colorschar, colorsmanip, colorssex, colorstissue)
 
+
 # gene names and descriptions
 hugo <- read.csv("data/hugo.csv") %>% 
   dplyr::distinct(gene, name) %>% 
-  mutate(gene_name = paste(gene, name, sep = ": "))
-head(hugo)
+  mutate(gene_name = paste(gene, name, sep = ": ")) 
+
+genenamesfuncts <- read_csv("data/genefunctions.csv") %>%
+  full_join(hugo,., by = "gene") %>%
+  mutate(gene_function = replace_na(gene_function, "A description of this gene is not currrently available here."))
+genenamesfuncts
 
 # data ----
 
@@ -123,7 +129,8 @@ candidatecounts <- read_csv("./data/candidatecounts.csv") %>%
   ) %>%
   filter(treatment %in% alllevels) %>%
   na.omit() %>%
-  left_join(., hugo, by = "gene") 
+  left_join(., genenamesfuncts, by = "gene") 
+
 
 alldeg <- tbl(con, "alldeg")
 
@@ -140,11 +147,14 @@ tsne <- tbl(con, "tsne")
 
 ## get gene ids
 gene_names <- candidatecounts %>%
+  drop_na() %>%
   dplyr::distinct(gene_name) %>%
   dplyr::arrange(gene_name) %>%
   pull()
+gene_names
 
 gene_names2 <- candidatecounts %>%
+  drop_na() %>%
   dplyr::distinct(gene_name) %>%
   dplyr::arrange(gene_name) %>%
   pull()

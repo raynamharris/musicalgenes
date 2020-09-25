@@ -33,12 +33,12 @@ function(input, output) {
   })
   
   
-  output$genename <- renderTable({
+  output$genedescrip <- renderTable({
     
-    mygene <- hugo %>%
+    mygenedescrip <- genenamesfuncts %>%
       filter(gene_name %in% c(!!as.character(input$gene))) %>%
-      select(gene, name)
-    mygene
+      select(gene, gene_function)
+    mygenedescrip
     
   })
   

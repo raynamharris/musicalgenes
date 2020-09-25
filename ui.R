@@ -35,7 +35,7 @@ shinyUI(
             multiple = FALSE
           ),
           
-         # tableOutput("genename"),
+          tableOutput("genedescrip"),
           
           selectInput(
             inputId = "tissue",
