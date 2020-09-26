@@ -35,12 +35,36 @@ function(input, output) {
   
   output$genedescrip <- renderTable({
     
-    mygenedescrip <- genenamesfuncts %>%
+    df <- description %>%
       filter(gene_name %in% c(!!as.character(input$gene))) %>%
-      select(gene, gene_function)
-    mygenedescrip
+      select(Description) %>%
+      rename("Gene description" = Description)
+    df
     
   })
+  
+  output$genedisease <- renderTable({
+    
+    df <- disease %>%
+      filter(gene_name %in% c(!!as.character(input$gene))) %>%
+      select(Diseases) %>%
+      rename("Associated diseases" = Diseases)
+    df
+    
+  })
+  
+  
+  output$goterms <- renderTable({
+    
+    df <- bpgo %>%
+      filter(gene_name %in% c(!!as.character(input$gene))) %>%
+      select(GOterms) %>%
+      rename("Associated Biological Processes" = GOterms)
+    df
+    
+  })
+  
+  
   
 
   output$boxPlot <- renderPlot({
@@ -79,12 +103,12 @@ function(input, output) {
       labs(y = "gene expression", x = NULL, subtitle = mysubtitle) +
       geom_signif(comparisons = list( c("control", "bldg"),
                                       c("bldg", "lay"),
-                                      c("lay", "inc.d3"),
-                                      c("inc.d3", "inc.d9"),
-                                      c("inc.d9", "inc.d17"),
-                                      c("inc.d17", "hatch"),
-                                      c("hatch", "n5"),
-                                      c("n5", "n9")),  
+                                      c("bldg", "inc.d3"),
+                                      c("bldg", "inc.d9"),
+                                      c("bldg", "inc.d17"),
+                                      c("bldg", "hatch"),
+                                      c("bldg", "n5"),
+                                      c("bldg", "n9")),  
                   map_signif_level=TRUE, step_increase = 0.1) +
       geom_signif(comparisons = list( c("inc.d3", "m.inc.d3"),
                                       c("inc.d9", "m.inc.d9"),
@@ -143,9 +167,7 @@ function(input, output) {
       scale_color_manual(values = allcolors) +
       scale_x_discrete(breaks = alllevels,
                        labels = alllevels) +
-      labs(y = "mean gene expression as music notes", x = NULL) +
-      scale_y_continuous(n.breaks = 5, 
-                         labels = c("E", "G",  "B",  "D",  "F"))
+      labs(y = "mean gene expression as music notes", x = NULL) 
     
     p2
     

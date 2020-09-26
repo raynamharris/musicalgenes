@@ -18,14 +18,18 @@ shinyUI(
           
           h4("Transcriptional symphony"), 
           
-          p("Temporal and spatially controlled changes in gene expression 
-            are often described as a “symphony of gene expression.” 
-                What does these transcriptional symphony of parental 
-                  care in parenting pigeons sound like?
-              Data sonification is the presentation of data as sound. 
+          p("Temporaly controlled changes in gene expression 
+            are often described as a “transcriptional symphony.” 
+              What does these transcriptional symphony of parental 
+              care in parenting pigeons sound like?"),
+          
+            p("Data sonification is the presentation of data as sound. 
             Here, you can interactively visualize and sonify gene expression 
             to better understand the molecular mechanisms that regulate
             parental care behavior and other important phenotypes."),
+          
+          p("After choosing a gene, tissue and sex, click the 'sonify' 
+            button to listen the mean value of gene expression."),
             
           selectInput(
             inputId = "gene",
@@ -35,7 +39,6 @@ shinyUI(
             multiple = FALSE
           ),
           
-          tableOutput("genedescrip"),
           
           selectInput(
             inputId = "tissue",
@@ -46,7 +49,6 @@ shinyUI(
           ),
           
           
-          
           selectInput(
             inputId = "sex",
             label = "Chose female or male.",
@@ -55,7 +57,23 @@ shinyUI(
             multiple = FALSE
           ),
           
-          p("After choosing a gene, tissue and sex, click the 'sonify' button to listen the mean value of gene expression."),
+          tableOutput("genedescrip"),
+          
+          
+          tableOutput("goterms"),
+          
+          p("Many genes that are important for regulating reproduction and parental care have also be associated with diseases. Understanding how genes work together to regulate behavior could help us understand how they interact in disease. Below are a list of diseases associated with the gene of interest."),
+          
+          tableOutput("genedisease"),
+          
+          p("Descriptions, diseases, and biological processes associated with the human ortholog of the gene of interest are provided by the ",
+            tags$a(
+              href = "https://www.alliancegenome.org/downloads#gene-descriptions",
+              "Alliance of Genome Resources.")
+          ),
+          
+          
+          
          p("Don't see your favorite gene?", 
            
            tags$a(
@@ -117,11 +135,10 @@ shinyUI(
           
           uiOutput("audiotag"),
           
-        
-          
+         
           p(" "),
           
-          p("In the above image, box and whisker plots illustrate the average and range of data for each group. Stars above the boxes indicate statistically significant changes in gene expression between sequential time points. Plotting music notes instead of points, bars or graphs reduces the utility of the data for statistical reasoning but does allow the user to visualize the same pattern that is being used to create a tone via sonification. We can represent an averaged value of gene expression for each group as a music note that can be played by an instrument in an orchestra.")),
+          p("In the above image, box and whisker plots illustrate the average and range of data for each group. Stars above the boxes indicate statistically significant changes in gene expression relative to either the nest-building control group or temporal controls. By plotting music notes instead of points, bars or graphs reduces the utility of the data for statistical reasoning but does allow the user to visualize the same pattern that is being used to create a tone via sonification. We can represent an averaged value of gene expression for each group as a music note that can be played by an instrument in an orchestra.")),
         
         wellPanel(  
           
@@ -129,11 +146,9 @@ shinyUI(
           
           p("In the future, we would like to be able sonify data for multiple genes using sounds from instruments found in an orchestra." ),
           
-          tableOutput("orchestratable"),
+          tableOutput("orchestratable")
           
-          p("Additionaly, we would like to be able sonify data showing the relationship between a single gene of interest across all three tissues (as shown with a 3D plot)." ),
-          
-          plotOutput("plot3D", width = "100%")),
+          ),
         
         wellPanel(
           h4("Learn more"),       

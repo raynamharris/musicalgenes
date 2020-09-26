@@ -104,11 +104,55 @@ allcolors <- c(colorschar, colorsmanip, colorssex, colorstissue)
 hugo <- read.csv("data/hugo.csv") %>% 
   dplyr::distinct(gene, name) %>% 
   mutate(gene_name = paste(gene, name, sep = ": ")) 
+head(hugo)
 
-genenamesfuncts <- read_csv("data/genefunctions.csv") %>%
-  full_join(hugo,., by = "gene") %>%
-  mutate(gene_function = replace_na(gene_function, "A description of this gene is not currrently available here."))
-genenamesfuncts
+disease <- read_tsv("data/DISEASE-ALLIANCE_HUMAN_29.tsv",
+                    skip = 19, col_names = F) %>%
+  distinct(X5,X8) %>%
+  rename(gene = X5, disease = X8) %>%
+  arrange(gene, disease) %>%
+  group_by(gene) %>%
+  summarize(Diseases = str_c(disease, collapse = "; ")) %>%
+  full_join(hugo,., by = "gene") 
+head(disease)
+
+description <- read_tsv("data/GENE-DESCRIPTION-TSV_HUMAN_18.tsv",
+                        skip = 14, col_names = F) %>%
+  rename(GO = X1, gene = X2, Description = X3) %>%
+  full_join(., disease, by = "gene") %>%
+  mutate(Description = replace_na(Description, 
+                                  "Not currrently available."),
+         Diseases = replace_na(Diseases, 
+                               "Not a marker for any known diseases."))
+head(description)
+
+# GO terms
+
+goterms <- read_tsv("data/go_terms.mgi", col_names = F) %>%
+  filter(X1 == "Biological Process") %>%
+  select(X2, X3) %>%
+  rename(GOid = X2, GOterm = X3) 
+head(goterms)
+
+# genes associated with bilogical process (BP) GO terms 
+bpgo <- read_tsv("data/gene_association.mgi",
+                   skip = 24, col_names = F) %>%
+  select(X3, X9, X5) %>%
+  rename(gene = X3, ontology = X9, GOid = X5) %>%
+  filter(ontology == "P") %>%
+  full_join(., goterms, by = "GOid") %>%
+  mutate(gene = toupper(gene)) %>%
+  left_join(hugo, ., by = "gene")  %>%
+  distinct(gene, name, gene_name, GOterm) %>%
+  arrange(GOterm, gene, gene_name) %>%
+  group_by(gene_name) %>%
+  summarize(GOterms = str_c(GOterm, collapse = "; ")) 
+tail(bpgo)
+
+
+
+
+
 
 # data ----
 
@@ -129,8 +173,8 @@ candidatecounts <- read_csv("./data/candidatecounts.csv") %>%
   ) %>%
   filter(treatment %in% alllevels) %>%
   na.omit() %>%
-  left_join(., genenamesfuncts, by = "gene") 
-
+  left_join(., description, by = "gene") 
+head(candidatecounts)
 
 alldeg <- tbl(con, "alldeg")
 
