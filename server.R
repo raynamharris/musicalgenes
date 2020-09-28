@@ -7,32 +7,9 @@ function(input, output) {
   treatment_filter <- reactive({ as.character(input$treatment) })
   
   
-  output$plot3D <- renderPlot({
-  
-    candidatedata <- candidatecounts %>%
-        filter(gene_name %in% c(!!as.character(input$gene))) %>%
-        mutate(bird = sapply(strsplit(samples,'\\_'), "[", 1)) %>%
-        select(gene, sex,tissue,treatment, bird, counts)  %>%
-        pivot_wider(names_from = tissue, values_from = counts) %>%
-        select(bird, treatment, sex, gene, hypothalamus, pituitary, gonads) %>%
-        mutate(sex = factor(sex)) %>%
-        drop_na()
-      
-      colors <- c(colorschar, colorsmanip)
-      colors <- colors[as.numeric(candidatedata$treatment)]
-      
-      shapes = c(17, 16) 
-      shapes <- shapes[as.numeric(candidatedata$sex)]
-      
-      p <- scatterplot3d(candidatedata[,c(6,7,5)], 
-                         color = colors, pch = shapes,
-                         main = input$gene,
-                         cex.symbols = 1.25)
-      return(p)
-    
-  })
   
   
+
   output$genedescrip <- renderTable({
     
     df <- description %>%
@@ -59,12 +36,10 @@ function(input, output) {
     df <- bpgo %>%
       filter(gene_name %in% c(!!as.character(input$gene))) %>%
       select(GOterms) %>%
-      rename("Associated Biological Processes" = GOterms)
+      rename("Gene Ontology: Associated Biological Processes" = GOterms)
     df
     
   })
-  
-  
   
 
   output$boxPlot <- renderPlot({

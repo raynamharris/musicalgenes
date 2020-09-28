@@ -176,7 +176,13 @@ candidatecounts <- read_csv("./data/candidatecounts.csv") %>%
   left_join(., description, by = "gene") 
 head(candidatecounts)
 
-alldeg <- tbl(con, "alldeg")
+
+## all differentially expressed genes (degs)
+
+#alldeg <- tbl(con, "alldeg")
+alldeg <- read_csv("../DoveParentsRNAseq/results/04_candidateDEGs.csv") 
+
+
 
 ## Go terms associated with parental care
 parentalbehavior <- tbl(con, "parentalbehavior")
