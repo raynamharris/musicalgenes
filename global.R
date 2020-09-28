@@ -180,8 +180,24 @@ head(candidatecounts)
 ## all differentially expressed genes (degs)
 
 #alldeg <- tbl(con, "alldeg")
-alldeg <- read_csv("../DoveParentsRNAseq/results/04_candidateDEGs.csv") 
-
+alldeg <- read_csv("www/alldeg.csv") %>%
+  left_join(., hugo) %>%
+  mutate(reference = sapply(strsplit(as.character(comparison), '\\_'), "[", 1),
+         treatment = sapply(strsplit(as.character(comparison), '\\_'), "[", 2)) %>%
+  select(sex, tissue, comparison, gene, gene_name, 
+         reference, treatment, lfc, padj, posneg) %>%
+  filter(comparison  %in% 
+           c("control_bldg", "bldg_lay",  "bldg_inc.d3",  
+             "bldg_inc.d9",   "bldg_inc.d17",  
+             "bldg_hatch", "bldg_n5", "bldg_n9",
+             "bldg_lay",  "lay_inc.d3",  
+             "inc.d3_inc.d9",   "inc.d9_inc.d17",  
+             "inc.d17_hatch", "hatch_n5", "n5_n9",
+             "inc.d3_m.inc.d3", "inc.d9_m.inc.d9",
+             "inc.d17_m.inc.d17",  "hatch_m.n2" ,
+             "inc.d9_early","inc.d17_prolong", "hatch_early",
+             "hatch_prolong", "hatch_extend")
+           ) 
 
 
 ## Go terms associated with parental care

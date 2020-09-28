@@ -7,6 +7,21 @@ function(input, output) {
   treatment_filter <- reactive({ as.character(input$treatment) })
   
   
+  output$allsigdegs <- renderTable({
+  
+  df <- alldeg %>%
+    filter(
+      gene_name %in% c(!!as.character(input$gene)),
+      tissue %in% !!as.character(input$tissue),
+      sex %in% !!as.character(input$sex)
+    )  %>%
+    mutate(group = paste(sex, tissue, sep = " "),
+           group = paste(gene, group, sep = " in the ")) %>%
+    rename("gene expression" = 'group') %>%
+    select(reference, treatment, lfc, padj, "gene expression") 
+  df
+  
+  })
   
   
 
@@ -84,16 +99,18 @@ function(input, output) {
                                       c("bldg", "hatch"),
                                       c("bldg", "n5"),
                                       c("bldg", "n9")),  
-                  map_signif_level=TRUE, step_increase = 0.1) +
+                  map_signif_level=TRUE, step_increase = 0.1,
+                  margin_top = 0.05) +
       geom_signif(comparisons = list( c("inc.d3", "m.inc.d3"),
                                       c("inc.d9", "m.inc.d9"),
                                       c("inc.d17", "m.inc.d17"),
                                       c("hatch", "m.n2")),  
-                  map_signif_level=TRUE, step_increase = 0.1) +
+                  map_signif_level=TRUE, step_increase = 0.1,
+                  margin_top = 0.05) +
     geom_signif(comparisons = list(  c("inc.d9", "early"),
                                     c("inc.d17", "prolong"),
                                     c("hatch", "extend")),  
-                map_signif_level=TRUE) 
+                map_signif_level=TRUE, margin_top = 0.05) 
     p1
   })
   

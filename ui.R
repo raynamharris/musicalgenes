@@ -138,7 +138,18 @@ shinyUI(
          
           p(" "),
           
-          p("In the above image, box and whisker plots illustrate the average and range of data for each group. Stars above the boxes indicate statistically significant changes in gene expression relative to either the nest-building control group or temporal controls. By plotting music notes instead of points, bars or graphs reduces the utility of the data for statistical reasoning but does allow the user to visualize the same pattern that is being used to create a tone via sonification. We can represent an averaged value of gene expression for each group as a music note that can be played by an instrument in an orchestra.")),
+          p("In the above image, box and whisker plots illustrate the average and range of data for each group. Stars above the boxes indicate statistically significant changes in gene expression relative to either the nest-building control group or temporal controls. By plotting music notes instead of points, bars or graphs reduces the utility of the data for statistical reasoning but does allow the user to visualize the same pattern that is being used to create a tone via sonification. We can represent an averaged value of gene expression for each group as a music note that can be played by an instrument in an orchestra."),
+        
+        h4("Significant changes in gene expression (after testing for multiple hypotheses.)"),
+      
+        p("The gene expression values were caluculated using RNA sequencing (RNA-seq),
+          which measures thousands of genes at once. 
+          The table below summarizes the comparisons for this gene, tissue, and sex that survived multiple hypothesis testing. If the table is emtpy, then no comparsions were signifcant (adjusted p-value < 0.1)."),
+        
+        tableOutput("allsigdegs")
+        
+        ),
+        
         
         wellPanel(  
           
