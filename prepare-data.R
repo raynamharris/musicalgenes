@@ -1,11 +1,11 @@
 library(DBI)
-library(RSQLite)
+library(duckdb)
 library(dplyr)
 library(readr)
 library(forcats)
 library(readr)
 
-con <- dbConnect(SQLite(), "data/musicalgenes.sqlite")
+con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
 
 charlevels <- c(
   "control", "bldg",
@@ -91,6 +91,8 @@ alldeg <- read_csv("./data/allDEG.csv") %>%
     comparison = factor(comparison, levels = comparisonlevels)
   )
 
+alldeg <- select(alldeg, -X1)
+
 dbWriteTable(
   con,
   "alldeg",
@@ -100,40 +102,28 @@ dbWriteTable(
   overwrite = TRUE
 )
 
-## Go terms associated with parental care
-parentalbehavior <- read_table("data/GO_term_parentalbehavior.txt")
-names(parentalbehavior) <- "allGO"
+dbDisconnect(con, shutdown = T)
 
-parentalbehavior <- parentalbehavior %>%
-  mutate(
-    id = sapply(strsplit(allGO, "	"), "[", 1),
-    gene = sapply(strsplit(allGO, "	"), "[", 2),
-    name = sapply(strsplit(allGO, "	"), "[", 3),
-    GO = sapply(strsplit(allGO, "	"), "[", 6)
-  )
+# hugo ----
 
-parentalbehavior$allGO <- NULL
+hugo <- read.csv("data/hugo.csv")
 
 dbWriteTable(
   con,
-  "parentalbehavior",
-  parentalbehavior,
+  "hugo",
+  hugo,
   temporary = FALSE,
   row.names = FALSE,
   overwrite = TRUE
 )
 
-tsne <- read_csv("data/tsne.csv")
-tsne$tissue <- factor(tsne$tissue, levels = c("hypothalamus", "pituitary", "gonads"))
-tsne <- tsne %>% mutate(tissue = fct_recode(tissue, "gonad" = "gonads"))
+# testing ----
 
-dbWriteTable(
-  con,
-  "tsne",
-  tsne,
-  temporary = FALSE,
-  row.names = FALSE,
-  overwrite = TRUE
-)
+con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
 
+dbListTables(con)
+
+dplyr::tbl(con, "alldeg")
+
+dbDisconnect(con, shutdown = T)
 

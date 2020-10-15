@@ -1,7 +1,6 @@
 # setup ----
 options(shiny.maxRequestSize = 30 * 1024^2)
 
-
 library(shiny)
 
 library(shinydashboard)
@@ -14,7 +13,7 @@ library(scales)
 library(tidyverse)
 library(forcats)
 library(DBI)
-library(RSQLite)
+library(duckdb)
 library(dbplyr)
 
 library(ggplot2)
@@ -101,10 +100,12 @@ allcolors <- c(colorschar, colorsmanip, colorssex, colorstissue)
 
 
 # gene names and descriptions
-hugo <- read.csv("data/hugo.csv") %>% 
+con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
+hugo <- tbl(con, "hugo") %>% 
   dplyr::distinct(gene, name) %>% 
-  mutate(gene_name = paste(gene, name, sep = ": ")) 
-head(hugo)
+  mutate(gene_name = paste(gene, name, sep = ": ")) %>% 
+  collect()
+dbDisconnect(con)
 
 disease <- read_tsv("data/DISEASE-ALLIANCE_HUMAN_29.tsv",
                     skip = 19, col_names = F) %>%
@@ -156,9 +157,6 @@ tail(bpgo)
 
 # data ----
 
-## SQLite Pool Connection
-con <- dbConnect(SQLite(), "data/musicalgenes.sqlite")
-
 ## candidate counts and differentiall expressed gene results
 
 #candidatecounts <- tbl(con, "candidatecounts") %>%
@@ -179,13 +177,15 @@ head(candidatecounts)
 
 ## all differentially expressed genes (degs)
 
-#alldeg <- tbl(con, "alldeg")
-alldeg <- read_csv("www/alldeg.csv") %>%
-  left_join(., hugo) %>%
-  mutate(reference = sapply(strsplit(as.character(comparison), '\\_'), "[", 1),
-         treatment = sapply(strsplit(as.character(comparison), '\\_'), "[", 2)) %>%
-  select(sex, tissue, comparison, gene, gene_name, 
-         reference, treatment, lfc, padj, posneg) %>%
+con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
+
+alldeg <- tbl(con, "alldeg") %>% 
+  left_join(
+    tbl(con, "hugo") %>% 
+      dplyr::distinct(gene, name) %>% 
+      mutate(gene_name = paste(gene, name, sep = ": "))
+  ) %>% 
+  select(sex, tissue, comparison, gene, gene_name, lfc, padj) %>%
   filter(comparison  %in% 
            c("control_bldg", "bldg_lay",  "bldg_inc.d3",  
              "bldg_inc.d9",   "bldg_inc.d17",  
@@ -197,19 +197,12 @@ alldeg <- read_csv("www/alldeg.csv") %>%
              "inc.d17_m.inc.d17",  "hatch_m.n2" ,
              "inc.d9_early","inc.d17_prolong", "hatch_early",
              "hatch_prolong", "hatch_extend")
-           ) 
+  ) %>% 
+  collect() %>% 
+  mutate(reference = sapply(strsplit(as.character(comparison), '\\_'), "[", 1),
+         treatment = sapply(strsplit(as.character(comparison), '\\_'), "[", 2))
 
-
-## Go terms associated with parental care
-parentalbehavior <- tbl(con, "parentalbehavior")
-
-parentalbehaviorgenes <- parentalbehavior %>%
-  mutate(gene = toupper(gene)) %>%
-  pull(gene)
-
-## tsne data
-
-tsne <- tbl(con, "tsne")
+dbDisconnect(con)
 
 ## get gene ids
 gene_names <- candidatecounts %>%
@@ -217,7 +210,6 @@ gene_names <- candidatecounts %>%
   dplyr::distinct(gene_name) %>%
   dplyr::arrange(gene_name) %>%
   pull()
-gene_names
 
 gene_names2 <- candidatecounts %>%
   drop_na() %>%
