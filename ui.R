@@ -2,7 +2,7 @@ shinyUI(
   fluidPage(
     
     # Application title
-    titlePanel("Musical Genes: Visualize and sonifiy gene expression in parenting pigeons"),
+    titlePanel("Musical Genes: Visualize and sonify gene expression in parenting pigeons"),
 
     # titlePanel(title=div(img(src="expdesign.png"))),
   
@@ -18,7 +18,7 @@ shinyUI(
           
           h4("Transcriptional symphony"), 
           
-          p("Temporaly controlled changes in gene expression 
+          p("Temporally controlled changes in gene expression 
             are often described as a “transcriptional symphony.” 
               What does these transcriptional symphony of parental 
               care in parenting pigeons sound like?"),
@@ -138,13 +138,15 @@ shinyUI(
          
           p(" "),
           
-          p("In the above image, box and whisker plots illustrate the average and range of data for each group. Stars above the boxes indicate statistically significant changes in gene expression relative to either the nest-building control group or temporal controls. By plotting music notes instead of points, bars or graphs reduces the utility of the data for statistical reasoning but does allow the user to visualize the same pattern that is being used to create a tone via sonification. We can represent an averaged value of gene expression for each group as a music note that can be played by an instrument in an orchestra."),
+          p("In the top image, box and whisker plots illustrate the median and range of data 
+	    for each group. Below that, we use music notes to represent the mean for each group. 
+	    You can imagine playing these notes on an instrument of your choice."),
         
-        h4("Significant changes in gene expression (after testing for multiple hypotheses.)"),
+        h4("Significant changes in gene expression (after testing for multiple hypotheses)."),
       
-        p("The gene expression values were caluculated using RNA sequencing (RNA-seq),
+        p("These gene expression values were calculated using RNA sequencing (RNA-seq),
           which measures thousands of genes at once. 
-          The table below summarizes the comparisons for this gene, tissue, and sex that survived multiple hypothesis testing. If the table is emtpy, then no comparsions were signifcant (adjusted p-value < 0.1)."),
+          The table below summarizes the comparisons for this gene, tissue, and sex that survived multiple hypothesis testing. If the table is empty, then no comparisons were significant (adjusted p-value < 0.1)."),
         
         tableOutput("allsigdegs")
         
@@ -186,17 +188,15 @@ shinyUI(
           h4("Credit"), 
           
           p("This app is a product of the 'Birds, Brains, and Banter (B3)'
-               Laboratory at the University of California at Davis.
+            Laboratory at the University of California at Davis.
             This and related research is funded by the National Science Foundation,
             in a grant to Rebecca Calisi and Matthew MacManes.
-          The webpage was created and written by Rayna Harris and Rebecca Calisi.  
-                Owen Marshall, Mauricio Vargas, Titus Brown, and 
+            The webpage was created and written by Rayna Harris and Rebecca Calisi.  
+            Owen Marshall, Mauricio Vargas, Titus Brown, and 
             Alexandra Colón Rodríguez contributed intellectually to the design. 
             Suzanne Austin, Andrew Lang, Victoria Farrar, April Booth, 
             Tanner Feustel, and Matthew MacManes contributed the 
             experiment that is the foundation of this application.")
-  
-              
              )
           )
           
