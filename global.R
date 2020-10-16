@@ -22,15 +22,12 @@ library(cowplot)
 library(magick)
 
 library(ggpubr)
-library(readr)
 
 library(scatterplot3d) 
 
 library(corrr)
 
 citation("sonify") ## for gene expression analysis
-
-
 
 # experimental levels ----
 
@@ -60,12 +57,12 @@ sexlevels <- c("female", "male")
 tissuelevel <- c("hypothalamus", "pituitary", "gonad")
 tissuelevels <- c("hypothalamus", "pituitary", "gonads")
 
-
 comparisonlevels <- c(
   "control_bldg", "bldg_lay", "lay_inc.d3",
   "inc.d3_inc.d9", "inc.d9_inc.d17", "inc.d17_hatch",
   "hatch_n5", "n5_n9"
 )
+
 # experimental colors
 colorschar <- c(
   "control" = "#cc4c02",
@@ -87,7 +84,6 @@ colorsmanip <- c("m.inc.d3" = "#CDCDCD",
                  "prolong" = "#9e9ac8" , 
                  "extend" = "#6a51a3" )
 
-
 colorssex <- c("female" = "#969696", "male" = "#525252")
 
 colorstissue <- c(
@@ -98,124 +94,58 @@ colorstissue <- c(
 
 allcolors <- c(colorschar, colorsmanip, colorssex, colorstissue)
 
-
 # gene names and descriptions
 con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
-hugo <- tbl(con, "hugo") %>% 
-  dplyr::distinct(gene, name) %>% 
-  mutate(gene_name = paste(gene, name, sep = ": ")) %>% 
-  collect()
-dbDisconnect(con)
-
-disease <- read_tsv("data/DISEASE-ALLIANCE_HUMAN_29.tsv",
-                    skip = 19, col_names = F) %>%
-  distinct(X5,X8) %>%
-  rename(gene = X5, disease = X8) %>%
-  arrange(gene, disease) %>%
-  group_by(gene) %>%
-  summarize(Diseases = str_c(disease, collapse = "; ")) %>%
-  full_join(hugo,., by = "gene") 
-head(disease)
-
-description <- read_tsv("data/GENE-DESCRIPTION-TSV_HUMAN_18.tsv",
-                        skip = 14, col_names = F) %>%
-  rename(GO = X1, gene = X2, Description = X3) %>%
-  full_join(., disease, by = "gene") %>%
-  mutate(Description = replace_na(Description, 
-                                  "Not currrently available."),
-         Diseases = replace_na(Diseases, 
-                               "Not a marker for any known diseases."))
-head(description)
 
 # GO terms
-
-goterms <- read_tsv("data/go_terms.mgi", col_names = F) %>%
-  filter(X1 == "Biological Process") %>%
-  select(X2, X3) %>%
-  rename(GOid = X2, GOterm = X3) 
-head(goterms)
+goterms <- tbl(con, "goterms") %>% collect()
 
 # genes associated with bilogical process (BP) GO terms 
-bpgo <- read_tsv("data/gene_association.mgi",
-                   skip = 24, col_names = F) %>%
-  select(X3, X9, X5) %>%
-  rename(gene = X3, ontology = X9, GOid = X5) %>%
-  filter(ontology == "P") %>%
-  full_join(., goterms, by = "GOid") %>%
-  mutate(gene = toupper(gene)) %>%
-  left_join(hugo, ., by = "gene")  %>%
+bpgo <- tbl(con, "bpgo") %>%
+  full_join(., tbl(con, "goterms"), by = "GOid") %>%
+  left_join(tbl(con, "hugo"), ., by = "gene")  %>%
+  mutate(
+    gene = toupper(gene),
+    gene_name = paste(gene, name, sep = ": ")
+  ) %>% 
   distinct(gene, name, gene_name, GOterm) %>%
   arrange(GOterm, gene, gene_name) %>%
+  collect() %>% 
   group_by(gene_name) %>%
-  summarize(GOterms = str_c(GOterm, collapse = "; ")) 
-tail(bpgo)
-
-
-
-
-
+  summarize(GOterms = str_c(GOterm, collapse = "; "))
 
 # data ----
 
 ## candidate counts and differentiall expressed gene results
 
-#candidatecounts <- tbl(con, "candidatecounts") %>%
-#  as_tibble(.) %>%
-#  left_join(., hugo, by = "gene") 
-
 # data from https://github.com/macmanes-lab/DoveParentsRNAseq
-candidatecounts <- read_csv("./data/candidatecounts.csv") %>%
+candidatecounts <- tbl(con, "candidatecounts") %>%
+  filter(treatment %in% alllevels) %>%
+  left_join(., tbl(con, "description"), by = "gene") %>% 
+  inner_join(., tbl(con, "hugo"), by = "gene") %>% 
+  collect() %>% 
   mutate(
+    gene_name = paste(gene, name, sep = ": "),
     treatment = factor(treatment, levels = alllevels),
     tissue = factor(tissue, levels = tissuelevels)
-  ) %>%
-  filter(treatment %in% alllevels) %>%
-  na.omit() %>%
-  left_join(., description, by = "gene") 
-head(candidatecounts)
-
-
-## all differentially expressed genes (degs)
-
-con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
-
-alldeg <- tbl(con, "alldeg") %>% 
-  left_join(
-    tbl(con, "hugo") %>% 
-      dplyr::distinct(gene, name) %>% 
-      mutate(gene_name = paste(gene, name, sep = ": "))
-  ) %>% 
-  select(sex, tissue, comparison, gene, gene_name, lfc, padj) %>%
-  filter(comparison  %in% 
-           c("control_bldg", "bldg_lay",  "bldg_inc.d3",  
-             "bldg_inc.d9",   "bldg_inc.d17",  
-             "bldg_hatch", "bldg_n5", "bldg_n9",
-             "bldg_lay",  "lay_inc.d3",  
-             "inc.d3_inc.d9",   "inc.d9_inc.d17",  
-             "inc.d17_hatch", "hatch_n5", "n5_n9",
-             "inc.d3_m.inc.d3", "inc.d9_m.inc.d9",
-             "inc.d17_m.inc.d17",  "hatch_m.n2" ,
-             "inc.d9_early","inc.d17_prolong", "hatch_early",
-             "hatch_prolong", "hatch_extend")
-  ) %>% 
-  collect() %>% 
-  mutate(reference = sapply(strsplit(as.character(comparison), '\\_'), "[", 1),
-         treatment = sapply(strsplit(as.character(comparison), '\\_'), "[", 2))
-
-dbDisconnect(con)
+  )
 
 ## get gene ids
-gene_names <- candidatecounts %>%
+gene_names <- tbl(con, "candidatecounts") %>% 
+  distinct(gene) %>%
+  left_join(
+    ., tbl(con, "hugo")
+  ) %>% 
+  mutate(gene_name = paste(gene, name, sep = ": ")) %>% 
+  collect() %>% 
   drop_na() %>%
   dplyr::distinct(gene_name) %>%
   dplyr::arrange(gene_name) %>%
   pull()
 
-gene_names2 <- candidatecounts %>%
-  drop_na() %>%
-  dplyr::distinct(gene_name) %>%
-  dplyr::arrange(gene_name) %>%
-  pull()
+dbDisconnect(con, shutdown = TRUE)
+
+gene_names2 <- gene_names
 
 numberstonotes <- data.frame(
   scaledmean = c(0:6),
@@ -230,4 +160,3 @@ orchestra <- c("violin",
                "saxaphone")
 
 orchestra <- sort(orchestra)
-orchestra

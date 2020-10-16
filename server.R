@@ -9,16 +9,42 @@ function(input, output) {
   
   output$allsigdegs <- renderTable({
   
-  df <- alldeg %>%
+  con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
+    
+  df <- tbl(con, "alldeg") %>% 
+    left_join(
+      tbl(con, "hugo") %>% 
+        dplyr::distinct(gene, name) %>% 
+        mutate(gene_name = paste(gene, name, sep = ": "))
+    ) %>% 
+    select(sex, tissue, comparison, gene, gene_name, lfc, padj) %>%
     filter(
       gene_name %in% c(!!as.character(input$gene)),
       tissue %in% !!as.character(input$tissue),
       sex %in% !!as.character(input$sex)
     )  %>%
+    filter(comparison  %in% 
+             c("control_bldg", "bldg_lay",  "bldg_inc.d3",  
+               "bldg_inc.d9",   "bldg_inc.d17",  
+               "bldg_hatch", "bldg_n5", "bldg_n9",
+               "bldg_lay",  "lay_inc.d3",  
+               "inc.d3_inc.d9",   "inc.d9_inc.d17",  
+               "inc.d17_hatch", "hatch_n5", "n5_n9",
+               "inc.d3_m.inc.d3", "inc.d9_m.inc.d9",
+               "inc.d17_m.inc.d17",  "hatch_m.n2" ,
+               "inc.d9_early","inc.d17_prolong", "hatch_early",
+               "hatch_prolong", "hatch_extend")
+    ) %>% 
+    collect() %>% 
+    mutate(reference = sapply(strsplit(as.character(comparison), '\\_'), "[", 1),
+           treatment = sapply(strsplit(as.character(comparison), '\\_'), "[", 2)) %>%
     mutate(group = paste(sex, tissue, sep = " "),
            group = paste(gene, group, sep = " in the ")) %>%
     rename("gene expression" = 'group') %>%
-    select(reference, treatment, lfc, padj, "gene expression") 
+    select(reference, treatment, lfc, padj, "gene expression")
+  
+  dbDisconnect(con, shutdown = TRUE)
+  
   df
   
   })
@@ -27,20 +53,41 @@ function(input, output) {
 
   output$genedescrip <- renderTable({
     
-    df <- description %>%
+    con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
+    
+    df <- tbl(con, "description") %>%
+      full_join(., tbl(con, "disease"), by = "gene") %>%
+      inner_join(., tbl(con, "hugo"), by = "gene") %>% 
+      mutate(gene_name = paste(gene, name, sep = ": ")) %>% 
       filter(gene_name %in% c(!!as.character(input$gene))) %>%
+      collect() %>% 
+      mutate(
+        Description = replace_na(Description, "Not currrently available."),
+        Diseases = replace_na(Diseases, "Not a marker for any known diseases.")
+      ) %>%
       select(Description) %>%
       rename("Gene description" = Description)
+    
+    dbDisconnect(con, shutdown = TRUE)
+    
     df
     
   })
   
   output$genedisease <- renderTable({
     
-    df <- disease %>%
+    con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
+    
+    df <- tbl(con, "disease") %>%
+      full_join(tbl(con, "hugo"), ., by = "gene") %>% 
+      mutate(gene_name = paste(gene, name, sep = ": ")) %>% 
       filter(gene_name %in% c(!!as.character(input$gene))) %>%
       select(Diseases) %>%
+      collect() %>%
       rename("Associated diseases" = Diseases)
+    
+    dbDisconnect(con, shutdown = TRUE)
+    
     df
     
   })
@@ -48,10 +95,26 @@ function(input, output) {
   
   output$goterms <- renderTable({
     
-    df <- bpgo %>%
+    con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
+    
+    df <- tbl(con, "bpgo") %>%
+      full_join(., tbl(con, "goterms"), by = "GOid") %>%
+      left_join(tbl(con, "hugo"), ., by = "gene")  %>%
+      mutate(
+        gene = toupper(gene),
+        gene_name = paste(gene, name, sep = ": ")
+      ) %>% 
       filter(gene_name %in% c(!!as.character(input$gene))) %>%
+      distinct(gene, name, gene_name, GOterm) %>%
+      arrange(GOterm, gene, gene_name) %>%
+      collect() %>% 
+      group_by(gene_name) %>%
+      summarize(GOterms = str_c(GOterm, collapse = "; ")) %>%
       select(GOterms) %>%
       rename("Gene Ontology: Associated Biological Processes" = GOterms)
+    
+    dbDisconnect(con, shutdown = TRUE)
+    
     df
     
   })
