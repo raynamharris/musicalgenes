@@ -3,3 +3,5 @@
 .RData
 .Ruserdata
 data/musicalgenes.duckdb
+data/musicalgenes.duckdb.tmp
+data/musicalgenes.duckdb.wal
