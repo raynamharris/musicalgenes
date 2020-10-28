@@ -16,60 +16,24 @@ library(magick)
 library(ggpubr)
 library(corrr)
 
-
-# experimental levels and colors ----
-
 source("attributes.R")
-
-
-# gene names and descriptions
-con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
 
 # data ----
 
-candidatecounts <- tbl(con, "candidatecounts") %>% 
-  left_join(tbl(con, "hugo"), ., by = "gene")  %>%
-  mutate(
-    gene = toupper(gene),
-    gene_name = paste(gene, name, sep = ": ")
-  ) %>% 
-  collect()
+con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
 
-description <- tbl(con, "description") %>% collect()
-hugo <- tbl(con, "hugo") %>% collect()
+# candidate counts and differentiall expressed gene results
+# from https://github.com/macmanes-lab/DoveParentsRNAseq
 
-## candidate counts and differentiall expressed gene results
-
-# data from https://github.com/macmanes-lab/DoveParentsRNAseq
+candidatecounts <- tbl(con, "candidatecounts") %>% collect()
 
 
-## get gene ids
-gene_names <- tbl(con, "candidatecounts") %>% 
-  distinct(gene) %>%
-  left_join(
-    ., tbl(con, "hugo")
-  ) %>% 
-  mutate(gene_name = paste(gene, name, sep = ": ")) %>% 
-  collect() %>% 
-  drop_na() %>%
+# gene names and descriptions
+gene_names <- candidatecounts %>%
   dplyr::distinct(gene_name) %>%
   dplyr::arrange(gene_name) %>%
   pull()
+gene_names2 <- gene_names
 
 dbDisconnect(con, shutdown = TRUE)
 
-gene_names2 <- gene_names
-
-numberstonotes <- data.frame(
-  scaledmean = c(0:6),
-  note = c("A", "B",  "C",  "D", "E", "F",  "G")
-)
-
-orchestra <- c("violin", 
-               "french horn", "clarinet", "bassoon", "oboe",
-               "trumpet", "trombone", "tuba",
-               "upright bass", "viola", "cello",
-               "piano", "keyboard",
-               "saxophone")
-
-orchestra <- sort(orchestra)

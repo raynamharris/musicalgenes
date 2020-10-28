@@ -59,10 +59,7 @@ shinyUI(
           
           tableOutput("genedescrip"),
           
-          
           tableOutput("goterms"),
-          
-          p("Many genes that are important for regulating reproduction and parental care have also be associated with diseases. Understanding how genes work together to regulate behavior could help us understand how they interact in disease. Below are a list of diseases associated with the gene of interest."),
           
           tableOutput("genedisease"),
           

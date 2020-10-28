@@ -55,15 +55,11 @@ function(input, output) {
     
     con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
     
-    df <- tbl(con, "description") %>%
-      full_join(., tbl(con, "disease"), by = "gene") %>%
-      inner_join(., tbl(con, "hugo"), by = "gene") %>% 
-      mutate(gene_name = paste(gene, name, sep = ": ")) %>% 
+    df <- tbl(con, "descriptions") %>%
       filter(gene_name %in% c(!!as.character(input$gene))) %>%
       collect() %>% 
       mutate(
-        Description = replace_na(Description, "Not currrently available."),
-        Diseases = replace_na(Diseases, "Not a marker for any known diseases.")
+        Description = replace_na(Description, "Not currrently available.")
       ) %>%
       select(Description) %>%
       rename("Gene description" = Description)
@@ -79,12 +75,10 @@ function(input, output) {
     con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
     
     df <- tbl(con, "disease") %>%
-      full_join(tbl(con, "hugo"), ., by = "gene") %>% 
-      mutate(gene_name = paste(gene, name, sep = ": ")) %>% 
       filter(gene_name %in% c(!!as.character(input$gene))) %>%
-      select(Diseases) %>%
+      select(diseases) %>%
       collect() %>%
-      rename("Associated diseases" = Diseases)
+      rename("Associated diseases" = diseases)
     
     dbDisconnect(con, shutdown = TRUE)
     
@@ -98,12 +92,6 @@ function(input, output) {
     con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
     
     df <- tbl(con, "bpgo") %>%
-      full_join(., tbl(con, "goterms"), by = "GOid") %>%
-      left_join(tbl(con, "hugo"), ., by = "gene")  %>%
-      mutate(
-        gene = toupper(gene),
-        gene_name = paste(gene, name, sep = ": ")
-      ) %>% 
       filter(gene_name %in% c(!!as.character(input$gene))) %>%
       distinct(gene, name, gene_name, GOterm) %>%
       arrange(GOterm, gene, gene_name) %>%

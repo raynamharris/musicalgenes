@@ -69,3 +69,20 @@ colorstissue <- c(
 )
 
 allcolors <- c(colorschar, colorsmanip, colorssex, colorstissue)
+
+
+## music notes and instruments
+
+numberstonotes <- data.frame(
+  scaledmean = c(0:6),
+  note = c("A", "B",  "C",  "D", "E", "F",  "G")
+)
+
+orchestra <- c("violin", 
+               "french horn", "clarinet", "bassoon", "oboe",
+               "trumpet", "trombone", "tuba",
+               "upright bass", "viola", "cello",
+               "piano", "keyboard",
+               "saxophone")
+
+orchestra <- sort(orchestra)
