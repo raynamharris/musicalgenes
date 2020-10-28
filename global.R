@@ -1,5 +1,4 @@
 # setup ----
-options(shiny.maxRequestSize = 30 * 1024^2)
 
 library(shiny)
 library(shinydashboard)
