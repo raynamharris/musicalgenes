@@ -219,6 +219,48 @@ function(input, output) {
   })
   
   
+  
+  output$hormoneplots <- renderPlot({
+    
+    con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
+    hormones <- tbl(con, "hormones") %>% collect()
+    dbDisconnect(con, shutdown = TRUE)
+    
+    
+    mysubtitle = paste("Data from",input$sex, input$tissue, input$gene, sep = " ")
+    
+    candidatecounts %>%
+      filter(
+        gene_name %in% c(!!as.character(input$gene)),
+        tissue %in% !!as.character(input$tissue),
+        sex %in% !!as.character(input$sex)
+      ) %>%
+      mutate(id = sapply(strsplit(samples,'\\_'), "[", 1))  %>%
+      select(-samples) %>%
+      inner_join(hormones, 
+        by = "id")  %>%
+      select(id, sex, treatment, tissue, gene, gene_name, counts, prl:e2t) %>%
+      pivot_longer(cols = prl:e2t, 
+                   names_to = "hormone", values_to = "conc") %>%
+      mutate(treatment = factor(treatment, levels = alllevels)) %>%
+      ggplot(aes(x = log10(counts), y = log10(conc))) +
+      geom_point(aes( color = treatment)) +
+      geom_smooth(aes(color = sex), method = "lm") +
+      facet_wrap(~hormone, nrow = 1, scales = "free_y") +
+      theme_minimal(base_size = 16) + 
+      scale_color_manual(values = allcolors) +
+      labs(x = "log10(gene expression)", y = "log10(hormone concentration)",
+           subtitle = mysubtitle)
+        
+    
+    
+    
+    
+  })
+  
+  
+  
+  
 
   output$musicalgenes <- renderTable({
     

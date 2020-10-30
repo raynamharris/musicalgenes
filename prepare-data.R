@@ -146,6 +146,20 @@ dbWriteTable(
   overwrite = TRUE
 )
 
+# hormones ----
+
+hormones <- read_csv("./data/hormones.csv") %>%
+  select(-sex, -treatment)
+
+dbWriteTable(
+  con,
+  "hormones",
+  hormones,
+  temporary = FALSE,
+  row.names = FALSE,
+  overwrite = TRUE
+)
+
 dbDisconnect(con, shutdown = T)
 
 # testing ----

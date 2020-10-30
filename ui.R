@@ -152,9 +152,25 @@ shinyUI(
         
         wellPanel(  
           
+          h4("Genes and hormones"), 
+          
+          p("There is an intricate interplay between genes and hormones.
+            Genes directly or indirectly encode hormones and the receptors they bind to,
+            and hormones can module to the expression levels of many genes.
+            Here, we show the correlation pattern between four hormones
+            (prolactin (prl), corticosterone (cort), progesterone (p4), 
+            and estradiol (e2) in females or testosterone (t) in males." ),
+          
+          plotOutput("hormoneplots")
+          
+        ),
+        
+        
+        wellPanel(  
+          
           h4("Future directions"), 
           
-          p("In the future, we would like to be able sonify data for multiple genes using sounds from instruments found in an orchestra." ),
+          p("In the future, we would like to be able sonify data for multiple genes or hormones simultaneously using sounds from instruments found in an orchestra." ),
           
           tableOutput("orchestratable")
           
