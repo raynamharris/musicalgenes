@@ -155,3 +155,4 @@ con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
 dbListTables(con)
 
 dbDisconnect(con, shutdown = T)
+

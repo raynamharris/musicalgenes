@@ -107,7 +107,9 @@ function(input, output) {
     
   })
   
-
+  
+  
+  
   output$boxPlot <- renderPlot({
     
     mysubtitle = paste("Data from",input$sex, input$tissue, input$gene, sep = " ")
@@ -258,7 +260,6 @@ function(input, output) {
     candidatecountsdf <- as.data.frame(candidatecounts)
     
     genestoplay <- sample(gene_names, 14)
-    
     
     orchestratable <- candidatecountsdf %>%
       mutate(

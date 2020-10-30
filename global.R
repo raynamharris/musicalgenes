@@ -24,8 +24,8 @@ con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
 # candidate counts and differentiall expressed gene results
 # from https://github.com/macmanes-lab/DoveParentsRNAseq
 
+hugo <- tbl(con, "hugo") %>% collect()
 candidatecounts <- tbl(con, "candidatecounts") %>% collect()
-
 
 # gene names and descriptions
 gene_names <- candidatecounts %>%
