@@ -14,7 +14,7 @@ shinyUI(
     sidebarLayout(
       sidebarPanel(
         
-        wellPanel(
+        
           
           h4("Molecular Symphony"), 
           
@@ -94,9 +94,9 @@ shinyUI(
          HTML('<iframe width="95%" height = "200px" 
               src="https://www.youtube.com/embed/PoKiIwIsLSo" 
               frameborder="0" allow="accelerometer; autoplay; 
-              encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
+              encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'),
          
-        ),
+        
         
 
         HTML('<iframe width="95%" height="200px" 

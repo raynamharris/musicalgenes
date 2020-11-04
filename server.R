@@ -130,7 +130,7 @@ function(input, output) {
       
       geom_boxplot(aes(fill = treatment), outlier.shape = NA, fatten = 2) +
       #geom_jitter(alpha = 0.8) +
-        theme_minimal(base_size = 16) +
+      musicalgenestheme() +
       scale_fill_manual(values = allcolors, guide = FALSE) +
       scale_color_manual(values = allcolors) +
       scale_x_discrete(breaks = alllevels) +
@@ -198,15 +198,12 @@ function(input, output) {
                     color = "white", 
                     width=0) +
       geom_image(aes(image=image), size = 0.1)+
-      theme_minimal(base_size = 16) +
+      musicalgenestheme() + 
       theme(
         axis.text.x = element_text(color = "black", size = 16, 
                                    angle = 45, hjust = 0.5),
         legend.position = "none",
-        plot.subtitle  = element_text(face = "italic"),
-        strip.background  = element_blank(),
-        panel.grid.major  = element_blank(),  # remove major gridlines
-        panel.grid.minor  = element_blank()
+        plot.subtitle  = element_text(face = "italic")
       ) +
       scale_fill_manual(values = allcolors, guide = FALSE) +
       scale_color_manual(values = allcolors) +
@@ -226,9 +223,11 @@ function(input, output) {
     hormones <- tbl(con, "hormones") %>% collect()
     dbDisconnect(con, shutdown = TRUE)
     
+    myxlab = paste("log10( ", input$sex, input$tissue, 
+                   input$gene, " expression)",
+                   sep = " ")
     
-    mysubtitle = paste("Data from",input$sex, input$tissue, input$gene, sep = " ")
-    
+   
     candidatecounts %>%
       filter(
         gene_name %in% c(!!as.character(input$gene)),
@@ -242,15 +241,14 @@ function(input, output) {
       select(id, sex, treatment, tissue, gene, gene_name, counts, prl:e2t) %>%
       pivot_longer(cols = prl:e2t, 
                    names_to = "hormone", values_to = "conc") %>%
-      mutate(treatment = factor(treatment, levels = alllevels)) %>%
+       mutate(treatment = factor(treatment, levels = alllevels)) %>%
       ggplot(aes(x = log10(counts), y = log10(conc))) +
       geom_point(aes( color = treatment)) +
       geom_smooth(aes(color = sex), method = "lm") +
       facet_wrap(~hormone, nrow = 1, scales = "free_y") +
-      theme_minimal(base_size = 16) + 
+      musicalgenestheme() + 
       scale_color_manual(values = allcolors) +
-      labs(x = "log10(gene expression)", y = "log10(hormone concentration)",
-           subtitle = mysubtitle)
+      labs(x = myxlab, y = "log10( hormone concentration)")
         
     
     

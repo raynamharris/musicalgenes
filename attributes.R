@@ -36,6 +36,17 @@ comparisonlevels <- c(
   "hatch_n5", "n5_n9"
 )
 
+## R theme
+
+musicalgenestheme <- function () { 
+  theme_minimal(base_size = 16,
+                base_family = 'Helvetica') +
+    theme(
+      strip.background  = element_blank(),
+      panel.grid.major  = element_blank(),  # remove major gridlines
+      panel.grid.minor  = element_blank()  # remove minor gridlines
+    )
+}
 
 ## colors
 
@@ -86,3 +97,4 @@ orchestra <- c("violin",
                "saxophone")
 
 orchestra <- sort(orchestra)
+
