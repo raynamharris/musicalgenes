@@ -241,23 +241,38 @@ function(input, output) {
       select(id, sex, treatment, tissue, gene, gene_name, counts, prl:e2t) %>%
       pivot_longer(cols = prl:e2t, 
                    names_to = "hormone", values_to = "conc") %>%
-       mutate(treatment = factor(treatment, levels = alllevels)) %>%
+      mutate(treatment = factor(treatment, levels = alllevels)) %>%
       ggplot(aes(x = log10(counts), y = log10(conc))) +
       geom_point(aes( color = treatment)) +
       geom_smooth(aes(color = sex), method = "lm") +
       facet_wrap(~hormone, nrow = 1, scales = "free_y") +
       musicalgenestheme() + 
       scale_color_manual(values = allcolors) +
-      labs(x = myxlab, y = "log10( hormone concentration)")
+      labs(x = myxlab, y = "log10( hormone concentration)",
+           subtitle = "Corrlations betweeen candidate genes and hormones") +
+      theme(legend.position = "none")
         
-    
-    
-    
-    
   })
   
   
+  output$statichormones1 <- renderPlot({
+    
+    hormoneplot(charlevels) + labs(x = "Sequential parental stages",
+                                   subtitle = "Circulating hormone concentrations")
+    
+  })
   
+  output$statichormones2 <- renderPlot({
+    
+    hormoneplot(rmlevels) + labs(x = "Offspring removal and internal controls")
+    
+  })
+  
+  output$statichormones3 <- renderPlot({
+    
+    hormoneplot(timelevels) + labs(x = "Offspring replacement and internal controls")
+    
+  })
   
 
   output$musicalgenes <- renderTable({

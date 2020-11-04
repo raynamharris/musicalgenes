@@ -16,14 +16,21 @@ charlabels <- c(
   "nestling\ncare day 9\n(n9)"
 )
 
-maniplevels <- c("m.inc.d3" ,  "early" ,  "m.inc.d9" , "m.inc.d17", "prolong" ,  "m.n2", "extend")
+maniplevels <- c("m.inc.d3" ,  "early" ,  "m.inc.d9" ,
+                 "m.inc.d17", "prolong" ,  "m.n2", "extend")
 
 alllevels <- c("control", "bldg", "lay", "inc.d3", "m.inc.d3" ,  
                "inc.d9", "m.inc.d9" , "early" ,
                "inc.d17",  "m.inc.d17", "prolong", 
                "hatch",  "m.n2", "extend",
-               "n5",  
-               "n9")
+               "n5",  "n9")
+
+rmlevels <- c("inc.d3" ,  "m.inc.d3" ,  "inc.d9" , "m.inc.d9", 
+              "inc.d17", "m.inc.d17" ,  "hatch", "m.n2")
+
+timelevels <- c("inc.d9", "early", 
+                "inc.d17", "prolong",
+                "hatch", "extend")
 
 sexlevels <- c("female", "male")
 
@@ -42,11 +49,11 @@ musicalgenestheme <- function () {
   theme_minimal(base_size = 16,
                 base_family = 'Helvetica') +
     theme(
-      strip.background  = element_blank(),
       panel.grid.major  = element_blank(),  # remove major gridlines
       panel.grid.minor  = element_blank()  # remove minor gridlines
     )
 }
+
 
 ## colors
 

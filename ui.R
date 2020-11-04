@@ -157,7 +157,9 @@ shinyUI(
       
         p("These gene expression values were calculated using RNA sequencing (RNA-seq),
           which measures thousands of genes at once. 
-          The table below summarizes the comparisons for this gene, tissue, and sex that survived multiple hypothesis testing. If the table is empty, then no comparisons were significant (adjusted p-value < 0.1)."),
+          The table below summarizes the comparisons for this gene, tissue, and sex that survived 
+          multiple hypothesis testing. If the table is empty, then no comparisons were significant 
+          (adjusted p-value < 0.1)."),
         
         tableOutput("allsigdegs")
         
@@ -169,12 +171,28 @@ shinyUI(
                  
                  p("There is an intricate interplay between genes and hormones.
                    Genes directly or indirectly encode hormones and the receptors they bind to,
-                   and hormones can module to the expression levels of many genes.
-                   Here, we show the correlation pattern between the gene of interest and four hormones
+                   and hormones can module to the expression levels of many genes."),      
+                 
+                 p("Here, we show the correlation pattern between the gene of interest and four hormones
                    (prolactin (prl), corticosterone (cort), progesterone (p4), 
                    and estradiol (e2) in females or testosterone (t) in males." ),
                  
-                 plotOutput("hormoneplots")
+                 plotOutput("hormoneplots"),
+                 
+                 p("To better understand the correlation, these graphs show how the hormones change over time 
+                    and in inresponse to manipuation." ),
+                 
+                 plotOutput("statichormones1"),
+                 
+                 plotOutput("statichormones2"),
+                 
+                 plotOutput("statichormones3"),
+                 
+                 p("As a reminder, here is the experimental design and a graphic description
+                   of each treatment," ),
+                 
+                 HTML('<center><img src="fig_musicalgenes.png", width = "100%"></center>')
+                 
                  ),
         
         tabPanel("Gene Information",
@@ -200,7 +218,8 @@ shinyUI(
                  
                  h4("Future directions"),    
                  
-                 p("In the future, we would like to be able sonify data for multiple genes or hormones simultaneously using sounds from instruments found in an orchestra." ),
+                 p("In the future, we would like to be able sonify data for multiple genes or 
+                   hormones simultaneously using sounds from instruments found in an orchestra." ),
                  
                  tableOutput("orchestratable")
                    )
