@@ -56,21 +56,3 @@ hormones2 <- hormones  %>%
   filter(!(name == "cort" & value > 100)) %>%
   drop_na()
 hormones2
-
-# function for hormone plot 
-
-hormoneplot <- function(whichlevels){
-  
-  p <- hormones2 %>%
-    filter(treatment %in% whichlevels) %>%
-    ggplot(aes(x = treatment, y = value)) +
-    geom_boxplot(aes(fill = treatment)) +
-    facet_wrap(~name, scales = "free_y",
-               nrow = 1) +
-    musicalgenestheme() +
-    scale_fill_manual(values = allcolors) +
-    theme(legend.position = "none",
-          axis.text.x = element_text(angle = 45, hjust = 1)) +
-    labs(y = "concentration (ng/mL)")
-  p
-}

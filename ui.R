@@ -27,12 +27,11 @@ shinyUI(
             to better understand the molecular mechanisms that regulate
             parental care behavior and other important phenotypes."),
           
-
           selectInput(
-            inputId = "gene",
-            label = "Choose a gene.",
-            choices = c(gene_names),
-            selected = c("PRL: prolactin"),
+            inputId = "sex",
+            label = "Chose female or male.",
+            choices = sexlevels,
+            selected = c("female"),
             multiple = FALSE
           ),
           
@@ -47,78 +46,40 @@ shinyUI(
           
           
           selectInput(
-            inputId = "sex",
-            label = "Chose female or male.",
-            choices = sexlevels,
-            selected = c("female"),
+            inputId = "gene",
+            label = "Choose a gene.",
+            choices = c(gene_names),
+            selected = c("PRL: prolactin"),
             multiple = FALSE
           ),
           
+         tableOutput("genedescrip"),
+         
+         tableOutput("goterms"),
+         
+         tableOutput("genedisease"),
+         
          p("After choosing a gene, tissue and sex, click the 'sonify' 
-            button to listen the mean value of gene expression."),
-          
+           button to listen the mean value of gene expression."),
+         
          p("Don't see your favorite gene?", 
            
            tags$a(
              href = "https://github.com/raynamharris/musicalgenes/issues/new?assignees=&labels=&template=request-a-gene.md&title=Gene+Request",
-             "Check here to create a request."
+             "Request it here."
            )
          ),
-        
-          
-          p("The code for this webpage is", 
-            
-            tags$a(
-              href = "https://github.com/raynamharris/musicalgenes",
-              "@raynamharris/musicalgenes"
-            )
-          ),
+         
+         
+         
+         p("The biological processes and diseases associated with the selected 
+           gene of interest are provided by the ",
+           tags$a(
+             href = "https://www.alliancegenome.org/downloads#gene-descriptions",
+             "Alliance of Genome Resources.")
+         )
           
 
-          
-          p("The data and code (or research compendium) behind the science are",
-            
-            tags$a(
-              href = "https://macmanes-lab.github.io/DoveParentsRNAseq/",
-              "@macmanes-lab/DoveParentsRNAseq"
-            )
-          ),
-         
-         h4("Learn more"),       
-         
-         p("Before building this app, I used a keyboard to play 
-           the sound of genes working together to regulate parental care. 
-           You can watch these videos to learn more about the inspiration behind this app."),
-         
-         
-         HTML('<iframe width="95%" height = "200px" 
-              src="https://www.youtube.com/embed/PoKiIwIsLSo" 
-              frameborder="0" allow="accelerometer; autoplay; 
-              encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'),
-         
-        
-        
-
-        HTML('<iframe width="95%" height="200px" 
-             src="https://www.youtube.com/embed/ssGuxnD_NCo" 
-             frameborder="0" allow="accelerometer; autoplay; 
-             encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'),
-        
-        
-        h4("Credit"), 
-        
-        p("This app is a product of the 'Birds, Brains, and Banter (B3)'
-          Laboratory at the University of California at Davis.
-          This and related research is funded by the National Science Foundation,
-          in a grant to Rebecca Calisi and Matthew MacManes.
-          The webpage was created and written by Rayna Harris and Rebecca Calisi.  
-          Owen Marshall, Mauricio Vargas, Titus Brown, and 
-          Alexandra Colón Rodríguez contributed intellectually to the design. 
-          Suzanne Austin, Andrew Lang, Victoria Farrar, April Booth, 
-          Tanner Feustel, and Matthew MacManes contributed the 
-          experiment that is the foundation of this application.")
-      
-        
       ),
 
       ### main panel
@@ -165,9 +126,9 @@ shinyUI(
         
         ),
         
-        tabPanel("Hormonal symphony" ,
+        tabPanel("Hormonal Symphony" ,
                  
-                 h4("Hormonal symphony"),      
+                 h4("Hormonal Symphony"),      
                  
                  p("There is an intricate interplay between genes and hormones.
                    Genes directly or indirectly encode hormones and the receptors they bind to,
@@ -180,7 +141,7 @@ shinyUI(
                  plotOutput("hormoneplots"),
                  
                  p("To better understand the correlation, these graphs show how the hormones change over time 
-                    and in inresponse to manipuation." ),
+                    and in response to manipuation." ),
                  
                  plotOutput("statichormones1"),
                  
@@ -194,35 +155,74 @@ shinyUI(
                  HTML('<center><img src="fig_musicalgenes.png", width = "100%"></center>')
                  
                  ),
-        
-        tabPanel("Gene Information",
-                 
-                 h4("Gene information"),  
-                
-                 p("What biological processes and diseases are associated with the gene of interest?
-                    The following descriptions, diseases, and biological processes associated with the selected 
-                   gene of interest are provided by the ",
-                   tags$a(
-                     href = "https://www.alliancegenome.org/downloads#gene-descriptions",
-                     "Alliance of Genome Resources.")
-                 ),
-                   
-                 tableOutput("genedescrip"),
-                 
-                 tableOutput("goterms"),
-                 
-                 tableOutput("genedisease")
-                 ),
+      
         
         tabPanel("Future Directions" ,
                  
                  h4("Future directions"),    
                  
+
+                 p("Before building this app, I used a keyboard to play
+                   the sound of genes working together to regulate parental care. 
+                   You can watch these videos to learn more about the inspiration 
+                   behind this app."),
+                 
+                 
+                 HTML('<iframe width="75%" height = "400px" 
+                      src="https://www.youtube.com/embed/PoKiIwIsLSo" 
+                      frameborder="0" allow="accelerometer; autoplay; 
+                      encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'),
+ 
+                 
                  p("In the future, we would like to be able sonify data for multiple genes or 
                    hormones simultaneously using sounds from instruments found in an orchestra." ),
                  
                  tableOutput("orchestratable")
+                   ),
+        
+        tabPanel("About" ,
+                 
+                 h4("About"),    
+                 
+                 p("This video tutorial is a little out of date, 
+                   but it give you an idea of how to interactively
+                   explore this dataset."),
+                 
+                 HTML('<iframe width="75%" height="400px" 
+                      src="https://www.youtube.com/embed/bQWDiI2oZdI" 
+                      frameborder="0" allow="accelerometer; autoplay; 
+                      encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'),
+                   
+                 p("The code for this webpage is", 
+                   
+                   tags$a(
+                     href = "https://github.com/raynamharris/musicalgenes",
+                     "@raynamharris/musicalgenes"
                    )
+                 ),
+                 
+                 
+                 
+                 p("The data and code (or research compendium) behind the science are",
+                   
+                   tags$a(
+                     href = "https://macmanes-lab.github.io/DoveParentsRNAseq/",
+                     "@macmanes-lab/DoveParentsRNAseq"
+                   )
+                 ),
+                  
+                 p("This app is a product of the 'Birds, Brains, and Banter (B3)'
+                   Laboratory at the University of California at Davis.
+                   This and related research is funded by the National Science Foundation,
+                   in a grant to Rebecca Calisi and Matthew MacManes.
+                   The webpage was created and written by Rayna Harris and Rebecca Calisi.  
+                   Owen Marshall, Mauricio Vargas, Titus Brown, and 
+                   Alexandra Colón Rodríguez contributed intellectually to the design. 
+                   Suzanne Austin, Andrew Lang, Victoria Farrar, April Booth, 
+                   Tanner Feustel, and Matthew MacManes contributed the 
+                   experiment that is the foundation of this application.")
+
+                 )
           )
       )
           
