@@ -109,7 +109,7 @@ function(input, output) {
   
   
   
-  output$boxPlot <- renderPlot({
+  output$boxnmusicplot1 <- renderPlot({
     
     mysubtitle = paste("Data from",input$sex, input$tissue, input$gene, sep = " ")
     
@@ -121,14 +121,12 @@ function(input, output) {
       ) %>%
       collect() %>%
       mutate(
-        treatment = factor(treatment, levels = alllevels),
+        treatment = factor(treatment, levels = charlevels),
         tissue = factor(tissue, levels = tissuelevels)
       ) %>% 
       drop_na() %>%
       ggplot(aes(x = treatment, y = counts)) +
-      
       geom_boxplot(aes(fill = treatment), outlier.shape = NA, fatten = 2) +
-      #geom_jitter(alpha = 0.8) +
       musicalgenestheme() +
       scale_fill_manual(values = allcolors, guide = FALSE) +
       scale_color_manual(values = allcolors) +
@@ -137,43 +135,17 @@ function(input, output) {
         axis.text.x = element_text(color = "black", size = 16, 
                                    angle = 45, hjust = 0.5),
         legend.position = "none",
-        plot.subtitle  = element_text(face = "italic"),
-        strip.background  = element_blank(),
-        panel.grid.major  = element_blank(),  # remove major gridlines
-        panel.grid.minor  = element_blank()  # remove minor gridlines)
+        plot.subtitle  = element_text(face = "italic")
       ) +
-      labs(y = "gene expression", x = NULL, subtitle = mysubtitle) +
-      geom_signif(comparisons = list( c("control", "bldg"),
-                                      c("bldg", "lay"),
-                                      c("bldg", "inc.d3"),
-                                      c("bldg", "inc.d9"),
-                                      c("bldg", "inc.d17"),
-                                      c("bldg", "hatch"),
-                                      c("bldg", "n5"),
-                                      c("bldg", "n9")),  
-                  map_signif_level=TRUE, step_increase = 0.1,
-                  margin_top = 0.05) +
-      geom_signif(comparisons = list( c("inc.d3", "m.inc.d3"),
-                                      c("inc.d9", "m.inc.d9"),
-                                      c("inc.d17", "m.inc.d17"),
-                                      c("hatch", "m.n2")),  
-                  map_signif_level=TRUE, step_increase = 0.1,
-                  margin_top = 0.05) +
-    geom_signif(comparisons = list(  c("inc.d9", "early"),
-                                    c("inc.d17", "prolong"),
-                                    c("hatch", "extend")),  
-                map_signif_level=TRUE, margin_top = 0.05) 
+      labs(y = "gene expression", x = NULL, subtitle = mysubtitle)  
     p1
-  })
   
-  
-  output$musicPlot <- renderPlot({
     
     candidatecounts <- as.data.frame(candidatecounts)
 
     df <- candidatecounts %>%
       mutate(
-        treatment = factor(treatment, levels = alllevels),
+        treatment = factor(treatment, levels = charlevels),
         tissue = factor(tissue, levels = tissuelevels)
       ) %>% 
       group_by(treatment, tissue, gene_name, gene, sex)  %>% 
@@ -187,8 +159,107 @@ function(input, output) {
       ) %>% 
       collect() %>%
       drop_na() 
-    
   
+    p2 <- df %>%  
+      ggplot( aes(x = treatment, y = mean)) +
+      geom_errorbar(aes(ymin = mean - se, 
+                        ymax = mean + se), 
+                    color = "white", 
+                    width=0) +
+      geom_image(aes(image=image), size = 0.1)+
+      musicalgenestheme() + 
+      theme(
+        axis.text.x = element_text(color = "black", size = 16, 
+                                   angle = 45, hjust = 0.5),
+        legend.position = "none",
+        plot.subtitle  = element_text(face = "italic")
+      ) +
+      scale_fill_manual(values = allcolors, guide = FALSE) +
+      scale_color_manual(values = allcolors) +
+      scale_x_discrete(breaks = alllevels,
+                       labels = alllevels) +
+      labs(y = NULL, x = NULL, subtitle = "  \n ") 
+    
+    p <- plot_grid(p1,p2)
+    p
+    
+  })
+  
+  
+  observeEvent(input$button1, {
+    
+    candidatecountsdf <- as.data.frame(candidatecounts)
+    
+    meanvalues <- candidatecountsdf %>%
+      mutate(
+        treatment = factor(treatment, levels = charlevels),
+        tissue = factor(tissue, levels = tissuelevels)
+      ) %>% 
+      filter(gene_name %in% c(!!as.character(input$gene)),
+             tissue %in% !!as.character(input$tissue),
+             sex %in% !!as.character(input$sex)) %>%
+      group_by(sex, tissue, treatment) %>%
+      summarize(mean = mean(counts, na.rm = TRUE) + 2) %>%
+      arrange(sex, treatment)  %>%
+      filter(treatment != "NA") %>%
+      mutate(scaled = scales:::rescale(mean, to = c(0,6))) %>%
+      mutate(averaged = round(scaled,0) ) 
+    
+    sonify(x = meanvalues$mean, interpolation = "constant", duration = 3)
+  })
+  
+  
+  
+  
+  output$boxnmusicplot2 <- renderPlot({
+    
+    p1 <- candidatecounts %>%
+      filter(
+        gene_name %in% c(!!as.character(input$gene)),
+        tissue %in% !!as.character(input$tissue),
+        sex %in% !!as.character(input$sex)
+      ) %>%
+      collect() %>%
+      mutate(
+        treatment = factor(treatment, levels = rmlevels),
+        tissue = factor(tissue, levels = tissuelevels)
+      ) %>% 
+      drop_na() %>%
+      ggplot(aes(x = treatment, y = counts)) +
+      geom_boxplot(aes(fill = treatment), outlier.shape = NA, fatten = 2) +
+
+      musicalgenestheme() +
+      scale_fill_manual(values = allcolors, guide = FALSE) +
+      scale_color_manual(values = allcolors) +
+      scale_x_discrete(breaks = alllevels) +
+      theme(
+        axis.text.x = element_text(color = "black", size = 16, 
+                                   angle = 45, hjust = 0.5),
+        legend.position = "none",
+        plot.subtitle  = element_text(face = "italic")
+      ) +
+      labs(y = "gene expression", x = NULL, subtitle = " ") 
+    p1
+    
+    
+    candidatecounts <- as.data.frame(candidatecounts)
+    
+    df <- candidatecounts %>%
+      mutate(
+        treatment = factor(treatment, levels = rmlevels),
+        tissue = factor(tissue, levels = tissuelevels)
+      ) %>% 
+      group_by(treatment, tissue, gene_name, gene, sex)  %>% 
+      summarize(mean = mean(counts, na.rm = T), 
+                se = sd(counts,  na.rm = T)/sqrt(length(counts))) %>%
+      dplyr::mutate(image = "www/musicnote.png")   %>%
+      filter(
+        gene_name %in% c(!!as.character(input$gene)),
+        tissue %in% !!as.character(input$tissue),
+        sex %in% !!as.character(input$sex)
+      ) %>% 
+      collect() %>%
+      drop_na() 
     
     p2 <- df %>%  
       ggplot( aes(x = treatment, y = mean)) +
@@ -208,117 +279,144 @@ function(input, output) {
       scale_color_manual(values = allcolors) +
       scale_x_discrete(breaks = alllevels,
                        labels = alllevels) +
-      labs(y = "mean gene expression as music notes", x = NULL) 
+      labs(y = NULL, x = " ", subtitle = " ") 
     
-    p2
+    p <- plot_grid(p1,p2)
+    p
     
   })
   
   
+  observeEvent(input$button2, {
+    
+    candidatecountsdf <- as.data.frame(candidatecounts)
+    
+    meanvalues <- candidatecountsdf %>%
+      mutate(
+        treatment = factor(treatment, levels = rmlevels),
+        tissue = factor(tissue, levels = tissuelevels)
+      ) %>% 
+      filter(gene_name %in% c(!!as.character(input$gene)),
+             tissue %in% !!as.character(input$tissue),
+             sex %in% !!as.character(input$sex)) %>%
+      group_by(sex, tissue, treatment) %>%
+      summarize(mean = mean(counts, na.rm = TRUE) + 2) %>%
+      arrange(sex, treatment)  %>%
+      filter(treatment != "NA") %>%
+      mutate(scaled = scales:::rescale(mean, to = c(0,6))) %>%
+      mutate(averaged = round(scaled,0) ) 
+    
+    sonify(x = meanvalues$mean, interpolation = "constant", duration = 3)
+  })
   
-  output$hormoneplots <- renderPlot({
+  
+  
+  output$boxnmusicplot3 <- renderPlot({
     
-    con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
-    hormones <- tbl(con, "hormones") %>% collect()
-    dbDisconnect(con, shutdown = TRUE)
-    
-    myxlab = paste("log10( ", input$sex, input$tissue, 
-                   input$gene, " expression)",
-                   sep = " ")
-    
-   
-    candidatecounts %>%
+    p1 <- candidatecounts %>%
       filter(
         gene_name %in% c(!!as.character(input$gene)),
         tissue %in% !!as.character(input$tissue),
         sex %in% !!as.character(input$sex)
       ) %>%
-      mutate(id = sapply(strsplit(samples,'\\_'), "[", 1))  %>%
-      select(-samples) %>%
-      inner_join(hormones, 
-        by = "id")  %>%
-      select(id, sex, treatment, tissue, gene, gene_name, counts, prl:e2t) %>%
-      pivot_longer(cols = prl:e2t, 
-                   names_to = "hormone", values_to = "conc") %>%
-      mutate(treatment = factor(treatment, levels = alllevels)) %>%
-      ggplot(aes(x = log10(counts), y = log10(conc))) +
-      geom_point(aes( color = treatment)) +
-      geom_smooth(aes(color = sex), method = "lm") +
-      facet_wrap(~hormone, nrow = 1, scales = "free_y") +
+      collect() %>%
+      mutate(
+        treatment = factor(treatment, levels = timelevels),
+        tissue = factor(tissue, levels = tissuelevels)
+      ) %>% 
+      drop_na() %>%
+      ggplot(aes(x = treatment, y = counts)) +
+      geom_boxplot(aes(fill = treatment), outlier.shape = NA, fatten = 2) +
+      
+      musicalgenestheme() +
+      scale_fill_manual(values = allcolors, guide = FALSE) +
+      scale_color_manual(values = allcolors) +
+      scale_x_discrete(breaks = alllevels) +
+      theme(
+        axis.text.x = element_text(color = "black", size = 16, 
+                                   angle = 45, hjust = 0.5),
+        legend.position = "none",
+        plot.subtitle  = element_text(face = "italic")
+      ) +
+      labs(y = "gene expression", x = NULL, subtitle = " ") 
+    p1
+    
+    
+    candidatecounts <- as.data.frame(candidatecounts)
+    
+    df <- candidatecounts %>%
+      mutate(
+        treatment = factor(treatment, levels = timelevels),
+        tissue = factor(tissue, levels = tissuelevels)
+      ) %>% 
+      group_by(treatment, tissue, gene_name, gene, sex)  %>% 
+      summarize(mean = mean(counts, na.rm = T), 
+                se = sd(counts,  na.rm = T)/sqrt(length(counts))) %>%
+      dplyr::mutate(image = "www/musicnote.png")   %>%
+      filter(
+        gene_name %in% c(!!as.character(input$gene)),
+        tissue %in% !!as.character(input$tissue),
+        sex %in% !!as.character(input$sex)
+      ) %>% 
+      collect() %>%
+      drop_na() 
+    
+    p2 <- df %>%  
+      ggplot( aes(x = treatment, y = mean)) +
+      geom_errorbar(aes(ymin = mean - se, 
+                        ymax = mean + se), 
+                    color = "white", 
+                    width=0) +
+      geom_image(aes(image=image), size = 0.1)+
       musicalgenestheme() + 
+      theme(
+        axis.text.x = element_text(color = "black", size = 16, 
+                                   angle = 45, hjust = 0.5),
+        legend.position = "none",
+        plot.subtitle  = element_text(face = "italic")
+      ) +
+      scale_fill_manual(values = allcolors, guide = FALSE) +
       scale_color_manual(values = allcolors) +
-      labs(x = myxlab, y = "log10( hormone concentration)",
-           subtitle = "Corrlations betweeen candidate genes and hormones") +
-      theme(legend.position = "none")
-        
-  })
-  
-  
-  output$statichormones1 <- renderPlot({
+      scale_x_discrete(breaks = alllevels,
+                       labels = alllevels) +
+      labs(y = NULL, x = " ", subtitle = " ") 
     
-    p <- hormones2 %>%
-      filter(treatment %in% charlevels) %>%
-      filter(sex %in% !!as.character(input$sex)) %>%
-      ggplot(aes(x = treatment, y = value)) +
-      geom_boxplot(aes(fill = treatment, color = sex)) +
-      facet_wrap(~name, scales = "free_y",
-                   nrow = 1) +
-      musicalgenestheme() +
-      scale_fill_manual(values = allcolors) +
-      scale_color_manual(values = allcolors) +
-      theme(legend.position = "none",
-              axis.text.x = element_text(angle = 45, hjust = 1)) +
-      labs(y = "concentration (ng/mL)", x = "Sequential parental stages",
-                                   subtitle = "Circulating hormone concentrations")
-    p
-  })
-  
-  output$statichormones2 <- renderPlot({
-   
-    
-    p <- hormones2 %>%
-      filter(treatment %in% rmlevels) %>%
-      filter(sex %in% !!as.character(input$sex)) %>%
-      ggplot(aes(x = treatment, y = value)) +
-      geom_boxplot(aes(fill = treatment, color = sex)) +
-      facet_wrap(~name, scales = "free_y",
-                 nrow = 1) +
-      musicalgenestheme() +
-      scale_fill_manual(values = allcolors) +
-      scale_color_manual(values = allcolors) +
-      theme(legend.position = "none",
-            axis.text.x = element_text(angle = 45, hjust = 1)) +
-      labs(y = "concentration (ng/mL)", 
-           x = "Offspring removal and internal controls")
+    p <- plot_grid(p1,p2)
     p
     
   })
   
-  output$statichormones3 <- renderPlot({
+  
+  observeEvent(input$button3, {
     
-    p <- hormones2 %>%
-      filter(treatment %in% timelevels) %>%
-      filter(sex %in% !!as.character(input$sex)) %>%
-      ggplot(aes(x = treatment, y = value)) +
-      geom_boxplot(aes(fill = treatment, color = sex)) +
-      facet_wrap(~name, scales = "free_y",
-                 nrow = 1) +
-      musicalgenestheme() +
-      scale_fill_manual(values = allcolors) +
-      scale_color_manual(values = allcolors) +
-      theme(legend.position = "none",
-            axis.text.x = element_text(angle = 45, hjust = 1)) +
-      labs(y = "concentration (ng/mL)", 
-           x = "Offspring replacement and internal controls")
-    p
+    candidatecountsdf <- as.data.frame(candidatecounts)
     
+    meanvalues <- candidatecountsdf %>%
+      mutate(
+        treatment = factor(treatment, levels = rmlevels),
+        tissue = factor(tissue, levels = tissuelevels)
+      ) %>% 
+      filter(gene_name %in% c(!!as.character(input$gene)),
+             tissue %in% !!as.character(input$tissue),
+             sex %in% !!as.character(input$sex)) %>%
+      group_by(sex, tissue, treatment) %>%
+      summarize(mean = mean(counts, na.rm = TRUE) + 2) %>%
+      arrange(sex, treatment)  %>%
+      filter(treatment != "NA") %>%
+      mutate(scaled = scales:::rescale(mean, to = c(0,6))) %>%
+      mutate(averaged = round(scaled,0) ) 
+    
+    sonify(x = meanvalues$mean, interpolation = "constant", duration = 3)
   })
+  
+  
   
 
+  ## symphony table future directions
+  
   output$musicalgenes <- renderTable({
-    
-    ## average and rescale data
-   
+  
+  
     candidatecountsdf <- as.data.frame(candidatecounts)
    
     notes <- candidatecountsdf %>%
@@ -391,59 +489,109 @@ function(input, output) {
   }))
   
   
+  output$hormoneplots <- renderPlot({
+    
+    con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
+    hormones <- tbl(con, "hormones") %>% collect()
+    dbDisconnect(con, shutdown = TRUE)
+    
+    myxlab = paste("log10( ", input$sex, input$tissue, 
+                   input$gene, " expression)",
+                   sep = " ")
+    
+    
+    candidatecounts %>%
+      filter(
+        gene_name %in% c(!!as.character(input$gene)),
+        tissue %in% !!as.character(input$tissue),
+        sex %in% !!as.character(input$sex)
+      ) %>%
+      mutate(id = sapply(strsplit(samples,'\\_'), "[", 1))  %>%
+      select(-samples) %>%
+      inner_join(hormones, 
+                 by = "id")  %>%
+      select(id, sex, treatment, tissue, gene, gene_name, counts, prl:e2t) %>%
+      pivot_longer(cols = prl:e2t, 
+                   names_to = "hormone", values_to = "conc") %>%
+      mutate(treatment = factor(treatment, levels = alllevels)) %>%
+      ggplot(aes(x = log10(counts), y = log10(conc))) +
+      geom_point(aes( color = treatment)) +
+      geom_smooth(aes(color = sex), method = "lm") +
+      facet_wrap(~hormone, nrow = 1, scales = "free_y") +
+      musicalgenestheme() + 
+      scale_color_manual(values = allcolors) +
+      labs(x = myxlab, y = "log10( hormone concentration)",
+           subtitle = "Corrlations betweeen candidate genes and hormones") +
+      theme(legend.position = "none")
+    
+  })
+  
+  
+  output$statichormones1 <- renderPlot({
+    
+    p <- hormones2 %>%
+      filter(treatment %in% charlevels) %>%
+      filter(sex %in% !!as.character(input$sex)) %>%
+      ggplot(aes(x = treatment, y = value)) +
+      geom_boxplot(aes(fill = treatment, color = sex)) +
+      facet_wrap(~name, scales = "free_y",
+                 nrow = 1) +
+      musicalgenestheme() +
+      scale_fill_manual(values = allcolors) +
+      scale_color_manual(values = allcolors) +
+      theme(legend.position = "none",
+            axis.text.x = element_text(angle = 45, hjust = 1)) +
+      labs(y = "concentration (ng/mL)", x = "Sequential parental stages",
+           subtitle = "Circulating hormone concentrations")
+    p
+  })
+  
+  output$statichormones2 <- renderPlot({
+    
+    
+    p <- hormones2 %>%
+      filter(treatment %in% rmlevels) %>%
+      filter(sex %in% !!as.character(input$sex)) %>%
+      ggplot(aes(x = treatment, y = value)) +
+      geom_boxplot(aes(fill = treatment, color = sex)) +
+      facet_wrap(~name, scales = "free_y",
+                 nrow = 1) +
+      musicalgenestheme() +
+      scale_fill_manual(values = allcolors) +
+      scale_color_manual(values = allcolors) +
+      theme(legend.position = "none",
+            axis.text.x = element_text(angle = 45, hjust = 1)) +
+      labs(y = "concentration (ng/mL)", 
+           x = "Offspring removal and internal controls")
+    p
+    
+  })
+  
+  output$statichormones3 <- renderPlot({
+    
+    p <- hormones2 %>%
+      filter(treatment %in% timelevels) %>%
+      filter(sex %in% !!as.character(input$sex)) %>%
+      ggplot(aes(x = treatment, y = value)) +
+      geom_boxplot(aes(fill = treatment, color = sex)) +
+      facet_wrap(~name, scales = "free_y",
+                 nrow = 1) +
+      musicalgenestheme() +
+      scale_fill_manual(values = allcolors) +
+      scale_color_manual(values = allcolors) +
+      theme(legend.position = "none",
+            axis.text.x = element_text(angle = 45, hjust = 1)) +
+      labs(y = "concentration (ng/mL)", 
+           x = "Offspring replacement and internal controls")
+    p
+    
+  })
+  
 
   
   ## new sonify attempt from https://github.com/zielinskipp/sonifier/blob/master/app.R and
   ## https://zielinskipp.shinyapps.io/sonifier/
   
-  observeEvent(input$button, {
-    
-    audiotag <- function(filename){tags$audio(src = filename,
-                                              type ="audio/wav", controls = NA,
-                                              autoplay = T)}
-    
-    candidatecountsdf <- as.data.frame(candidatecounts)
-    
-    meanvalues <- candidatecountsdf %>%
-      mutate(
-        treatment = factor(treatment, levels = alllevels),
-        tissue = factor(tissue, levels = tissuelevels)
-      ) %>% 
-      filter(gene_name %in% c(!!as.character(input$gene)),
-             tissue %in% !!as.character(input$tissue),
-             sex %in% !!as.character(input$sex)) %>%
-      group_by(sex, tissue, treatment) %>%
-      summarize(mean = mean(counts, na.rm = TRUE) + 2) %>%
-      arrange(sex, treatment)  %>%
-      filter(treatment != "NA") %>%
-      mutate(scaled = scales:::rescale(mean, to = c(0,7))) %>%
-      mutate(averaged = round(scaled,0) ) 
-    
-    output$text <- renderText({
-    
-      paste0("Your input, ", input$gene, ", sounds like this:")})
-    
-      sound <- sonify(x = meanvalues$mean, interpolation = "constant", duration = 6)
-    
-      # Saves file
-      genename <- candidatecountsdf %>%
-        filter(gene_name %in% c(!!as.character(input$gene))) %>%
-        distinct(gene) %>% pull(gene)
-                 
-      wvname <- paste0(input$sex, input$tissue, genename, ".wav")
-      writeWave(sound, paste0("www/", wvname))
-    
-    # Creates audiotag
-    output$audiotag <- renderUI(audiotag(wvname))
-    
-    ## Dawnload handler
-    output$wav_dln <- downloadHandler(
-      filename = function(){
-        paste0("musicalgene", input$gene, input$tissue, ".wav")
-      },
-      content = function(filename){
-        writeWave(sound, filename)
-      }
-    )
-  })
+  
+
 }

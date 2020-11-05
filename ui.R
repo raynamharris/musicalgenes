@@ -10,13 +10,13 @@ shinyUI(
 
     tags$div(lang="en", class="header"),
 
-    # Inputs for boxplot
+    # Inputs for plots
     sidebarLayout(
       sidebarPanel(
         
         
           
-          h4("Molecular Symphony"), 
+          h4("Interactive data exploration"), 
           
           p("Temporally controlled changes in gene expression 
             are often described as a symphony that is regulated by transcription factors. 
@@ -96,35 +96,38 @@ shinyUI(
           
           p(""),
           
-          plotOutput("boxPlot", width = "100%"),
-          plotOutput("musicPlot", width = "100%"),
-            
-          p(" "),
+          plotOutput("boxnmusicplot1", width = "100%"),
           
-          actionButton("button", "Sonify the average gene expression value."),
+          actionButton("button1", "Listen to changes in gene expression between 
+                       sequential reproductive and parental stages."),
           
-          downloadButton("wav_dln", label = "Download wav file."),
+          p(""),
           
-          uiOutput("audiotag"),
+          plotOutput("boxnmusicplot2", width = "100%"),
           
-         
-          p(" "),
+          actionButton("button2", "Listen to changes in gene expression change 
+                       in response to offspring removal."),
           
-          p("In the top image, box and whisker plots illustrate the median and range of data 
-	    for each group. Below that, we use music notes to represent the mean for each group. 
-	    You can imagine playing these notes on an instrument of your choice."),
+          p(""),
+          
+          plotOutput("boxnmusicplot3", width = "100%"),
+          
+          actionButton("button3", "Listen to changes in gene expression change 
+                       in response to offspring replace"),
+          
+          p(""),
         
-        h4("Significant changes in gene expression (after testing for multiple hypotheses)."),
-      
-        p("These gene expression values were calculated using RNA sequencing (RNA-seq),
-          which measures thousands of genes at once. 
-          The table below summarizes the comparisons for this gene, tissue, and sex that survived 
-          multiple hypothesis testing. If the table is empty, then no comparisons were significant 
-          (adjusted p-value < 0.1)."),
-        
-        tableOutput("allsigdegs")
+          p("The top panel provides an overview of an experiment 
+            designed to characterize the reproductive transcriptome
+            of the bi-parental rock dove. 
+            The box and whisker plots illustrate the median and range 
+            of gene expression for any one of a hundred candidate genes. 
+            The music notes to represent the mean for each group.")
         
         ),
+        
+        
+      
         
         tabPanel("Hormonal Symphony" ,
                  
@@ -140,7 +143,8 @@ shinyUI(
                  
                  plotOutput("hormoneplots"),
                  
-                 p("To better understand the correlation, these graphs show how the hormones change over time 
+                 p("To better understand the correlation, 
+                    these graphs show how the hormones change over time 
                     and in response to manipuation." ),
                  
                  plotOutput("statichormones1"),
