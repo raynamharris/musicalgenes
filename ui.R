@@ -115,6 +115,8 @@ shinyUI(
           actionButton("button3", "Listen to changes in gene expression change 
                        in response to offspring replace"),
           
+          uiOutput("audiotag"),
+          
           p(""),
         
           p("The top panel provides an overview of an experiment 

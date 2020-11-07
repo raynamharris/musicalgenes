@@ -389,9 +389,13 @@ function(input, output) {
   
   observeEvent(input$button3, {
     
-    candidatecountsdf <- as.data.frame(candidatecounts)
+    audiotag <- function(filename){tags$audio(src = filename,	    
+                                              type ="audio/wav", controls = NA,	
+                                              autoplay = T)}
     
-    meanvalues <- candidatecountsdf %>%
+    candidatecounts <- as.data.frame(candidatecounts)
+    
+    meanvalues <- candidatecounts%>%
       mutate(
         treatment = factor(treatment, levels = rmlevels),
         tissue = factor(tissue, levels = tissuelevels)
@@ -406,9 +410,33 @@ function(input, output) {
       mutate(scaled = scales:::rescale(mean, to = c(0,6))) %>%
       mutate(averaged = round(scaled,0) ) 
     
-    sonify(x = meanvalues$mean, interpolation = "constant", duration = 3)
+    output$text <- renderText({
+      
+      paste0("Your input, ", input$gene, ", sounds like this:")})
+    
+    sound <- sonify(x = meanvalues$mean, interpolation = "constant", duration = 3)
+    
+    # Saves file
+    genename <- candidatecountsdf %>%
+      filter(gene_name %in% c(!!as.character(input$gene))) %>%
+      distinct(gene) %>% pull(gene)
+    
+    wvname <- paste0(input$sex, input$tissue, genename, ".wav")
+    writeWave(sound, paste0("www/", wvname))
+    
+    # Creates audiotag
+    output$audiotag <- renderUI(audiotag(wvname))
+    
+    ## Dawnload handler
+    output$wav_dln <- downloadHandler(
+      filename = function(){
+        paste0("musicalgenetiming", input$gene, input$tissue, ".wav")
+      },
+      content = function(filename){
+        writeWave(sound, filename)
+      }
+    )
   })
-  
   
   
 
