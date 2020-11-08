@@ -6,7 +6,6 @@ function(input, output) {
   sex_filter <- reactive({ as.character(input$sex) })
   treatment_filter <- reactive({ as.character(input$treatment) })
   
-  
   output$allsigdegs <- renderTable({
   
   con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
@@ -48,8 +47,6 @@ function(input, output) {
   
   })
   
-  
-
   output$genedescrip <- renderTable({
     
     con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
@@ -85,7 +82,6 @@ function(input, output) {
     
   })
   
-  
   output$goterms <- renderTable({
     
     con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
@@ -106,9 +102,6 @@ function(input, output) {
     
   })
   
-  
-  
-  
   output$boxnmusicplot1 <- renderPlot({
     
     mysubtitle = paste("Data from",input$sex, input$tissue, input$gene, sep = " ")
@@ -128,6 +121,7 @@ function(input, output) {
       drop_na() %>%
       ggplot(aes(x = treatment, y = counts)) +
       geom_boxplot(aes(fill = treatment), outlier.shape = NA, fatten = 2) +
+      geom_point() +
       musicalgenestheme() +
       scale_fill_manual(values = allcolors, guide = FALSE) +
       scale_color_manual(values = allcolors) +
@@ -186,8 +180,12 @@ function(input, output) {
     
   })
   
-  
   observeEvent(input$button1, {
+    
+    audiotag <- function(filename){tags$audio(src = filename,	    
+                                              type ="audio/wav", 
+                                              controls = NA,	
+                                              autoplay = T)}
     
     meanvalues <- candidatecounts %>%
       as.data.frame(.) %>%
@@ -230,9 +228,6 @@ function(input, output) {
     )
   })
   
-  
-  
-  
   output$boxnmusicplot2 <- renderPlot({
     
     p1 <- candidatecounts %>%
@@ -251,6 +246,7 @@ function(input, output) {
       ggplot(aes(x = treatment, y = counts)) +
       geom_boxplot(aes(fill = treatment), outlier.shape = NA, fatten = 2) +
 
+      geom_point() +
       musicalgenestheme() +
       scale_fill_manual(values = allcolors, guide = FALSE) +
       scale_color_manual(values = allcolors) +
@@ -308,8 +304,12 @@ function(input, output) {
     
   })
   
-  
   observeEvent(input$button2, {
+    
+    audiotag <- function(filename){tags$audio(src = filename,	    
+                                              type ="audio/wav", 
+                                              controls = NA,	
+                                              autoplay = T)}
     
      meanvalues <- candidatecounts %>%
        as.data.frame(.) %>%
@@ -352,8 +352,6 @@ function(input, output) {
      )
   })
   
-  
-  
   output$boxnmusicplot3 <- renderPlot({
     
     p1 <- candidatecounts %>%
@@ -372,6 +370,7 @@ function(input, output) {
       ggplot(aes(x = treatment, y = counts)) +
       geom_boxplot(aes(fill = treatment), outlier.shape = NA, fatten = 2) +
       
+      geom_point() +
       musicalgenestheme() +
       scale_fill_manual(values = allcolors, guide = FALSE) +
       scale_color_manual(values = allcolors) +
@@ -431,7 +430,6 @@ function(input, output) {
     
   })
   
-  
   observeEvent(input$button3, {
     
     audiotag <- function(filename){tags$audio(src = filename,	    
@@ -479,10 +477,6 @@ function(input, output) {
       }
     )
   })
-  
-  
-
-  ## symphony table future directions
   
   output$musicalgenes <- renderTable({
 
