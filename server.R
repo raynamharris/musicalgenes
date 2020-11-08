@@ -120,6 +120,7 @@ function(input, output) {
         sex %in% !!as.character(input$sex)
       ) %>%
       collect() %>%
+      filter(treatment %in% charlevels) %>%
       mutate(
         treatment = factor(treatment, levels = charlevels),
         tissue = factor(tissue, levels = tissuelevels)
@@ -140,10 +141,10 @@ function(input, output) {
       labs(y = "gene expression", x = NULL, subtitle = mysubtitle)  
     p1
   
-    
-    candidatecounts <- as.data.frame(candidatecounts)
 
     df <- candidatecounts %>%
+      as.data.frame(candidatecounts) %>%
+      filter(treatment %in% charlevels) %>%
       mutate(
         treatment = factor(treatment, levels = charlevels),
         tissue = factor(tissue, levels = tissuelevels)
@@ -188,9 +189,9 @@ function(input, output) {
   
   observeEvent(input$button1, {
     
-    candidatecountsdf <- as.data.frame(candidatecounts)
-    
-    meanvalues <- candidatecountsdf %>%
+    meanvalues <- candidatecounts %>%
+      as.data.frame(.) %>%
+      filter(treatment %in% charlevels) %>%
       mutate(
         treatment = factor(treatment, levels = charlevels),
         tissue = factor(tissue, levels = tissuelevels)
@@ -205,7 +206,28 @@ function(input, output) {
       mutate(scaled = scales:::rescale(mean, to = c(0,6))) %>%
       mutate(averaged = round(scaled,0) ) 
     
-    sonify(x = meanvalues$mean, interpolation = "constant", duration = 3)
+    sound <- sonify(x = meanvalues$mean, interpolation = "constant", duration = 3)
+    
+    # Saves file
+    genename <- candidatecounts %>%
+      filter(gene_name %in% c(!!as.character(input$gene))) %>%
+      distinct(gene) %>% pull(gene)
+    
+    wvname <- paste0("musicalgeneparental", input$sex, input$tissue, genename, ".wav")
+    writeWave(sound, paste0("www/", wvname))
+    
+    # Creates audiotag
+    output$audiotag <- renderUI(audiotag(wvname))
+    
+    ## Dawnload handler
+    output$wav_dln <- downloadHandler(
+      filename = function(){
+        paste0("musicalgeneparental", input$sex, input$tissue, genename, ".wav")
+      },
+      content = function(filename){
+        writeWave(sound, filename)
+      }
+    )
   })
   
   
@@ -214,6 +236,7 @@ function(input, output) {
   output$boxnmusicplot2 <- renderPlot({
     
     p1 <- candidatecounts %>%
+      filter(treatment %in% rmlevels) %>%
       filter(
         gene_name %in% c(!!as.character(input$gene)),
         tissue %in% !!as.character(input$tissue),
@@ -242,9 +265,8 @@ function(input, output) {
     p1
     
     
-    candidatecounts <- as.data.frame(candidatecounts)
-    
     df <- candidatecounts %>%
+      filter(treatment %in% rmlevels) %>%
       mutate(
         treatment = factor(treatment, levels = rmlevels),
         tissue = factor(tissue, levels = tissuelevels)
@@ -289,9 +311,9 @@ function(input, output) {
   
   observeEvent(input$button2, {
     
-    candidatecountsdf <- as.data.frame(candidatecounts)
-    
-    meanvalues <- candidatecountsdf %>%
+     meanvalues <- candidatecounts %>%
+       as.data.frame(.) %>%
+     filter(treatment %in% rmlevels) %>%
       mutate(
         treatment = factor(treatment, levels = rmlevels),
         tissue = factor(tissue, levels = tissuelevels)
@@ -306,7 +328,28 @@ function(input, output) {
       mutate(scaled = scales:::rescale(mean, to = c(0,6))) %>%
       mutate(averaged = round(scaled,0) ) 
     
-    sonify(x = meanvalues$mean, interpolation = "constant", duration = 3)
+     sound <- sonify(x = meanvalues$mean, interpolation = "constant", duration = 3)
+     
+     # Saves file
+     genename <- candidatecounts %>%
+       filter(gene_name %in% c(!!as.character(input$gene))) %>%
+       distinct(gene) %>% pull(gene)
+     
+     wvname <- paste0("musicalgeneremoval", input$sex, input$tissue, genename, ".wav")
+     writeWave(sound, paste0("www/", wvname))
+     
+     # Creates audiotag
+     output$audiotag <- renderUI(audiotag(wvname))
+     
+     ## Dawnload handler
+     output$wav_dln <- downloadHandler(
+       filename = function(){
+         paste0("musicalgeneremoval", input$sex, input$tissue, genename, ".wav")
+       },
+       content = function(filename){
+         writeWave(sound, filename)
+       }
+     )
   })
   
   
@@ -314,6 +357,7 @@ function(input, output) {
   output$boxnmusicplot3 <- renderPlot({
     
     p1 <- candidatecounts %>%
+      filter(treatment %in% timelevels) %>%
       filter(
         gene_name %in% c(!!as.character(input$gene)),
         tissue %in% !!as.character(input$tissue),
@@ -345,6 +389,7 @@ function(input, output) {
     candidatecounts <- as.data.frame(candidatecounts)
     
     df <- candidatecounts %>%
+      filter(treatment %in% timelevels) %>%
       mutate(
         treatment = factor(treatment, levels = timelevels),
         tissue = factor(tissue, levels = tissuelevels)
@@ -390,14 +435,15 @@ function(input, output) {
   observeEvent(input$button3, {
     
     audiotag <- function(filename){tags$audio(src = filename,	    
-                                              type ="audio/wav", controls = NA,	
+                                              type ="audio/wav", 
+                                              controls = NA,	
                                               autoplay = T)}
     
-    candidatecounts <- as.data.frame(candidatecounts)
-    
     meanvalues <- candidatecounts%>%
+      as.data.frame(.) %>%
+      filter(treatment %in% timelevels) %>%
       mutate(
-        treatment = factor(treatment, levels = rmlevels),
+        treatment = factor(treatment, levels = timelevels),
         tissue = factor(tissue, levels = tissuelevels)
       ) %>% 
       filter(gene_name %in% c(!!as.character(input$gene)),
@@ -410,18 +456,14 @@ function(input, output) {
       mutate(scaled = scales:::rescale(mean, to = c(0,6))) %>%
       mutate(averaged = round(scaled,0) ) 
     
-    output$text <- renderText({
-      
-      paste0("Your input, ", input$gene, ", sounds like this:")})
-    
     sound <- sonify(x = meanvalues$mean, interpolation = "constant", duration = 3)
     
     # Saves file
-    genename <- candidatecountsdf %>%
+    genename <- candidatecounts %>%
       filter(gene_name %in% c(!!as.character(input$gene))) %>%
       distinct(gene) %>% pull(gene)
     
-    wvname <- paste0(input$sex, input$tissue, genename, ".wav")
+    wvname <- paste0("musicalgenetiming", input$sex, input$tissue, genename, ".wav")
     writeWave(sound, paste0("www/", wvname))
     
     # Creates audiotag
@@ -430,7 +472,7 @@ function(input, output) {
     ## Dawnload handler
     output$wav_dln <- downloadHandler(
       filename = function(){
-        paste0("musicalgenetiming", input$gene, input$tissue, ".wav")
+        paste0("musicalgenetiming", input$sex, input$tissue, genename, ".wav")
       },
       content = function(filename){
         writeWave(sound, filename)
@@ -443,11 +485,9 @@ function(input, output) {
   ## symphony table future directions
   
   output$musicalgenes <- renderTable({
-  
-  
-    candidatecountsdf <- as.data.frame(candidatecounts)
-   
-    notes <- candidatecountsdf %>%
+
+    notes <- candidatecounts %>%
+      as.data.frame(.) %>%
       mutate(
         treatment = factor(treatment, levels = alllevels),
         tissue = factor(tissue, levels = tissuelevels)
@@ -473,8 +513,6 @@ function(input, output) {
    notes
     
   })
-  
-  
   
   output$orchestratable <- renderTable(({
     
@@ -516,7 +554,6 @@ function(input, output) {
     orchestratable
   }))
   
-  
   output$hormoneplots <- renderPlot({
     
     con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
@@ -553,7 +590,6 @@ function(input, output) {
       theme(legend.position = "none")
     
   })
-  
   
   output$statichormones1 <- renderPlot({
     
@@ -614,12 +650,5 @@ function(input, output) {
     p
     
   })
-  
-
-  
-  ## new sonify attempt from https://github.com/zielinskipp/sonifier/blob/master/app.R and
-  ## https://zielinskipp.shinyapps.io/sonifier/
-  
-  
 
 }
