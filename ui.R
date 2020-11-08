@@ -13,9 +13,7 @@ shinyUI(
     # Inputs for plots
     sidebarLayout(
       sidebarPanel(
-        
-        
-          
+
           h4("Interactive data exploration"), 
           
           p("Temporally controlled changes in gene expression 
@@ -34,8 +32,7 @@ shinyUI(
             selected = c("female"),
             multiple = FALSE
           ),
-          
-          
+        
           selectInput(
             inputId = "tissue",
             label = "Choose a tissue.",
@@ -43,7 +40,6 @@ shinyUI(
             selected = "pituitary",
             multiple = FALSE
           ),
-          
           
           selectInput(
             inputId = "gene",
