@@ -24,14 +24,9 @@ bibliography: paper.bib
 
 ##  Summary
 
-
-![screenshot](www/screenshot.png)
-
-## Statement of need
-
 In addition to striving to conduct and publish reproducible research, scientists must also aim to create accessible research outputs. Readers with bioinformatics expertise can access the data and reproduce the results associated with published manuscripts; however, much of the data associated with publications is too large or to complex for the average reader to explore on their own. Furthermore, many of the visualize use to communicate transcriptomic findings are often inaccessible to those with poor color vision. We have create a application that provides a simple graphical user interface for interactive data explore and sonfiication to make transcriptomic data more accessible to diverse users. 
 
-##  Introduction 
+## Statement of need
 
 Temporal and spatially controlled changes in gene expression are often described as a “symphony of gene expression”, with RNA polymerase function as the transcription factor that turns genes on in a coordinated fashion in response to external or internal cures. Could we gain more biological insight and make data more accessible if we utilized data sonification to actually listen to the metaphorical transitional symphony?   
   
@@ -39,9 +34,10 @@ Neuroscientists are known for listening to outputs while doing research, molecul
   
 Because genes are highly conserved across species, the data from studies on model organisms are potentially useful to other scientists and clinicians. However, data accessibility is often a barrier to data reuse and thus the potential for biomedical discovery is diminished. Easy-to-use interfaces that allow users to interactively explore data in the cloud would speed discovery by eliminating the need to download data and install software as a precursor to data exploration. Sharing data and code alone, but using these notebook requires technical knowledge that many researchers and clinicians do not have. A challenge that researchers face is designing sequencing projects need to be large enough to have sufficient power to test hypotheses, and then making the data and results easily accessible to reduce barriers to translation research.   
   
-We sought to create an open source tools for data exploration that could be used to reproducibly convert gene expression into sound. As a proto-type, we used data from Harris, Austin, et al 2020, a highly replicated experimental design to characterize the transcriptional activity of the hypothalamus, pituitary, and gonads axis at nine time points over the course of reproduction and parental care in male and female pairs as they transitioned from a sexually mature, non-reproductive state to a reproductive one. Nine pseudo-timepoints measured represent nest building, egg incubation, nesting care, and fledging (Fig 1).   
+## Aproach
   
-## Materials and Methods  
+We sought to create an open source tools for data exploration that could be used to reproducibly convert gene expression into sound. As a proto-type, we used data from Harris, Austin, et al 2020, a highly replicated experimental design to characterize the transcriptional activity of the hypothalamus, pituitary, and gonads axis at nine time points over the course of reproduction and parental care in male and female pairs as they transitioned from a sexually mature, non-reproductive state to a reproductive one. Nine pseudo-timepoints measured represent nest building, egg incubation, nesting care, and fledging (Fig 1).   
+
   
 Gene expression data associated with Harris, Austin, et al 2020 (https://github.com/macmanes-lab/DoveParentsRNAseq) were imported into R for processing, analysis, and visualization (cite all the r packages).  Data were imported into R and stored in duckdb for faster access. Additional information about genes, such as their description, ontology, and associated diseases were obtained from the gene ontology database (Genome alliance). Gene names for the human ortholog were imported from the HUGO database (ref). 
 
@@ -49,15 +45,35 @@ Data were joined, filtered, selected, mutated, and plotted with various R packag
 
 Video tutorial describing how to use the Shiny app were created an made avilable on YouTube at <insert link>.  
 
+Currently, the R shiny app is organized into 4 panels. The first panel is the heart and soul of the application. Here, you can vizualize and sonifiy gene expression ineractively for about 150 genes in the hypothalamus, pitutiary, and gonads of male and female rock doves to explore how variation in gene expression changes over he course of the natural parentla care cycles or in response to manipulations. As in Austin et al in prep, we show box-and-whisker plot median and range of gene expression at difference stages of reproduction, from building nests and incubating eggs to nurturing baby chicks. 
 
-## Results 
+![](www/fig1.png)
 
-Currently, the R shiny app is organized into 4 panels. The first panel is the heart and soul of the application. Here, you can vizualize and sonifiy gene expression ineractively for about 150 genes in the hypothalamus, pitutiary, and gonads of male and female rock doves to explore how variation in gene expression changes over he course of the natural parentla care cycles or in response to manipulations. As in Austin et al in prep, we show box-and-whisker plot median and range of gene expression at difference stages of reproduction, from building nests and incubating eggs to nurturing baby chicks. The second tab seeks to integrate physiology and gene expression by showing correlations between cirulating prolactin, sex steroids (estradiol and testosterone), corticosterone, and progesterone and the gene of interest. The third tab is about the future directions where we hope to tap the application to truly recreate the transcripotional and physiological symphony that regulates parental care. The final tab provides more information abdout the authors and the sources of funding for this project. 
+**Fig. 1 Musical Genes**
 
-The default gene expression pattern shown by the shiny app is that of the prolactin gene (aslso refereed to as PRL) in the female pituitary. These results show that prolactin increases significantly between incubation day 9 and incubation day 17. Prolactin decrease significantly between non-reproductive control and nest building stages as well as between hatch and nestling care day 5. Prolactin decreases significantly when you remove offspring at incubation days 9, 17, and at hatch as well as when you extend the timing until hatch.   
+The default gene expression pattern shown by the shiny app is that of the prolactin gene (aslso refereed to as PRL) in the female pituitary. These results show that prolactin increases significantly between incubation day 9 and incubation day 17. 
+
+Prolactin decrease significantly between non-reproductive control and nest building stages as well as between hatch and nestling care day 5. Prolactin decreases significantly when you remove offspring at incubation days 9, 17, and at hatch as well as when you extend the timing until hatch.  
+
+![](www/fig2.png)
+
+**Fig. 2 Transcriptional cacophony?**
+
+The second tab seeks to integrate physiology and gene expression by showing correlations between cirulating prolactin, sex steroids (estradiol and testosterone), corticosterone, and progesterone and the gene of interest. 
 
 
-## Discussion 
+![](www/fig3.png)
+
+**Fig. 3 Hormonal symphony**
+
+The third tab is about the future directions where we hope to tap the application to truly recreate the transcripotional and physiological symphony that regulates parental care. The final tab provides more information abdout the authors and the sources of funding for this project. 
+
+![](www/fig4.png)
+
+**Fig. 4 Transcriptional Symphony**
+
+
+## Significance 
 
 
 This app allows for rapid data exploration associated with a research paper, which will allow peer-reviewers and readers without R expertise to explore the data.

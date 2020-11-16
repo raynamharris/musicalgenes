@@ -82,15 +82,10 @@ shinyUI(
       mainPanel(
         
         tabsetPanel(
-          tabPanel("Transcriptional Symphony", 
+          tabPanel("Musical Genes", 
                    
-                   h4("Transcriptional symphony"),      
-              
-
-          HTML('<center><img src="fig_musicalgenes.png", width = "100%"></center>'),
-              
-          
-          p(""),
+                   h4("Musical Genes"),      
+            
           
           plotOutput("boxnmusicplot1", width = "100%"),
           
@@ -114,6 +109,11 @@ shinyUI(
           uiOutput("audiotag"),
           
           p(""),
+          
+          HTML('<center><img src="expdesign.png", width = "100%"></center>'),
+          
+          
+          p(""),
         
           p("The top panel provides an overview of an experiment 
             designed to characterize the reproductive transcriptome
@@ -131,15 +131,17 @@ shinyUI(
                  
                  h4("Hormonal Symphony"),      
                  
+                 
+                 
+                 plotOutput("hormoneplots"),
+                 
                  p("There is an intricate interplay between genes and hormones.
                    Genes directly or indirectly encode hormones and the receptors they bind to,
-                   and hormones can module to the expression levels of many genes."),      
-                 
-                 p("Here, we show the correlation pattern between the gene of interest and four hormones
+                   and hormones can module to the expression levels of many genes.
+                   Here, we show the correlation pattern between the gene of interest and four hormones
                    (prolactin (prl), corticosterone (cort), progesterone (p4), 
                    and estradiol (e2) in females or testosterone (t) in males." ),
                  
-                 plotOutput("hormoneplots"),
                  
                  p("To better understand the correlation, 
                     these graphs show how the hormones change over time 
@@ -154,26 +156,15 @@ shinyUI(
                  p("As a reminder, here is the experimental design and a graphic description
                    of each treatment," ),
                  
-                 HTML('<center><img src="fig_musicalgenes.png", width = "100%"></center>')
+                 HTML('<center><img src="expdesign.png", width = "100%"></center>')
                  
                  ),
       
         
-        tabPanel("Future Directions" ,
+        tabPanel("Transcriptional Symphony" ,
                  
-                 h4("Future directions"),    
+                 h4("Transcriptional Symphony"),    
                  
-
-                 p("Before building this app, I used a keyboard to play
-                   the sound of genes working together to regulate parental care. 
-                   You can watch these videos to learn more about the inspiration 
-                   behind this app."),
-                 
-                 
-                 HTML('<iframe width="75%" height = "400px" 
-                      src="https://www.youtube.com/embed/PoKiIwIsLSo" 
-                      frameborder="0" allow="accelerometer; autoplay; 
-                      encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'),
  
                  
                  p("In the future, we would like to be able sonify data for multiple genes or 
@@ -185,6 +176,17 @@ shinyUI(
         tabPanel("About" ,
                  
                  h4("About"),    
+                 
+                 p("Before building this app, I used a keyboard to play
+                   the sound of genes working together to regulate parental care. 
+                   You can watch these videos to learn more about the inspiration 
+                   behind this app."),
+                 
+                 
+                 HTML('<iframe width="75%" height = "400px" 
+                      src="https://www.youtube.com/embed/PoKiIwIsLSo" 
+                      frameborder="0" allow="accelerometer; autoplay; 
+                      encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'),
                  
                  p("This video tutorial is a little out of date, 
                    but it give you an idea of how to interactively
