@@ -535,7 +535,7 @@ function(input, output) {
       left_join(., numberstonotes, by = "scaledmean")   %>%
       select(sex, tissue, treatment, gene_name, note ) %>%
       #pivot_wider(names_from = treatment, values_from = note ) 
-       group_by(gene_name) %>%
+      group_by(gene_name) %>%
       summarize(notes = str_c(note, collapse = ""))
     
     numrows <- nrow(orchestratable)
