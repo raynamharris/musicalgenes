@@ -1,5 +1,5 @@
 ---
-title: 'Musical Genes: Visualize and sonifiy gene expression in parenting pigeons'
+title: 'Interactive exploration of the transcriptional symphony regulating reprodution and parental care'
 tags:
   - R
   - transcriptomics
