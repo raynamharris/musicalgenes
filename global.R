@@ -56,3 +56,5 @@ hormones2 <- hormones  %>%
   filter(!(name == "cort" & value > 100)) %>%
   drop_na()
 hormones2
+
+

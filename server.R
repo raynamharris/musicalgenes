@@ -572,7 +572,8 @@ function(input, output) {
       select(id, sex, treatment, tissue, gene, gene_name, counts, prl:e2t) %>%
       pivot_longer(cols = prl:e2t, 
                    names_to = "hormone", values_to = "conc") %>%
-      mutate(treatment = factor(treatment, levels = alllevels)) %>%
+      filter(treatment %in% charlevels) %>%
+      mutate(treatment = factor(treatment, levels = charlevels)) %>%
       ggplot(aes(x = log10(counts), y = log10(conc))) +
       geom_point(aes( color = treatment)) +
       geom_smooth(aes(color = sex), method = "lm") +
@@ -604,5 +605,42 @@ function(input, output) {
     p
   })
   
+  
+  output$correlations <- renderTable({
+  
+    
+    
+      
+    correlations <- candidatecounts %>%
+      
+      filter(
+        #gene_name %in% c(!!as.character(input$gene)),
+        tissue %in% !!as.character(input$tissue),
+        sex %in% !!as.character(input$sex)
+      ) %>%
+      
+      
+      mutate(id = sapply(strsplit(samples,'\\_'), "[", 1))  %>%
+      select(-samples) %>%
+      inner_join(hormones, 
+                 by = "id")  %>%
+      select(id, sex, treatment, tissue, gene, gene_name, counts, prl:e2t) %>%
+      pivot_longer(cols = prl:e2t, 
+                   names_to = "hormone", values_to = "conc") %>%
+      group_by(gene, hormone) %>%
+      summarize(R2=cor(counts,conc)) %>%
+      arrange(R2)
+    
+    top25 <- head(correlations, 10) %>% pull(gene)
+    bottom25 <- tail(correlations, 10) %>% pull(gene)
+    
+    topcorrs <- correlations %>%
+      pivot_wider(names_from = hormone, values_from = R2) %>%
+      filter(gene %in% c(top25, bottom25)) %>%
+      arrange(gene)
+    topcorrs
+    
+    
+  })
 
 }

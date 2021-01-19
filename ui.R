@@ -133,30 +133,30 @@ shinyUI(
                  
                  
                  
-                 plotOutput("hormoneplots"),
+                 
                  
                  p("There is an intricate interplay between genes and hormones.
                    Genes directly or indirectly encode hormones and the receptors they bind to,
-                   and hormones can module to the expression levels of many genes.
-                   Here, we show the correlation pattern between the gene of interest and four hormones
-                   (prolactin (prl), corticosterone (cort), progesterone (p4), 
-                   and estradiol (e2) in females or testosterone (t) in males." ),
-                 
-                 
-                 p("To better understand the correlation, 
-                    these graphs show how the hormones change over time 
-                    and in response to manipuation." ),
-                 
+                   and hormones can module to the expression levels of many genes."),
+                  
+              p(" Austin el al 2021 decribed these changes in circulating levels of 
+                  corticosterone (cort), prolactin (prl), 
+                  progesterone (p4), and estradiol (e2) in females 
+                or testosterone (t) in males." ),
+                   
                  plotOutput("statichormones1"),
+
+                 p("Here, we can interatively explore correlations between 
+                    these hormones an the gene of interest." ),
+              
+              plotOutput("hormoneplots"),
+              
+              p("Not sure what other genes to explore? This table shows correlation 
+                between hormones and the 20 genes with the largest positive or negative correlations."),
                  
-                 plotOutput("statichormones2"),
-                 
-                 plotOutput("statichormones3"),
-                 
-                 p("As a reminder, here is the experimental design and a graphic description
-                   of each treatment," ),
-                 
-                 HTML('<center><img src="expdesign.png", width = "100%"></center>')
+                 tableOutput("correlations")
+              
+             
                  
                  ),
       

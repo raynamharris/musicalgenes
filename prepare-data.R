@@ -160,6 +160,7 @@ dbWriteTable(
   overwrite = TRUE
 )
 
+
 dbDisconnect(con, shutdown = T)
 
 # testing ----
@@ -169,4 +170,3 @@ con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
 dbListTables(con)
 
 dbDisconnect(con, shutdown = T)
-
