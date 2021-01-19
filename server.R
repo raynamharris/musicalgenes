@@ -604,45 +604,5 @@ function(input, output) {
     p
   })
   
-  output$statichormones2 <- renderPlot({
-    
-    
-    p <- hormones2 %>%
-      filter(treatment %in% rmlevels) %>%
-      filter(sex %in% !!as.character(input$sex)) %>%
-      ggplot(aes(x = treatment, y = value)) +
-      geom_boxplot(aes(fill = treatment, color = sex)) +
-      facet_wrap(~name, scales = "free_y",
-                 nrow = 1) +
-      musicalgenestheme() +
-      scale_fill_manual(values = allcolors) +
-      scale_color_manual(values = allcolors) +
-      theme(legend.position = "none",
-            axis.text.x = element_text(angle = 45, hjust = 1)) +
-      labs(y = "concentration (ng/mL)", 
-           x = "Offspring removal and internal controls")
-    p
-    
-  })
-  
-  output$statichormones3 <- renderPlot({
-    
-    p <- hormones2 %>%
-      filter(treatment %in% timelevels) %>%
-      filter(sex %in% !!as.character(input$sex)) %>%
-      ggplot(aes(x = treatment, y = value)) +
-      geom_boxplot(aes(fill = treatment, color = sex)) +
-      facet_wrap(~name, scales = "free_y",
-                 nrow = 1) +
-      musicalgenestheme() +
-      scale_fill_manual(values = allcolors) +
-      scale_color_manual(values = allcolors) +
-      theme(legend.position = "none",
-            axis.text.x = element_text(angle = 45, hjust = 1)) +
-      labs(y = "concentration (ng/mL)", 
-           x = "Offspring replacement and internal controls")
-    p
-    
-  })
 
 }
