@@ -132,21 +132,17 @@ shinyUI(
                  HTML('<center><img src="expdesign.png", width = "100%"></center>'),
                  
                 
+                 p("Changes in gene expression can influence levels of ciruclating hormones. 
+                   We also measured these four hormones across the stages of parental care 
+                   and calculated weather they were correlated with gene expression 
+                   (R^2 value provided in the table).
+                   We can use scatter plots are often used to vizualze 
+                   correlated changes in gene expression and hormone levels.
+                   Chose a hormone and listen to how it's levels change as the 
+                   selected gene increases in expression."),
                  
-                 
-                 
-                 plotOutput("statichormones1"),
-                 
-                 
-               
-                 
-                 plotOutput("hormoneplots"),
                  
                  tableOutput("correlations"),
-              
-                 
-                 p(""), 
-                 
                  
                  selectInput(
                    inputId = "hormone",
@@ -156,21 +152,23 @@ shinyUI(
                    multiple = FALSE
                  ),
                  
-                 actionButton("button4", 
-                              "Listen to changes in hormone concentration as gene expression increases."),
                  
+                 
+                 plotOutput("hormoneplots"),
+                 
+                
+              
                  
                  p(""), 
                  
-                p("Changes in gene expression can influence levels of ciruclating hormones. 
-                   We also measured these four hormones across the stages of parental care 
-                   and calculated weather they were correlated with gene expression 
-                   (R^2 value provided in the table above).
-                   We can use scatter plots are often used to vizualze 
-                   correlated changes in gene expression and hormone levels.
-                   Chose a hormone and listen to how it's levels change as the 
-                   selected gene increases in expression.")
                  
+                 
+                 
+                 actionButton("button4", 
+                              "Listen to changes in hormone concentration as gene expression increases.")
+                 
+                 
+                
                  
                  
                  ),

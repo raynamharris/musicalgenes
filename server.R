@@ -567,6 +567,8 @@ function(input, output) {
     orchestratable
   }))
   
+  
+  
   output$hormoneplots <- renderPlot({
     
     con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
@@ -574,11 +576,16 @@ function(input, output) {
     dbDisconnect(con, shutdown = TRUE)
     
     myxlab = paste("log10( ", #input$sex, input$tissue, 
-                   input$gene, " expression)",
+                   input$gene, " expr.)",
                    sep = " ")
     
     
-    candidatecounts %>%
+    myylab = paste("log10( ", #input$sex, input$tissue, 
+                   input$hormone, " conc.)",
+                   sep = " ")
+    
+    
+    p3 <- candidatecounts %>%
       filter(
         gene_name %in% c(!!as.character(input$gene)),
         tissue %in% !!as.character(input$tissue),
@@ -597,37 +604,83 @@ function(input, output) {
                          "cort" = "corticosterone",
                          "p4" = "progesterone"),
              hormone = factor(hormone, levels = hormonelevels)) %>%
+      filter(hormone %in% !!as.character(input$hormone)) %>%
       filter(treatment %in% charlevels) %>%
       mutate(treatment = factor(treatment, levels = charlevels)) %>%
-      ggplot(aes(y = log10(counts), x = log10(conc))) +
+      ggplot(aes(x = log10(counts), y = log10(conc))) +
         geom_point(aes( color = treatment)) +
-        geom_smooth(aes(color = sex), method = "lm") +
-        facet_wrap(~hormone, nrow = 1, scales = "free_x") +
+        #geom_smooth(aes(color = sex), method = "lm") +
         musicalgenestheme() + 
         scale_color_manual(values = allcolors) +
-        labs(y = myxlab, x = "log10( hormone concentration)",
-            subtitle = "Correlations betweeen candidate genes and hormones") +
+        labs(x = myxlab,  y = myylab) +
         theme(legend.position = "none")
     
-  })
-  
-  output$statichormones1 <- renderPlot({
     
-    p <- hormones2 %>%
-      filter(treatment %in% charlevels) %>%
-      filter(sex %in% !!as.character(input$sex)) %>%
+    myylab2 = paste("log10( ", #input$sex, input$tissue, 
+                   input$gene, " expression)",
+                   sep = " ")
+    
+    p1 <- candidatecounts %>%
+      filter(
+        gene_name %in% c(!!as.character(input$gene)),
+        tissue %in% !!as.character(input$tissue),
+        sex %in% !!as.character(input$sex)
+      ) %>%
+      collect() %>%
+      filter(treatment %in% charlevels,
+             treatment != "control") %>%
+      mutate(
+        treatment = factor(treatment, levels = charlevels),
+        tissue = factor(tissue, levels = tissuelevels)
+      ) %>% 
+      drop_na() %>%
+      ggplot(aes(x = treatment, y = counts)) +
+      geom_boxplot(aes(fill = treatment, color = sex), outlier.shape = NA, fatten = 2) +
+      geom_point() +
+      musicalgenestheme() +
+      scale_fill_manual(values = allcolors, guide = FALSE) +
+      scale_color_manual(values = allcolors) +
+      scale_x_discrete(breaks = alllevels) +
+      musicalgenestheme() +
+      theme(legend.position = "none",
+            axis.text.x = element_text(angle = 45, hjust = 1)) +
+      scale_y_log10() +
+      labs(x = NULL, y = myylab2)  
+    
+    
+    myylab3 = paste("log10( ", #input$sex, input$tissue, 
+                    input$hormone, " concentration)",
+                    sep = " ")
+    
+    p2 <- hormones2 %>%
+      filter(treatment %in% charlevels,
+             sex %in% !!as.character(input$sex),
+             name %in% !!as.character(input$hormone)) %>%
       ggplot(aes(x = treatment, y = value)) +
+      
       geom_boxplot(aes(fill = treatment, color = sex)) +
-      facet_wrap(~name, scales = "free_y",
-                 nrow = 1) +
+      geom_point() +
       musicalgenestheme() +
       scale_fill_manual(values = allcolors) +
       scale_color_manual(values = allcolors) +
       theme(legend.position = "none",
             axis.text.x = element_text(angle = 45, hjust = 1)) +
-      labs(y = "concentration (ng/mL)", x = "Sequential parental stages",
-           subtitle = "Circulating hormone concentrations")
+      
+      scale_y_log10() +
+      labs(y = myylab3, x = NULL) 
+    
+    
+    p <- plot_grid(p1,p2, p3, nrow = 1)
     p
+    
+    
+    
+    
+  })
+  
+  output$statichormones1 <- renderPlot({
+    
+    
   })
   
   
@@ -675,7 +728,7 @@ function(input, output) {
   
   observeEvent(input$button4, {
     
-    audiotag <- function(filename){tags$audio(src = filename,	    
+    audiotag4 <- function(filename){tags$audio(src = filename,	    
                                               type ="audio/wav", 
                                               controls = T,	
                                               autoplay = T)}
@@ -720,7 +773,7 @@ function(input, output) {
     writeWave(sound, paste0("www/", wvname))
     
     # Creates audiotag
-    output$audiotag <- renderUI(audiotag(wvname))
+    output$audiotag4 <- renderUI(audiotag(wvname))
     
   })
 
