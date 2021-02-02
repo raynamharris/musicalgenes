@@ -606,6 +606,7 @@ function(input, output) {
              hormone = factor(hormone, levels = hormonelevels)) %>%
       filter(hormone %in% !!as.character(input$hormone)) %>%
       filter(treatment %in% charlevels) %>%
+      filter(treatment != "control") %>%
       mutate(treatment = factor(treatment, levels = charlevels)) %>%
       ggplot(aes(x = log10(counts), y = log10(conc))) +
         geom_point(aes( color = treatment)) +
