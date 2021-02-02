@@ -136,6 +136,14 @@ shinyUI(
                  HTML('<center><img src="expdesign.png", width = "100%"></center>'),
                  
                  
+                 
+                 
+                 plotOutput("statichormones1"),
+                 
+                 p("" ),
+                 
+                 plotOutput("hormoneplots"),
+                 
                  p("There is an intricate interplay between genes and hormones.
                    Genes directly or indirectly encode hormones and the receptors they bind to,
                    and hormones can module to the expression levels of many genes.
@@ -144,15 +152,8 @@ shinyUI(
                    progesterone (p4), and estradiol in females 
                    or testosterone in males (e2t).
                    Here, we can interatively explore correlations between 
-                   these hormones an the gene of interest." ),
-                 
-                 plotOutput("statichormones1"),
-                 
-                 p("" ),
-                 
-                 plotOutput("hormoneplots"),
-                 
-                 p("Not sure what other genes to explore? This table shows the R2 value 
+                   these hormones an the gene of interest.
+                  Not sure what other genes to explore? This table shows the R2 value 
                    between hormones and the 20 genes with the largest positive or negative correlations."),
                  
                  tableOutput("correlations")

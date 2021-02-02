@@ -512,7 +512,22 @@ function(input, output) {
     
     candidatecountsdf <- as.data.frame(candidatecounts)
     
-    genestoplay <- sample(gene_names, 14)
+    #genestoplay <- sample(gene_names, 14)
+    
+    genestoplay <- c("AR: androgen receptor",
+                     "AVP: arginine vasopressin",
+                     "AVPR1A: arginine vasopressin receptor 1A",
+                     "CRHBP: corticotropin releasing hormone binding protein",
+                     "ESR1: estrogen receptor 1",
+                     "FOS: Fos proto-oncogene, AP-1 transcription factor subunit",
+                     "GALR1: galanin receptor 1",
+                     "GNRHR: gonadotropin releasing hormone receptor",
+                     "OXT: oxytocin/neurophysin I prepropeptide",
+                     "PGR: progesterone receptor",
+                     "PRL: prolactin",
+                     "PRLR: prolactin receptor",
+                     "TH: tyrosine hydroxylase",
+                     "VIP: vasoactive intestinal peptide")
     
     orchestratable <- candidatecountsdf %>%
       mutate(
