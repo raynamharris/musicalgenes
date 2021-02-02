@@ -23,6 +23,7 @@ affiliations:
 
 ##  Summary
 
+
 In addition to striving to conduct and publish reproducible research, scientists must also aim to create accessible research outputs. Readers with bioinformatics expertise can access the data and reproduce the results associated with published manuscripts; however, much of the data associated with publications is too large or to complex for the average reader to explore on their own. Furthermore, many of the visualize use to communicate transcriptomic findings are often inaccessible to those with poor color vision. We have create a application that provides a simple graphical user interface for interactive data explore and sonfiication to make transcriptomic data more accessible to diverse users. 
 
 ## Statement of need

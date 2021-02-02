@@ -725,7 +725,7 @@ function(input, output) {
   
   observeEvent(input$button4, {
     
-    audiotag4 <- function(filename){tags$audio(src = filename,	    
+    audiotag <- function(filename){tags$audio(src = filename,	    
                                               type ="audio/wav", 
                                               controls = T,	
                                               autoplay = T)}
@@ -770,7 +770,17 @@ function(input, output) {
     writeWave(sound, paste0("www/", wvname))
     
     # Creates audiotag
-    output$audiotag4 <- renderUI(audiotag(wvname))
+    output$audiotag <- renderUI(audiotag(wvname))
+    
+    ## Dawnload handler
+    output$wav_dln <- downloadHandler(
+      filename = function(){
+        paste0("musicalhormones", input$sex, input$tissue, genename, input$hormone, ".wav")
+      },
+      content = function(filename){
+        writeWave(sound, filename)
+      }
+    )
     
   })
 
