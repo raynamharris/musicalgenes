@@ -759,7 +759,7 @@ function(input, output) {
       arrange(counts)
     
     sound <-  sonify(x = correlations$conc,  interpolation = "constant", duration = 9)
-    sound
+    
     
     # Saves file
     genename <- candidatecounts %>%
