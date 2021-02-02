@@ -57,25 +57,32 @@ musicalgenestheme <- function () {
 
 ## colors
 
-colorschar <- c(
-  "control" = "#cc4c02",
-  "bldg" = "#fe9929",
-  "lay" = "#fed98e",
-  "inc.d3" = "#78c679",
-  "inc.d9" = "#31a354",
-  "inc.d17" = "#006837",
-  "hatch" = "#6baed6",
-  "n5" = "#3182bd",
-  "n9" = "#08519c"
-)
 
-colorsmanip <- c("m.inc.d3" = "#CDCDCD", 
-                 "m.inc.d9" = "#959595", 
-                 "m.inc.d17" = "#626262",
-                 "m.n2" = "#262625", 
-                 "early" = "#cbc9e2", 
-                 "prolong" = "#9e9ac8" , 
-                 "extend" = "#6a51a3" )
+
+colorschar <-  c("control" = "#D2B48C", 
+                 "bldg"= "#D2B48C", 
+                 "lay"= "#ffffff", 
+                 "inc.d3"= "#d07776", 
+                 "inc.d9"= "#d07776", 
+                 "inc.d17"= "#d07776", 
+                 "hatch"= "#a991c7",
+                 "n5"= "#a991c7", 
+                 "n9"= "#a991c7" )
+
+colorsmanip <- c("m.inc.d3" = "#373b42", 
+                 "m.inc.d9" = "#373b42", 
+                 "m.inc.d17" = "#373b42",
+                 "m.n2" = "#373b42", 
+                 "early" = "#f2cf0a", 
+                 "prolong" = "#f2cf0a" , 
+                 "extend" = "#f2cf0a" )
+
+colorsstudy <- c("char" = "#737373", 
+                 "manip" = "#252525")
+
+
+
+
 
 colorssex <- c("female" = "#969696", "male" = "#525252")
 
@@ -86,7 +93,7 @@ colorstissue <- c(
   "gonad" = "#7570b3"
 )
 
-allcolors <- c(colorschar, colorsmanip, colorssex, colorstissue)
+allcolors <- c(colorschar, colorsmanip, colorssex, colorstissue, colorsstudy)
 
 
 ## music notes and instruments

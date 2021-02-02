@@ -25,6 +25,8 @@ shinyUI(
             to better understand the molecular mechanisms that regulate
             parental care behavior and other important phenotypes."),
           
+          
+          
           selectInput(
             inputId = "sex",
             label = "Chose female or male.",
@@ -82,64 +84,57 @@ shinyUI(
       mainPanel(
         
         tabsetPanel(
-          tabPanel("Musical Genes", 
+          tabPanel("Transcriptional Symphony", 
                    
-                   h4("Musical Genes"),      
+                   h4("The sound of one gene changing over time"),   
+                   
+                   HTML('<center><img src="expdesign.png", width = "100%"></center>'),
+                   
+                   
+                 
             
           
           plotOutput("boxnmusicplot1", width = "100%"),
           
-          actionButton("button1", "Listen to changes in gene expression between 
-                       sequential reproductive and parental stages."),
-          
-          p(""),
-          
-          plotOutput("boxnmusicplot2", width = "100%"),
-          
-          actionButton("button2", "Listen to changes in gene expression change 
-                       in response to offspring removal."),
-          
-          p(""),
-          
-          plotOutput("boxnmusicplot3", width = "100%"),
-          
-          actionButton("button3", "Listen to changes in gene expression change 
-                       in response to offspring replace"),
-          
-          uiOutput("audiotag"),
-          
-          p(""),
-          
-          HTML('<center><img src="expdesign.png", width = "100%"></center>'),
-          
-          
-          p(""),
-        
           p("The top panel provides an overview of an experiment 
             designed to characterize the reproductive transcriptome
             of the bi-parental rock dove. 
             The box and whisker plots illustrate the median and range 
             of gene expression for any one of a hundred candidate genes. 
-            The music notes to represent the mean for each group.")
-        
-        ),
+            The music notes to represent the mean for each group."),
+          
+          actionButton("button1", "Listen to changes in gene expression between 
+                       sequential reproductive and parental stages."),
+          
+          
+          
+          h4("The transcriptional symphony of parental care"),   
+          
+          
+          p("In the future, I would really like to sonify data for multiple genes
+                   simultaneously using sounds from instruments found in an orchestra.
+            I haven't figured out how to do this in R, 
+            but here are some notes that can be played on your instrument of choice." ),
+          
+          tableOutput("orchestratable")
+          
+          
+          
+         
         
          
-        tabPanel("Transcriptional Symphony" ,
+          
+          
+        ),
                  
-                 h4("Transcriptional Symphony"),    
-                 
-                 p("I would really like to sonify data for multiple genes
-                   simultaneously using sounds from instruments found in an orchestra.
-                   I haven't figured out how to do this in R, 
-                   but here are some notes that can be played on your instrument of choice." ),
-                 
-                 tableOutput("orchestratable")
-                   ),
         
         tabPanel("Hormonal Symphony" ,
                  
-                 h4("Hormonal Symphony"),      
+                 
+                 h4("Experimental design"),    
+                 
+                 HTML('<center><img src="expdesign.png", width = "100%"></center>'),
+                 
                  
                  p("There is an intricate interplay between genes and hormones.
                    Genes directly or indirectly encode hormones and the receptors they bind to,
@@ -169,10 +164,23 @@ shinyUI(
                  
                  h4("About"),    
                  
-                 p("Before building this app, I used a keyboard to play
+                 p("This app is a product of the 'Birds, Brains, and Banter (B3)'
+                   Laboratory at the University of California at Davis.
+                   This and related research is funded by the National Science Foundation,
+                   in a grant to Rebecca Calisi and Matthew MacManes.
+                   The webpage was created and written by Rayna Harris and Rebecca Calisi.  
+                   Owen Marshall, Mauricio Vargas, Titus Brown, and 
+                   Alexandra Colón Rodríguez contributed intellectually to the design. 
+                   Suzanne Austin, Andrew Lang, Victoria Farrar, April Booth, 
+                   Tanner Feustel, and Matthew MacManes contributed the 
+                   experiment that is the foundation of this application. 
+                   Before building this app, I used a keyboard to play
                    the sound of genes working together to regulate parental care. 
-                   You can watch these videos to learn more about the inspiration 
-                   behind this app."),
+                   "),
+                 
+                 p("You can watch these videos to learn more about the inspiration 
+                   behind this app and how to interactively
+                   explore this dataset."),
                  
                  
                  HTML('<iframe width="75%" height = "400px" 
@@ -180,9 +188,7 @@ shinyUI(
                       frameborder="0" allow="accelerometer; autoplay; 
                       encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'),
                  
-                 p("This video tutorial is a little out of date, 
-                   but it give you an idea of how to interactively
-                   explore this dataset."),
+                
                  
                  HTML('<iframe width="75%" height="400px" 
                       src="https://www.youtube.com/embed/bQWDiI2oZdI" 
@@ -205,18 +211,8 @@ shinyUI(
                      href = "https://macmanes-lab.github.io/DoveParentsRNAseq/",
                      "@macmanes-lab/DoveParentsRNAseq"
                    )
-                 ),
-                  
-                 p("This app is a product of the 'Birds, Brains, and Banter (B3)'
-                   Laboratory at the University of California at Davis.
-                   This and related research is funded by the National Science Foundation,
-                   in a grant to Rebecca Calisi and Matthew MacManes.
-                   The webpage was created and written by Rayna Harris and Rebecca Calisi.  
-                   Owen Marshall, Mauricio Vargas, Titus Brown, and 
-                   Alexandra Colón Rodríguez contributed intellectually to the design. 
-                   Suzanne Austin, Andrew Lang, Victoria Farrar, April Booth, 
-                   Tanner Feustel, and Matthew MacManes contributed the 
-                   experiment that is the foundation of this application.")
+                 )
+                 
 
                  )
           )

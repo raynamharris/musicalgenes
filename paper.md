@@ -1,25 +1,23 @@
 ---
-title: 'Interactive exploration of the transcriptional symphony regulating reprodution and parental care'
-tags:
-  - R
-  - transcriptomics
-  - neuroscience
-  - animal behavior
-  - parental care
-  - data sonification
+title: Interactive exploration of the transcriptional symphony regulating reprodution
+  and parental care
 authors:
-  - name: Rayna Harris and many others
-    affiliation: 1
-  - name: Rebecca Calisi 
-    affiliation: 1
-affiliations:
- - name: UC Davis
-   index: 1 
-date: 15 Nov 2020
+- affiliation: 1
+  name: Rayna Harris and many others
+- affiliation: 1
+  name: Rebecca Calisi
+date: "15 Nov 2020"
 bibliography: paper.bib
-
-# see https://joss.readthedocs.io/en/latest/submitting.html#example-paper-and-bibliography
-
+tags:
+- R
+- transcriptomics
+- neuroscience
+- animal behavior
+- parental care
+- data sonification
+affiliations:
+- index: 1
+  name: UC Davis
 ---
 
 ##  Summary
