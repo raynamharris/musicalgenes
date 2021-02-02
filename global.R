@@ -54,5 +54,11 @@ hormones2 <- hormones  %>%
   filter(treatment != "control") %>%
   pivot_longer(cols = prl:e2t) %>%
   filter(!(name == "cort" & value > 100)) %>%
-  drop_na()
+  drop_na() %>%
+  mutate(name = factor(name),
+         name=recode(name,  "prl" = "prolactin",
+                           "e2t" ="sex steroids",
+                     "cort" = "corticosterone",
+                     "p4" = "progesterone"),
+         name = factor(name, levels = hormonelevels))
 hormones2

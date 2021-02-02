@@ -43,6 +43,15 @@ comparisonlevels <- c(
   "hatch_n5", "n5_n9"
 )
 
+
+
+
+hormonelevels <- c(
+  "corticosterone",
+  "progesterone",
+  "prolactin", 
+  "sex steroids")
+
 ## R theme
 
 musicalgenestheme <- function () { 

@@ -570,7 +570,7 @@ function(input, output) {
     hormones <- tbl(con, "hormones") %>% collect()
     dbDisconnect(con, shutdown = TRUE)
     
-    myxlab = paste("log10( ", input$sex, input$tissue, 
+    myxlab = paste("log10( ", #input$sex, input$tissue, 
                    input$gene, " expression)",
                    sep = " ")
     
@@ -588,17 +588,23 @@ function(input, output) {
       select(id, sex, treatment, tissue, gene, gene_name, counts, prl:e2t) %>%
       pivot_longer(cols = prl:e2t, 
                    names_to = "hormone", values_to = "conc") %>%
+      mutate(hormone = factor(hormone),
+             hormone=recode(hormone,  "prl" = "prolactin",
+                         "e2t" ="sex steroids",
+                         "cort" = "corticosterone",
+                         "p4" = "progesterone"),
+             hormone = factor(hormone, levels = hormonelevels)) %>%
       filter(treatment %in% charlevels) %>%
       mutate(treatment = factor(treatment, levels = charlevels)) %>%
-      ggplot(aes(x = log10(counts), y = log10(conc))) +
-      geom_point(aes( color = treatment)) +
-      geom_smooth(aes(color = sex), method = "lm") +
-      facet_wrap(~hormone, nrow = 1, scales = "free_y") +
-      musicalgenestheme() + 
-      scale_color_manual(values = allcolors) +
-      labs(x = myxlab, y = "log10( hormone concentration)",
-           subtitle = "Corrlations betweeen candidate genes and hormones") +
-      theme(legend.position = "none")
+      ggplot(aes(y = log10(counts), x = log10(conc))) +
+        geom_point(aes( color = treatment)) +
+        geom_smooth(aes(color = sex), method = "lm") +
+        facet_wrap(~hormone, nrow = 1, scales = "free_x") +
+        musicalgenestheme() + 
+        scale_color_manual(values = allcolors) +
+        labs(y = myxlab, x = "log10( hormone concentration)",
+            subtitle = "Corrlations betweeen candidate genes and hormones") +
+        theme(legend.position = "none")
     
   })
   
@@ -630,7 +636,7 @@ function(input, output) {
     correlations <- candidatecounts %>%
       
       filter(
-        #gene_name %in% c(!!as.character(input$gene)),
+        gene_name %in% c(!!as.character(input$gene)),
         tissue %in% !!as.character(input$tissue),
         sex %in% !!as.character(input$sex)
       ) %>%
@@ -643,21 +649,78 @@ function(input, output) {
       select(id, sex, treatment, tissue, gene, gene_name, counts, prl:e2t) %>%
       pivot_longer(cols = prl:e2t, 
                    names_to = "hormone", values_to = "conc") %>%
-      group_by(gene, hormone) %>%
-      summarize(R2=cor(counts,conc)) %>%
-      arrange(R2)
-    
-    top25 <- head(correlations, 10) %>% pull(gene)
-    bottom25 <- tail(correlations, 10) %>% pull(gene)
-    
-    topcorrs <- correlations %>%
+      group_by(gene_name, hormone) %>%
+      summarize(R2=cor(counts,conc))  %>%
       pivot_wider(names_from = hormone, values_from = R2) %>%
-      filter(gene %in% c(top25, bottom25)) %>%
-      arrange(gene) %>%
-      select(gene, cort, e2t, p4, prl)
-    topcorrs
+      select(gene_name, cort, p4, prl, e2t) %>%
+      rename(
+        'gene' = gene_name,
+        'corticosterone' = cort ,
+        'progesterone' = p4,
+        'prolactin' = prl,
+        'sex steroids' = e2t
+      )
+    correlations
     
     
+  })
+  
+  
+  
+  
+  
+  
+  observeEvent(input$button4, {
+    
+    audiotag <- function(filename){tags$audio(src = filename,	    
+                                              type ="audio/wav", 
+                                              controls = NA,	
+                                              autoplay = T)}
+    
+    correlations <- candidatecounts %>%
+      
+      filter(
+        gene_name %in% c(!!as.character(input$gene)),
+        tissue %in% !!as.character(input$tissue),
+        sex %in% !!as.character(input$sex)
+      ) %>%
+      
+      mutate(id = sapply(strsplit(samples,'\\_'), "[", 1))  %>%
+      select(-samples) %>%
+      inner_join(hormones, 
+                 by = "id")  %>%
+      select(id, sex, treatment, tissue, gene, gene_name, counts, prl:e2t) %>%
+      pivot_longer(cols = prl:e2t, 
+                   names_to = "hormone", values_to = "conc") %>%
+      group_by(gene, hormone) %>%
+      filter(hormone == "prl",
+             treatment %in% charlevels) %>%
+      
+      arrange(counts)
+    
+    sound <-  sonify(x = correlations$conc,  interpolation = "constant", duration = 9)
+    
+    
+    # Saves file
+    genename <- candidatecounts %>%
+      filter(gene_name %in% c(!!as.character(input$gene))) %>%
+      distinct(gene) %>% pull(gene)
+    
+    wvname <- paste0("musicalgeneparental", input$sex, input$tissue, genename, ".wav")
+    writeWave(sound, paste0("www/", wvname))
+    
+    # Creates audiotag
+    output$audiotag <- renderUI(audiotag(wvname))
+    
+    ## Dawnload handler
+    output$wav_dln <- downloadHandler(
+      filename = function(){
+        paste0("musicalhormones", input$sex, input$tissue, genename, ".wav")
+      },
+      content = function(filename){
+        writeWave(sound, filename)
+      }
+    )
   })
 
 }

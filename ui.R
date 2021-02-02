@@ -86,12 +86,12 @@ shinyUI(
         tabsetPanel(
           tabPanel("Transcriptional Symphony", 
                    
-                   h4("The sound of one gene changing over time"),   
+                   h4("Stages of parental care in pigeons"),   
                    
                    HTML('<center><img src="expdesign.png", width = "100%"></center>'),
                    
                    
-                 
+                   h4("The look and sound of one gene changing over time"),   
             
           
           plotOutput("boxnmusicplot1", width = "100%"),
@@ -131,32 +131,38 @@ shinyUI(
         tabPanel("Hormonal Symphony" ,
                  
                  
-                 h4("Experimental design"),    
+                 h4("Stages of parental care in pigeons"),   
                  
                  HTML('<center><img src="expdesign.png", width = "100%"></center>'),
+                 
+                 p("Changes in gene expression can influence levels of ciruclating hormones. 
+                   We also measured these four hormones across the stages of parental care.
+                  We can use scatter plots are often used to vizualze correlated changes in gene expression and hormone levels."),
                  
                  
                  
                  
                  plotOutput("statichormones1"),
                  
-                 p("" ),
+                 p(""),
                  
                  plotOutput("hormoneplots"),
+              
                  
-                 p("There is an intricate interplay between genes and hormones.
-                   Genes directly or indirectly encode hormones and the receptors they bind to,
-                   and hormones can module to the expression levels of many genes.
-                   Austin el al 2021 decribed these changes in circulating levels of 
-                   corticosterone (cort), prolactin (prl), 
-                   progesterone (p4), and estradiol in females 
-                   or testosterone in males (e2t).
-                   Here, we can interatively explore correlations between 
-                   these hormones an the gene of interest.
-                  Not sure what other genes to explore? This table shows the R2 value 
-                   between hormones and the 20 genes with the largest positive or negative correlations."),
+                 tableOutput("correlations"),
                  
-                 tableOutput("correlations")
+                 p("Chose a hormone and listen to how it's levels change as the selected gene increases in expression."), 
+                 
+                 
+                 selectInput(
+                   inputId = "hormone",
+                   label = "Chose a hormone",
+                   choices = hormonelevels,
+                   selected = c("prolactin"),
+                   multiple = FALSE
+                 ),
+                 
+                 actionButton("button4", "Listen to changes in hormone concentration as gene expression increases.")
                  
                  
                  ),
