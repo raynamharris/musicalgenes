@@ -124,54 +124,46 @@ shinyUI(
         
         ),
         
-        
-      
+         
+        tabPanel("Transcriptional Symphony" ,
+                 
+                 h4("Transcriptional Symphony"),    
+                 
+                 p("I would really like to sonify data for multiple genes
+                   simultaneously using sounds from instruments found in an orchestra.
+                   I haven't figured out how to do this in R, 
+                   but here are some notes that can be played on your instrument of choice." ),
+                 
+                 tableOutput("orchestratable")
+                   ),
         
         tabPanel("Hormonal Symphony" ,
                  
                  h4("Hormonal Symphony"),      
                  
-                 
-                 
-                 
-                 
                  p("There is an intricate interplay between genes and hormones.
                    Genes directly or indirectly encode hormones and the receptors they bind to,
                    and hormones can module to the expression levels of many genes.
-              Austin el al 2021 decribed these changes in circulating levels of 
-                  corticosterone (cort), prolactin (prl), 
-                  progesterone (p4), and estradiol in females 
-                or testosterone in males (e2t).
+                   Austin el al 2021 decribed these changes in circulating levels of 
+                   corticosterone (cort), prolactin (prl), 
+                   progesterone (p4), and estradiol in females 
+                   or testosterone in males (e2t).
                    Here, we can interatively explore correlations between 
-                    these hormones an the gene of interest." ),
-                   
+                   these hormones an the gene of interest." ),
+                 
                  plotOutput("statichormones1"),
-
+                 
                  p("" ),
-              
-              plotOutput("hormoneplots"),
-              
-              p("Not sure what other genes to explore? This table shows correlation 
-                between hormones and the 20 genes with the largest positive or negative correlations."),
+                 
+                 plotOutput("hormoneplots"),
+                 
+                 p("Not sure what other genes to explore? This table shows the R2 value 
+                   between hormones and the 20 genes with the largest positive or negative correlations."),
                  
                  tableOutput("correlations")
-              
-             
+                 
                  
                  ),
-      
-        
-        tabPanel("Transcriptional Symphony" ,
-                 
-                 h4("Transcriptional Symphony"),    
-                 
- 
-                 
-                 p("In the future, we would like to be able sonify data for multiple genes or 
-                   hormones simultaneously using sounds from instruments found in an orchestra." ),
-                 
-                 tableOutput("orchestratable")
-                   ),
         
         tabPanel("About" ,
                  

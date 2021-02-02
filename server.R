@@ -521,7 +521,8 @@ function(input, output) {
       ) %>% 
       filter(gene_name %in% genestoplay,
              tissue %in% !!as.character(input$tissue),
-             sex %in% !!as.character(input$sex)) %>%
+             sex %in% !!as.character(input$sex),
+             treatment %in% charlevels) %>%
       #filter(gene_name %in% genestoplay,
       #       sex == "female",
       #       tissue  == "pituitary") %>%
@@ -637,7 +638,8 @@ function(input, output) {
     topcorrs <- correlations %>%
       pivot_wider(names_from = hormone, values_from = R2) %>%
       filter(gene %in% c(top25, bottom25)) %>%
-      arrange(gene)
+      arrange(gene) %>%
+      select(gene, cort, e2t, p4, prl)
     topcorrs
     
     
