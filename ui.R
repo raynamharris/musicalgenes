@@ -2,7 +2,7 @@ shinyUI(
   fluidPage(
     
     # Application title
-    titlePanel("Musical Genes: Visualize and sonify the molecular symphonies regulating parental care in pigeons"),
+    titlePanel("Interactively explore the transcriptional symphony of parental care in pigeons"),
 
     # titlePanel(title=div(img(src="expdesign.png"))),
   
@@ -14,14 +14,13 @@ shinyUI(
     sidebarLayout(
       sidebarPanel(
 
-          h4("Interactive data exploration"), 
+        h4("Musical Genes"),   
           
           p("Temporally controlled changes in gene expression 
-            are often described as a symphony that is regulated by transcription factors. 
-            What does this symphony of coordinated changes (or cacophony of 
-            discoordinated changes) in gene expression sound like? 
+            are often described as a metaphoical symphony that is regulated by transcription factors. 
+            What does this symphony of coordinated changes in gene expression sound like? 
             Data sonification is the presentation of data as sound. 
-            Here, you can interactively visualize and sonify gene expression 
+            Musical Genes is an app that allows user to interactively visualize and sonify gene expression 
             to better understand the molecular mechanisms that regulate
             parental care behavior and other important phenotypes."),
           
@@ -84,9 +83,9 @@ shinyUI(
       mainPanel(
         
         tabsetPanel(
-          tabPanel("Transcriptional Symphony", 
+          tabPanel("Transcriptional symphony", 
                    
-                   h4("Transcriptional Symphony"),   
+                   h4("Transcriptional symphony"),   
                    
                    HTML('<center><img src="expdesign.png", width = "100%"></center>'),
                    
@@ -124,10 +123,10 @@ shinyUI(
         ),
                  
         
-        tabPanel("Physiological Symphony" ,
+        tabPanel("Genes and hormones" ,
                  
                  
-                 h4("Physiological Symphony"),   
+                 h4("Genes and hormones"),   
                  
                  HTML('<center><img src="expdesign.png", width = "100%"></center>'),
                  
