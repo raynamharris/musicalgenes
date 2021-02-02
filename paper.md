@@ -6,7 +6,8 @@ authors:
   name: Rayna Harris and many others
 - affiliation: 1
   name: Rebecca Calisi
-date: "15 Nov 2020"
+date: "2 Feb 2021"
+output: pdf_document
 bibliography: paper.bib
 tags:
 - R

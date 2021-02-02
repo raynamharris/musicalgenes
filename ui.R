@@ -2,7 +2,7 @@ shinyUI(
   fluidPage(
     
     # Application title
-    titlePanel("Musical Genes: Visualize and sonify gene expression"),
+    titlePanel("Musical Genes: Visualize and sonify the molecular symphonies regulating parental care in pigeons"),
 
     # titlePanel(title=div(img(src="expdesign.png"))),
   
@@ -86,41 +86,37 @@ shinyUI(
         tabsetPanel(
           tabPanel("Transcriptional Symphony", 
                    
-                   h4("Stages of parental care in pigeons"),   
+                   h4("Transcriptional Symphony"),   
                    
                    HTML('<center><img src="expdesign.png", width = "100%"></center>'),
                    
                    
-                   h4("The look and sound of one gene changing over time"),   
-            
           
           plotOutput("boxnmusicplot1", width = "100%"),
+          
+          
+          
+          actionButton("button1", "Listen to changes in gene expression between 
+                       sequential reproductive and parental stages."),
+          
+        
+          
+          p(""), 
+          
+          tableOutput("orchestratable"),
+          
+          
           
           p("The top panel provides an overview of an experiment 
             designed to characterize the reproductive transcriptome
             of the bi-parental rock dove. 
             The box and whisker plots illustrate the median and range 
             of gene expression for any one of a hundred candidate genes. 
-            The music notes to represent the mean for each group."),
-          
-          actionButton("button1", "Listen to changes in gene expression between 
-                       sequential reproductive and parental stages."),
-          
-          
-          
-          h4("The transcriptional symphony of parental care"),   
-          
-          
-          p("In the future, I would really like to sonify data for multiple genes
-                   simultaneously using sounds from instruments found in an orchestra.
+            The music notes to represent the mean for each group.
+            In the future, I would really like to sonify data for multiple genes
+             simultaneously using sounds from instruments found in an orchestra.
             I haven't figured out how to do this in R, 
-            but here are some notes that can be played on your instrument of choice." ),
-          
-          tableOutput("orchestratable")
-          
-          
-          
-         
+            but here are some notes that can be played on your instrument of choice." )
         
          
           
@@ -128,30 +124,28 @@ shinyUI(
         ),
                  
         
-        tabPanel("Hormonal Symphony" ,
+        tabPanel("Physiological Symphony" ,
                  
                  
-                 h4("Stages of parental care in pigeons"),   
+                 h4("Physiological Symphony"),   
                  
                  HTML('<center><img src="expdesign.png", width = "100%"></center>'),
                  
-                 p("Changes in gene expression can influence levels of ciruclating hormones. 
-                   We also measured these four hormones across the stages of parental care.
-                  We can use scatter plots are often used to vizualze correlated changes in gene expression and hormone levels."),
-                 
+                
                  
                  
                  
                  plotOutput("statichormones1"),
                  
-                 p(""),
+                 
+               
                  
                  plotOutput("hormoneplots"),
-              
                  
                  tableOutput("correlations"),
+              
                  
-                 p("Chose a hormone and listen to how it's levels change as the selected gene increases in expression."), 
+                 p(""), 
                  
                  
                  selectInput(
@@ -162,7 +156,21 @@ shinyUI(
                    multiple = FALSE
                  ),
                  
-                 actionButton("button4", "Listen to changes in hormone concentration as gene expression increases.")
+                 actionButton("button4", 
+                              "Listen to changes in hormone concentration as gene expression increases."),
+                 
+                 
+                 p(""), 
+                 
+                p("Changes in gene expression can influence levels of ciruclating hormones. 
+                   We also measured these four hormones across the stages of parental care 
+                   and calculated weather they were correlated with gene expression 
+                   (R^2 value provided in the table above).
+                   We can use scatter plots are often used to vizualze 
+                   correlated changes in gene expression and hormone levels.
+                   Chose a hormone and listen to how it's levels change as the 
+                   selected gene increases in expression.")
+                 
                  
                  
                  ),

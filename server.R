@@ -5,6 +5,7 @@ function(input, output) {
   tissue_filter <- reactive({ as.character(input$tissue) })
   sex_filter <- reactive({ as.character(input$sex) })
   treatment_filter <- reactive({ as.character(input$treatment) })
+  hormone_filter <- reactive({ as.character(input$hormone) })
   
   output$allsigdegs <- renderTable({
   
@@ -104,7 +105,7 @@ function(input, output) {
   
   output$boxnmusicplot1 <- renderPlot({
     
-    mysubtitle = paste("Data from",input$sex, input$tissue, input$gene, sep = " ")
+    mysubtitle = paste(input$sex, input$tissue, input$gene, "expression", sep = " ")
     
     p1 <- candidatecounts %>%
       filter(
@@ -132,7 +133,7 @@ function(input, output) {
         legend.position = "none",
         plot.subtitle  = element_text(face = "italic")
       ) +
-      labs(y = "gene expression", x = NULL, subtitle = mysubtitle)  
+      labs(x = NULL, y = mysubtitle)  
     p1
   
 
@@ -166,14 +167,13 @@ function(input, output) {
       theme(
         axis.text.x = element_text(color = "black", size = 16, 
                                    angle = 45, hjust = 0.5),
-        legend.position = "none",
-        plot.subtitle  = element_text(face = "italic")
+        legend.position = "none"
       ) +
       scale_fill_manual(values = allcolors, guide = FALSE) +
       scale_color_manual(values = allcolors) +
       scale_x_discrete(breaks = alllevels,
                        labels = alllevels) +
-      labs(y = NULL, x = NULL, subtitle = "  \n ") 
+      labs(y = NULL, x = NULL, subtitle = " ") 
     
     p <- plot_grid(p1,p2)
     p
@@ -329,6 +329,7 @@ function(input, output) {
       mutate(averaged = round(scaled,0) ) 
     
      sound <- sonify(x = meanvalues$mean, interpolation = "constant", duration = 3)
+     sound
      
      # Saves file
      genename <- candidatecounts %>%
@@ -560,7 +561,9 @@ function(input, output) {
     orchestratable$instrument <- orchestra
     
     orchestratable <- orchestratable %>%
-      select(gene_name, instrument, notes)
+      select(gene_name, instrument, notes) %>%
+      rename(
+        'gene' = gene_name)
     orchestratable
   }))
   
@@ -603,7 +606,7 @@ function(input, output) {
         musicalgenestheme() + 
         scale_color_manual(values = allcolors) +
         labs(y = myxlab, x = "log10( hormone concentration)",
-            subtitle = "Corrlations betweeen candidate genes and hormones") +
+            subtitle = "Correlations betweeen candidate genes and hormones") +
         theme(legend.position = "none")
     
   })
@@ -654,7 +657,7 @@ function(input, output) {
       pivot_wider(names_from = hormone, values_from = R2) %>%
       select(gene_name, cort, p4, prl, e2t) %>%
       rename(
-        'gene' = gene_name,
+        'gene' = gene_name, 
         'corticosterone' = cort ,
         'progesterone' = p4,
         'prolactin' = prl,
@@ -674,7 +677,7 @@ function(input, output) {
     
     audiotag <- function(filename){tags$audio(src = filename,	    
                                               type ="audio/wav", 
-                                              controls = NA,	
+                                              controls = T,	
                                               autoplay = T)}
     
     correlations <- candidatecounts %>%
@@ -692,35 +695,33 @@ function(input, output) {
       select(id, sex, treatment, tissue, gene, gene_name, counts, prl:e2t) %>%
       pivot_longer(cols = prl:e2t, 
                    names_to = "hormone", values_to = "conc") %>%
-      group_by(gene, hormone) %>%
-      filter(hormone == "prl",
-             treatment %in% charlevels) %>%
       
+      mutate(hormone = factor(hormone),
+             hormone=recode(hormone,  "prl" = "prolactin",
+                            "e2t" ="sex steroids",
+                            "cort" = "corticosterone",
+                            "p4" = "progesterone"),
+             hormone = factor(hormone, levels = hormonelevels)) %>%
+      
+      group_by(gene, hormone) %>%
+      filter(treatment %in% charlevels,
+             hormone %in% c(!!as.character(input$hormone))) %>%
       arrange(counts)
     
     sound <-  sonify(x = correlations$conc,  interpolation = "constant", duration = 9)
-    
+    sound
     
     # Saves file
     genename <- candidatecounts %>%
       filter(gene_name %in% c(!!as.character(input$gene))) %>%
       distinct(gene) %>% pull(gene)
     
-    wvname <- paste0("musicalgeneparental", input$sex, input$tissue, genename, ".wav")
+    wvname <- paste0("musicalhormones", input$sex, input$tissue, genename, input$hormone, ".wav")
     writeWave(sound, paste0("www/", wvname))
     
     # Creates audiotag
     output$audiotag <- renderUI(audiotag(wvname))
     
-    ## Dawnload handler
-    output$wav_dln <- downloadHandler(
-      filename = function(){
-        paste0("musicalhormones", input$sex, input$tissue, genename, ".wav")
-      },
-      content = function(filename){
-        writeWave(sound, filename)
-      }
-    )
   })
 
 }
