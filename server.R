@@ -645,7 +645,7 @@ function(input, output) {
       theme(legend.position = "none",
             axis.text.x = element_text(angle = 45, hjust = 1)) +
       scale_y_log10() +
-      labs(x = NULL, y = myylab2)  
+      labs(x = "parental stage", y = myylab2)  
     
     
     myylab3 = paste("log10( ", #input$sex, input$tissue, 
@@ -667,10 +667,10 @@ function(input, output) {
             axis.text.x = element_text(angle = 45, hjust = 1)) +
       
       scale_y_log10() +
-      labs(y = myylab3, x = NULL) 
+      labs(y = myylab3, x = "parental stage") 
     
     
-    p <- plot_grid(p1,p2, p3, nrow = 1)
+    p <- plot_grid(p3,p1, p2, nrow = 1)
     p
     
     
@@ -678,10 +678,6 @@ function(input, output) {
     
   })
   
-  output$statichormones1 <- renderPlot({
-    
-    
-  })
   
   
   output$correlations <- renderTable({
