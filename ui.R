@@ -4,7 +4,6 @@ shinyUI(
     # Application title
     titlePanel("Interactively explore the transcriptional symphony of parental care in pigeons"),
 
-
     tags$head(includeScript("google-analytics.html")),
 
     tags$div(lang="en", class="header"),
@@ -22,8 +21,6 @@ shinyUI(
             Musical Genes is an app that allows user to interactively visualize and sonify gene expression 
             to better understand the molecular mechanisms that regulate
             parental care behavior and other important phenotypes."),
-          
-          
           
           selectInput(
             inputId = "sex",
@@ -49,16 +46,7 @@ shinyUI(
             multiple = FALSE
           ),
         
-        selectInput(
-          inputId = "hormone",
-          label = "Chose a hormone",
-          choices = hormonelevels,
-          selected = c("prolactin"),
-          multiple = FALSE
-        ),
-        
-        
-          
+
          tableOutput("genedescrip"),
          
          tableOutput("goterms"),
@@ -107,6 +95,8 @@ shinyUI(
           actionButton("button1", "Listen to changes in gene expression between 
                        sequential reproductive and parental stages."),
           
+          downloadButton("wav_dln", "Download the wave file."),
+          
         
           
           p(""), 
@@ -153,6 +143,15 @@ shinyUI(
                  tableOutput("correlations"),
                  
                  
+                 selectInput(
+                   inputId = "hormone",
+                   label = "Chose a hormone",
+                   choices = hormonelevels,
+                   selected = c("prolactin"),
+                   multiple = FALSE
+                 ),
+                 
+                 
                  
                  plotOutput("hormoneplots"),
                  
@@ -165,9 +164,9 @@ shinyUI(
                  
                  
                  actionButton("button4", 
-                              "Listen to changes in hormone concentration as gene expression increases.")
+                              "Listen to changes in hormone concentration as gene expression increases."),
                  
-                 
+                 downloadButton("wav_dln2", "Download the wave file.")
                 
                  
                  

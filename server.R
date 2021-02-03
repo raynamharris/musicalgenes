@@ -211,7 +211,7 @@ function(input, output) {
       filter(gene_name %in% c(!!as.character(input$gene))) %>%
       distinct(gene) %>% pull(gene)
     
-    wvname <- paste0("musicalgeneparental", input$sex, input$tissue, genename, ".wav")
+    wvname <- paste0( input$sex, input$tissue, genename, ".wav")
     writeWave(sound, paste0("www/", wvname))
     
     # Creates audiotag
@@ -220,7 +220,7 @@ function(input, output) {
     ## Dawnload handler
     output$wav_dln <- downloadHandler(
       filename = function(){
-        paste0("musicalgeneparental", input$sex, input$tissue, genename, ".wav")
+        paste0( input$sex, input$tissue, genename, ".wav")
       },
       content = function(filename){
         writeWave(sound, filename)
@@ -766,16 +766,16 @@ function(input, output) {
       filter(gene_name %in% c(!!as.character(input$gene))) %>%
       distinct(gene) %>% pull(gene)
     
-    wvname <- paste0("musicalhormones", input$sex, input$tissue, genename, input$hormone, ".wav")
+    wvname <- paste0(input$sex, input$tissue, genename, input$hormone, ".wav")
     writeWave(sound, paste0("www/", wvname))
     
     # Creates audiotag
     output$audiotag <- renderUI(audiotag(wvname))
     
     ## Dawnload handler
-    output$wav_dln <- downloadHandler(
+    output$wav_dln2 <- downloadHandler(
       filename = function(){
-        paste0("musicalhormones", input$sex, input$tissue, genename, input$hormone, ".wav")
+        paste0(input$sex, input$tissue, genename, input$hormone, ".wav")
       },
       content = function(filename){
         writeWave(sound, filename)
