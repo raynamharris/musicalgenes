@@ -33,6 +33,7 @@ Depends:
     ggplot2,
     ggimage,
     cowplot,
-    magick
+    magick,
+    duckdb
 Encoding: UTF-8
 LazyData: true

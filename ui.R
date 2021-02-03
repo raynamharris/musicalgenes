@@ -4,8 +4,7 @@ shinyUI(
     # Application title
     titlePanel("Interactively explore the transcriptional symphony of parental care in pigeons"),
 
-    # titlePanel(title=div(img(src="expdesign.png"))),
-  
+
     tags$head(includeScript("google-analytics.html")),
 
     tags$div(lang="en", class="header"),
@@ -49,6 +48,16 @@ shinyUI(
             selected = c("PRL: prolactin"),
             multiple = FALSE
           ),
+        
+        selectInput(
+          inputId = "hormone",
+          label = "Chose a hormone",
+          choices = hormonelevels,
+          selected = c("prolactin"),
+          multiple = FALSE
+        ),
+        
+        
           
          tableOutput("genedescrip"),
          
@@ -142,14 +151,6 @@ shinyUI(
                  
                  
                  tableOutput("correlations"),
-                 
-                 selectInput(
-                   inputId = "hormone",
-                   label = "Chose a hormone",
-                   choices = hormonelevels,
-                   selected = c("prolactin"),
-                   multiple = FALSE
-                 ),
                  
                  
                  
