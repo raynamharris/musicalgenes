@@ -50,25 +50,6 @@ candidategenes <- candidatecounts %>%
   select(gene) %>% distinct(gene) %>% arrange(gene) %>% pull(gene)
 candidategenes
 
-# differential expressed gene results ----
-alldeg <- read_csv("./data/allDEG.csv") %>%
-  mutate(
-    tissue = factor(tissue, levels = tissuelevels),
-    direction = factor(direction, levels = charlevels),
-    comparison = factor(comparison, levels = comparisonlevels)
-  ) %>% 
-  select(-X1) %>%
-  filter(gene %in% candidategenes) 
-
-dbWriteTable(
-  con,
-  "alldeg",
-  alldeg,
-  temporary = FALSE,
-  row.names = FALSE,
-  overwrite = TRUE
-)
-
 
 # disease ----
 disease <- read_tsv("./data/DISEASE-ALLIANCE_HUMAN_29.tsv",
