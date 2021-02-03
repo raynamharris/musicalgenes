@@ -64,8 +64,7 @@ shinyUI(
            )
          ),
          
-         
-         
+
          p("The biological processes and diseases associated with the selected 
            gene of interest are provided by the ",
            tags$a(
@@ -151,20 +150,13 @@ shinyUI(
                    multiple = FALSE
                  ),
                  
-                 
-                 
                  plotOutput("hormoneplots"),
                  
-                
-              
-                 
                  p(""), 
-                 
-                 
-                 
-                 
+
                  actionButton("button4", 
-                              "Listen to changes in hormone concentration as gene expression increases."),
+                              "Listen to changes in hormone concentration 
+                              as gene expression increases."),
                  
                  downloadButton("wav_dln2", "Download the wave file.")
                 
