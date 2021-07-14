@@ -124,7 +124,7 @@ shinyUI(
         tabPanel("Genes and hormones" ,
                  
                  
-                 h4("Genes and hormones"),   
+                 h4("Hormones"),   
                  
                  HTML('<center><img src="expdesign.png", width = "100%"></center>'),
                  
@@ -132,23 +132,32 @@ shinyUI(
                  p("Changes in gene expression can influence levels of ciruclating hormones. 
                    We also measured these four hormones across the stages of parental care 
                    and calculated weather they were correlated with gene expression 
-                   (R^2 value provided in the table).
-                   We can use scatter plots are often used to vizualze 
+                   (R^2 value provided in the table)."),
+                   
+                 
+                 
+                 
+                 
+                 
+                 plotOutput("hormoneplots4"),
+                 
+                 
+                 
+                 #tableOutput("correlations"),
+
+                p("We can use scatter plots are often used to vizualze 
                    correlated changes in gene expression and hormone levels.
                    Chose a hormone and listen to how it's levels change as the 
                    selected gene increases in expression."),
-                 
-                 
-                 tableOutput("correlations"),
-                 
-                 
-                 selectInput(
-                   inputId = "hormone",
-                   label = "Chose a hormone",
-                   choices = hormonelevels,
-                   selected = c("prolactin"),
-                   multiple = FALSE
-                 ),
+                
+                
+                selectInput(
+                  inputId = "hormone",
+                  label = "Chose a hormone",
+                  choices = hormonelevels,
+                  selected = c("prolactin"),
+                  multiple = FALSE
+                ),
                  
                  plotOutput("hormoneplots"),
                  

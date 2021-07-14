@@ -250,6 +250,48 @@ function(input, output) {
   
   
   
+  
+  
+  
+  output$hormoneplots4 <- renderPlot({
+    
+    con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
+    hormones <- tbl(con, "hormones") %>% collect()
+    dbDisconnect(con, shutdown = TRUE)
+    
+
+    
+    p <- hormones2 %>%
+      filter(treatment %in% charlevels,
+             sex %in% !!as.character(input$sex)) %>%
+      
+      ggplot(aes(x = treatment, y = value)) +
+      geom_boxplot(aes(fill = treatment, color = sex)) +
+      geom_point() +
+      musicalgenestheme() +
+      scale_fill_manual(values = allcolors) +
+      scale_color_manual(values = allcolors) +
+      theme(legend.position = "none",
+            axis.text.x = element_text(angle = 45, hjust = 1)) +
+      
+      scale_y_log10() +
+      labs(y = "log10( hormone concentration)", x = "parental stage", subtitle = "Hormones") +
+      facet_wrap(~name, nrow = 1)
+    
+    
+    
+    p 
+    
+
+    
+  })
+  
+  
+  
+  
+  
+  
+  
   output$hormoneplots <- renderPlot({
     
     con <- dbConnect(duckdb(), "data/musicalgenes.duckdb")
@@ -294,7 +336,7 @@ function(input, output) {
         #geom_smooth(aes(color = sex), method = "lm") +
         musicalgenestheme() + 
         scale_color_manual(values = allcolors) +
-        labs(x = myxlab,  y = myylab) +
+        labs(x = myxlab,  y = myylab, subtitle = "Genes and hormones") +
         theme(legend.position = "none")
     
     
@@ -327,7 +369,7 @@ function(input, output) {
       theme(legend.position = "none",
             axis.text.x = element_text(angle = 45, hjust = 1)) +
       scale_y_log10() +
-      labs(x = "parental stage", y = myylab2)  
+      labs(x = "parental stage", y = myylab2, subtitle = "Genes")  
     
     
     myylab3 = paste("log10( ", #input$sex, input$tissue, 
@@ -349,10 +391,10 @@ function(input, output) {
             axis.text.x = element_text(angle = 45, hjust = 1)) +
       
       scale_y_log10() +
-      labs(y = myylab3, x = "parental stage") 
+      labs(y = myylab3, x = "parental stage", subtitle = "Hormones") 
     
     
-    p <- plot_grid(p3,p1, p2, nrow = 1)
+    p <- plot_grid(p2,p1, p3, nrow = 1)
     p
     
     
